@@ -19,12 +19,13 @@ export default function App() {
   const [modalCase, setModalCase] = useState(null);
   const [showShortcuts, setShowShortcuts] = useState(false);
   
-  // Theme state: dark | light (default: dark)
+  // Theme state: light | dark (default: light)
   const [theme, setTheme] = useState(() => {
     try {
-      return localStorage.getItem(THEME_STORAGE_KEY) || 'dark';
+      const saved = localStorage.getItem(THEME_STORAGE_KEY);
+      return saved || 'light';
     } catch {
-      return 'dark';
+      return 'light';
     }
   });
 
@@ -277,30 +278,30 @@ export default function App() {
             theme={theme}
           />
 
-          {/* Active Category Mini Tag */}
-          {activeGroupInfo && (
-            <div className={`border rounded px-2.5 py-1 flex items-center justify-between shrink-0 text-xs ${
-              isDark ? 'bg-slate-900/90 border-slate-800' : 'bg-white border-slate-200 shadow-sm'
-            }`}>
-              <div className="flex items-center gap-1.5">
-                <span className="px-1.5 py-0.2 rounded text-[10px] font-bold bg-blue-500/20 text-blue-500 border border-blue-500/30">
-                  {selectedGroup}
-                </span>
-                <span className={`font-semibold ${isDark ? 'text-slate-200' : 'text-slate-800'}`}>
-                  {activeGroupInfo.nameZh}
-                </span>
-                <span className={`text-[11px] hidden xl:inline ${isDark ? 'text-slate-400' : 'text-slate-500'}`}>
-                  · {activeGroupInfo.desc}
-                </span>
-              </div>
-              <button
-                onClick={() => setSelectedGroup('all')}
-                className="text-[11px] text-blue-500 hover:underline font-medium"
-              >
-                显示全部
-              </button>
+          {/* Category Top Explanation Area (英文缩写 + 英语单词原文 + 中文直译标注 + 要点说明，已取消"显示全部") */}
+          <div className={`border rounded px-2.5 py-1.5 flex flex-col gap-0.5 shrink-0 text-xs transition-colors ${
+            isDark ? 'bg-slate-900/90 border-slate-800' : 'bg-white border-slate-200 shadow-sm'
+          }`}>
+            <div className="flex items-center gap-1.5 flex-wrap">
+              <span className="px-1.5 py-0.2 rounded text-[10px] font-black uppercase bg-blue-500/15 text-blue-500 border border-blue-500/30 font-mono shrink-0">
+                {selectedGroup === 'all' ? 'ALL' : activeGroupInfo?.code}
+              </span>
+              <span className="font-mono text-xs font-bold text-amber-500 shrink-0">
+                {selectedGroup === 'all' ? 'All 41 F2L Cases' : activeGroupInfo?.fullEn}
+              </span>
+              <span className={`text-[11px] font-semibold px-1 rounded ${
+                isDark ? 'bg-slate-800 text-slate-200' : 'bg-slate-100 text-slate-800'
+              }`}>
+                直译: {selectedGroup === 'all' ? '全部形态 / 41 种常规情况' : activeGroupInfo?.literalZh}
+              </span>
             </div>
-          )}
+            <p className={`text-[11px] leading-tight truncate ${isDark ? 'text-slate-400' : 'text-slate-600'}`}>
+              {selectedGroup === 'all' 
+                ? '涵盖基础入槽、旋转棱块、顶白翻角、连体错配、钥匙孔分离与底槽情况等 41 种指法' 
+                : activeGroupInfo?.desc
+              }
+            </p>
+          </div>
 
           {/* INDEPENDENT CASE SCROLL CONTAINER (Scrolls smoothly without moving the page or the video!) */}
           <div 

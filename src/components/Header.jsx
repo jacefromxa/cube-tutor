@@ -23,34 +23,18 @@ export default function Header({
         : 'bg-white/95 border-slate-200 text-slate-900 shadow-sm'
     }`}>
       <div className="max-w-[1920px] mx-auto px-3 sm:px-4 lg:px-6 h-14 flex items-center justify-between gap-3">
-        {/* Left: Logo & Title */}
-        <div className="flex items-center gap-2.5">
-          <div className="w-8 h-8 rounded-md bg-gradient-to-tr from-blue-600 via-indigo-600 to-amber-500 p-0.5 shadow-md shadow-blue-500/20 flex items-center justify-center shrink-0">
-            <div className={`w-full h-full rounded-[4px] flex items-center justify-center font-black text-sm ${
+        {/* Left: Logo & Prominent Title */}
+        <div className="flex items-center gap-3">
+          <div className="w-8 h-8 sm:w-9 sm:h-9 rounded-md bg-gradient-to-tr from-blue-600 via-indigo-600 to-amber-500 p-0.5 shadow-md shadow-blue-500/20 flex items-center justify-center shrink-0">
+            <div className={`w-full h-full rounded-[4px] flex items-center justify-center font-black text-sm sm:text-base ${
               isDark ? 'bg-slate-900 text-amber-300' : 'bg-white text-blue-600'
             }`}>
               3×3
             </div>
           </div>
-          <div>
-            <div className="flex items-center gap-2">
-              <h1 className="text-sm sm:text-base font-bold tracking-tight">
-                CFOP · F2L 41 种常规手法
-              </h1>
-              <span className={`hidden md:inline-flex text-[11px] font-semibold px-1.5 py-0.2 rounded border ${
-                isDark 
-                  ? 'bg-blue-500/10 text-blue-400 border-blue-500/20' 
-                  : 'bg-blue-50 text-blue-600 border-blue-200'
-              }`}>
-                杜宇生（2023）
-              </span>
-            </div>
-            <p className={`text-[11px] hidden lg:block leading-none mt-0.5 ${
-              isDark ? 'text-slate-400' : 'text-slate-500'
-            }`}>
-              基于 csTimer 科学分类与时间轴实况解析 · 点击图形直达对应手法
-            </p>
-          </div>
+          <h1 className="text-base sm:text-lg md:text-xl font-black tracking-tight">
+            CFOP · F2L 41 种常规手法
+          </h1>
         </div>
 
         {/* Right: Mastery Filter Tabs + Progress Bar + Theme Toggle + Shortcuts */}

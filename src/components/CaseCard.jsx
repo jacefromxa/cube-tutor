@@ -94,8 +94,8 @@ export default function CaseCard({
         </button>
       </div>
 
-      {/* Middle: Compact 3D Cube Graphic (Reduced ~50% in size for maximum screen efficiency) */}
-      <div className={`relative w-14 h-14 sm:w-16 sm:h-16 mx-auto rounded bg-white p-1 my-1 overflow-hidden flex items-center justify-center shadow-inner group/cube shrink-0 border ${
+      {/* Middle: Prominent 3D Cube Graphic (Enlarged to fill width for superior visibility) */}
+      <div className={`relative w-20 h-20 sm:w-24 sm:h-24 mx-auto rounded bg-white p-1.5 my-1 overflow-hidden flex items-center justify-center shadow-inner group/cube shrink-0 border ${
         isMastered 
           ? (isDark ? 'border-emerald-600/40' : 'border-emerald-300') 
           : (isDark ? 'border-slate-700/60' : 'border-slate-200')
@@ -104,7 +104,7 @@ export default function CaseCard({
           src={caseItem.cubeImg}
           alt={caseItem.code}
           loading="lazy"
-          className="w-full h-full object-contain filter contrast-105 transition-transform duration-200 group-hover/cube:scale-110"
+          className="w-full h-full object-contain filter contrast-105 transition-transform duration-200 group-hover/cube:scale-105"
         />
 
         {/* Hover play prompt */}

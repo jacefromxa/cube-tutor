@@ -100,15 +100,6 @@ export default function FilterBar({
             (共 41 式)
           </span>
         </div>
-
-        {selectedGroup !== 'all' && (
-          <button
-            onClick={() => onSelectGroup('all')}
-            className="text-[11px] text-blue-500 hover:underline font-semibold"
-          >
-            显示全部 (重置)
-          </button>
-        )}
       </div>
 
       {/* 10 Visual Category Buttons in 5 Columns x 2 Rows: Highly Economical & Zero Scrolling! */}
