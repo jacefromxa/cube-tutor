@@ -5,6 +5,7 @@ import {
   Hand, ChevronDown, ChevronUp
 } from 'lucide-react';
 import { VIDEO_PATH, F2L_GROUPS, invertAlgorithm } from '../data/f2lCases';
+import { resolveAssetUrl } from '../utils/assetUrl';
 
 const VideoPlayer = forwardRef(function VideoPlayer({
   currentCase,
@@ -221,7 +222,7 @@ const VideoPlayer = forwardRef(function VideoPlayer({
       <div className="relative aspect-video lg:max-h-[calc(100%-210px)] bg-black w-full overflow-hidden select-none group flex items-center justify-center">
         <video
           ref={videoRef}
-          src={videoPath}
+          src={resolveAssetUrl(videoPath)}
           playsInline
           muted
           onTimeUpdate={handleTimeUpdate}
@@ -470,7 +471,7 @@ const VideoPlayer = forwardRef(function VideoPlayer({
             }`}>
               <div className="flex items-center gap-2 min-w-0">
                 <img 
-                  src={currentCase.cubeImg} 
+                  src={resolveAssetUrl(currentCase.cubeImg)} 
                   alt={currentCase.code} 
                   className={`w-7 h-7 rounded bg-white p-0.5 object-contain shadow-xs border shrink-0 ${
                     isDark ? 'border-slate-700' : 'border-slate-300'
@@ -523,7 +524,7 @@ const VideoPlayer = forwardRef(function VideoPlayer({
               <div className="flex items-center gap-2 sm:gap-3 min-w-0">
                 <div className="shrink-0">
                   <img 
-                    src={currentCase.cubeImg} 
+                    src={resolveAssetUrl(currentCase.cubeImg)} 
                     alt={currentCase.code} 
                     className={`w-9 h-9 sm:w-12 sm:h-12 rounded-md bg-white p-0.5 sm:p-1 object-contain shadow-xs border transition ${
                       isDark ? 'border-slate-700' : 'border-slate-300'

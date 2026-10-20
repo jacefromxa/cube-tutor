@@ -1,5 +1,6 @@
 import React from 'react';
 import { Check, Hand } from 'lucide-react';
+import { resolveAssetUrl } from '../utils/assetUrl';
 
 const GRIP_COLOR_MAP = {
   '中起手': 'bg-slate-700/40 text-slate-300 border-slate-600/50',
@@ -93,7 +94,7 @@ export default function CaseCard({
               : (isDark ? 'border-slate-700/60' : 'border-slate-200'))
       }`}>
         <img
-          src={caseItem.cubeImg}
+          src={resolveAssetUrl(caseItem.cubeImg)}
           alt={caseItem.code}
           loading="lazy"
           className="w-full h-full object-contain filter contrast-105 transition-transform duration-200 group-hover/cube:scale-105"

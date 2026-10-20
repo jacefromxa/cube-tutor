@@ -1,6 +1,7 @@
 import React from 'react';
 import { Layers } from 'lucide-react';
 import { F2L_GROUPS } from '../data/f2lCases';
+import { resolveAssetUrl } from '../utils/assetUrl';
 
 const COLOR_THEMES = {
   emerald: {
@@ -146,7 +147,7 @@ export default function FilterBar({
                 isDark ? 'border-slate-700/60' : 'border-slate-200'
               }`}>
                 <img
-                  src={g.img}
+                  src={resolveAssetUrl(g.img)}
                   alt={g.en}
                   className="w-full h-full object-contain filter contrast-105"
                 />
