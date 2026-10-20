@@ -7,7 +7,7 @@ import CaseCard from './components/CaseCard';
 import CardModal from './components/CardModal';
 import KeyboardShortcutsModal from './components/KeyboardShortcutsModal';
 import { F2L_CASES, F2L_GROUPS, TOTAL_CASES } from './data/f2lCases';
-import { Layers, Sparkles, AlertCircle } from 'lucide-react';
+import { AlertCircle } from 'lucide-react';
 
 const STORAGE_KEY = 'f2l_mastered_cases_v1';
 
@@ -190,13 +190,26 @@ export default function App() {
       />
 
       {/* Main Dual-Column Layout:
-          - Left: Compact Menu / Selection Area (Search, Categories with 3D icons, Case Grid with independent scroll)
-          - Right: Enlarged Hero Video Area (Always fixed and prominently displayed!)
+          - Left: Maximized Video Stage (Fixed, No scroll away, Maximized height, No black bar waste)
+          - Right: Option Menu (Compact Case cards reduced 50%, Independent scroll container)
       */}
-      <main className="flex-1 min-h-0 max-w-[1920px] w-full mx-auto px-3 sm:px-4 lg:px-6 py-3 flex flex-col lg:flex-row gap-4 lg:gap-5 items-stretch overflow-hidden">
+      <main className="flex-1 min-h-0 max-w-[1920px] w-full mx-auto px-3 sm:px-4 lg:px-6 py-2.5 sm:py-3 flex flex-col lg:flex-row gap-3 sm:gap-4 lg:gap-5 items-stretch overflow-hidden">
         
-        {/* LEFT COLUMN: Option Menu (Compact, Independent Scroll, Category Buttons + 41 Case Grid) */}
-        <div className="w-full lg:w-[380px] xl:w-[420px] 2xl:w-[460px] shrink-0 h-full flex flex-col gap-2.5 overflow-hidden">
+        {/* LEFT COLUMN: Maximized Video Player & Action Bar (Permanently Fixed in Viewport!) */}
+        <div className="w-full lg:w-[57%] xl:w-[61%] 2xl:w-[64%] shrink-0 h-full flex flex-col justify-start overflow-hidden">
+          <VideoPlayer
+            ref={playerRef}
+            currentCase={currentCase}
+            casesList={filteredCases.length > 0 ? filteredCases : F2L_CASES}
+            onSelectCase={handleSelectCase}
+            onViewCard={(item) => setModalCase(item)}
+            isMastered={masteredSet.has(currentCase?.id)}
+            onToggleMastered={toggleMastered}
+          />
+        </div>
+
+        {/* RIGHT COLUMN: Selection Menu & Independent Scrollable Case Grid */}
+        <div className="flex-1 min-w-0 h-full flex flex-col gap-2 overflow-hidden">
           {/* Filter Bar with English + Chinese + 3D Image Category Buttons */}
           <FilterBar
             selectedGroup={selectedGroup}
@@ -212,7 +225,7 @@ export default function App() {
 
           {/* Active Category Mini Tag */}
           {activeGroupInfo && (
-            <div className="bg-slate-900/90 border border-slate-800 rounded-2xl px-3 py-1.5 flex items-center justify-between shrink-0">
+            <div className="bg-slate-900/90 border border-slate-800 rounded-xl px-3 py-1.5 flex items-center justify-between shrink-0">
               <div className="flex items-center gap-2">
                 <span className="px-2 py-0.5 rounded text-[11px] font-bold bg-blue-500/20 text-blue-300 border border-blue-500/30">
                   {selectedGroup}
@@ -220,12 +233,15 @@ export default function App() {
                 <span className="text-xs font-semibold text-slate-200">
                   {activeGroupInfo.nameZh}
                 </span>
+                <span className="text-[11px] text-slate-400 hidden xl:inline">
+                  · {activeGroupInfo.desc}
+                </span>
               </div>
               <button
                 onClick={() => setSelectedGroup('all')}
                 className="text-[11px] text-blue-400 hover:text-blue-300 font-medium"
               >
-                重置
+                显示全部
               </button>
             </div>
           )}
@@ -233,10 +249,10 @@ export default function App() {
           {/* INDEPENDENT CASE SCROLL CONTAINER (Scrolls smoothly without moving the page or the video!) */}
           <div 
             ref={caseListScrollRef}
-            className="flex-1 min-h-0 overflow-y-auto pr-1.5 pb-2 overscroll-contain scrollbar-thin"
+            className="flex-1 min-h-0 overflow-y-auto pr-1 pb-2 overscroll-contain scrollbar-thin"
           >
             {filteredCases.length > 0 ? (
-              <div className="grid grid-cols-2 gap-2 sm:gap-2.5">
+              <div className="grid grid-cols-2 sm:grid-cols-3 gap-2">
                 {filteredCases.map(item => (
                   <CaseCard
                     key={item.id}
@@ -264,32 +280,6 @@ export default function App() {
                 </button>
               </div>
             )}
-          </div>
-        </div>
-
-        {/* RIGHT COLUMN: Enlarged Video & Action Stage (Always Visible & Prominently Positioned!) */}
-        <div className="flex-1 min-w-0 h-full flex flex-col gap-3 overflow-y-auto pr-1 scrollbar-thin">
-          <VideoPlayer
-            ref={playerRef}
-            currentCase={currentCase}
-            casesList={filteredCases.length > 0 ? filteredCases : F2L_CASES}
-            onSelectCase={handleSelectCase}
-            onViewCard={(item) => setModalCase(item)}
-            isMastered={masteredSet.has(currentCase?.id)}
-            onToggleMastered={toggleMastered}
-          />
-
-          {/* Quick Practice Tip Box */}
-          <div className="bg-slate-900/60 border border-slate-800/80 rounded-2xl p-3.5 text-xs text-slate-400 flex items-start gap-2.5 shadow-sm">
-            <Sparkles className="w-4 h-4 text-amber-400 shrink-0 mt-0.5" />
-            <div className="flex flex-col gap-1 leading-relaxed">
-              <span className="font-semibold text-slate-200">
-                杜宇生 F2L 常规手法速拧要点:
-              </span>
-              <p className="text-slate-400">
-                本套 41 式精选自杜宇生常规指法体系，特点是无转体入槽、后槽顺手做以及 D 层 Keyhole 提速。建议开启右上角“循环练习”，配合键盘空格键与 0.5x / 0.75x 慢放反复巩固肌肉记忆。
-              </p>
-            </div>
           </div>
         </div>
 

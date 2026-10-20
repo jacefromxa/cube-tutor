@@ -298,10 +298,10 @@ const VideoPlayer = forwardRef(function VideoPlayer({
 
       {/* Case Details & Algorithm Box */}
       {currentCase && (
-        <div className="p-4 sm:p-6 bg-slate-950/70 flex flex-col gap-4">
+        <div className="p-3 sm:p-4 bg-slate-950/80 flex flex-col gap-2.5">
           {/* Top row: Thumbnail & Metadata */}
-          <div className="flex items-start justify-between gap-3">
-            <div className="flex items-center gap-3.5">
+          <div className="flex items-center justify-between gap-3">
+            <div className="flex items-center gap-3">
               <div 
                 className="relative group/thumb cursor-pointer shrink-0" 
                 onClick={() => onViewCard(currentCase)}
@@ -310,34 +310,35 @@ const VideoPlayer = forwardRef(function VideoPlayer({
                 <img 
                   src={currentCase.cubeImg} 
                   alt={currentCase.code} 
-                  className="w-16 h-16 sm:w-18 sm:h-18 rounded-2xl bg-white p-1.5 object-contain shadow-lg border border-slate-700 group-hover/thumb:border-blue-400 transition"
+                  className="w-12 h-12 sm:w-14 sm:h-14 rounded-xl bg-white p-1 object-contain shadow-md border border-slate-700 group-hover/thumb:border-blue-400 transition"
                 />
-                <span className="absolute inset-0 bg-black/50 rounded-2xl opacity-0 group-hover/thumb:opacity-100 flex items-center justify-center transition text-[10px] text-white font-semibold">
-                  查看大图
+                <span className="absolute inset-0 bg-black/50 rounded-xl opacity-0 group-hover/thumb:opacity-100 flex items-center justify-center transition text-[9px] text-white font-semibold">
+                  大图
                 </span>
               </div>
 
-              <div className="flex flex-col gap-1">
+              <div className="flex flex-col gap-0.5 min-w-0">
                 <div className="flex items-center gap-2 flex-wrap">
-                  <span className="text-xl sm:text-2xl font-black text-white tracking-tight">
+                  <span className="text-lg sm:text-xl font-black text-white tracking-tight">
                     {currentCase.code}
                   </span>
-                  <span className="text-xs px-2.5 py-0.5 rounded-full bg-slate-800 text-slate-300 border border-slate-700 font-mono">
+                  <span className="text-[11px] px-2 py-0.5 rounded-full bg-slate-800 text-slate-300 border border-slate-700 font-mono">
                     csTimer #{currentCase.csTimerNum}
                   </span>
-                  <span className="text-xs px-2.5 py-0.5 rounded-full bg-blue-500/15 text-blue-400 border border-blue-500/30 font-medium">
+                  <span className="text-[11px] px-2 py-0.5 rounded-full bg-blue-500/15 text-blue-400 border border-blue-500/30 font-medium">
                     {groupInfo?.nameZh}
                   </span>
-                  <span className="text-xs px-2.5 py-0.5 rounded-full bg-amber-500/15 text-amber-300 border border-amber-500/30 font-medium flex items-center gap-1">
-                    <Hand className="w-3 h-3" />
+                  <span className="text-[11px] px-2 py-0.5 rounded-full bg-amber-500/15 text-amber-300 border border-amber-500/30 font-medium flex items-center gap-1">
+                    <Hand className="w-2.5 h-2.5" />
                     {currentCase.grip}
                   </span>
                 </div>
-                <p className="text-xs sm:text-sm text-slate-400">
-                  {currentCase.description}
-                </p>
-                <div className="text-[11px] text-slate-500 font-mono">
-                  视频时间轴: {currentCase.timestamp} ~ {Math.floor(currentCase.endSec / 60).toString().padStart(2, '0')}:{Math.floor(currentCase.endSec % 60).toString().padStart(2, '0')} (第 #{currentCase.videoOrder} 个演示，时长 {currentCase.duration}s)
+                <div className="flex items-center gap-2 text-xs text-slate-400">
+                  <span className="truncate">{currentCase.description}</span>
+                  <span className="text-slate-600 hidden sm:inline">·</span>
+                  <span className="text-[11px] text-slate-500 font-mono shrink-0 hidden sm:inline">
+                    时间轴: {currentCase.timestamp} ~ {Math.floor(currentCase.endSec / 60).toString().padStart(2, '0')}:{Math.floor(currentCase.endSec % 60).toString().padStart(2, '0')} ({currentCase.duration}s)
+                  </span>
                 </div>
               </div>
             </div>
@@ -346,20 +347,20 @@ const VideoPlayer = forwardRef(function VideoPlayer({
             <div className="flex items-center gap-2 shrink-0">
               <button
                 onClick={() => onToggleMastered(currentCase.id)}
-                className={`px-3 py-2 rounded-xl border text-xs font-semibold flex items-center gap-1.5 transition ${
+                className={`px-3 py-1.5 rounded-xl border text-xs font-semibold flex items-center gap-1.5 transition ${
                   isMastered 
                     ? 'bg-emerald-500/20 text-emerald-300 border-emerald-500/40 hover:bg-emerald-500/30'
                     : 'bg-slate-800 hover:bg-slate-750 text-slate-300 border-slate-700 hover:border-slate-600'
                 }`}
               >
                 <Check className={`w-3.5 h-3.5 ${isMastered ? 'text-emerald-400' : 'text-slate-500'}`} />
-                <span className="hidden sm:inline">{isMastered ? '已掌握' : '标记已掌握'}</span>
+                <span className="hidden sm:inline">{isMastered ? '已掌握' : '标记掌握'}</span>
               </button>
 
               <button
                 onClick={() => onViewCard(currentCase)}
                 title="查看原视频图解卡片"
-                className="p-2 rounded-xl bg-slate-800 hover:bg-slate-700 text-slate-300 hover:text-white border border-slate-700 transition"
+                className="p-1.5 rounded-xl bg-slate-800 hover:bg-slate-700 text-slate-300 hover:text-white border border-slate-700 transition"
               >
                 <Eye className="w-4 h-4" />
               </button>
@@ -367,22 +368,22 @@ const VideoPlayer = forwardRef(function VideoPlayer({
           </div>
 
           {/* Bottom row: Large Algorithm Banner with Copy Button */}
-          <div className="bg-slate-950 border border-slate-800/90 rounded-2xl p-3.5 sm:p-4 flex flex-col sm:flex-row sm:items-center justify-between gap-3 shadow-inner">
-            <div className="flex flex-col gap-0.5 overflow-hidden">
-              <span className="text-[11px] text-slate-500 font-mono uppercase tracking-wider">
-                推荐手法公式 (杜宇生常规解法)
+          <div className="bg-slate-950 border border-slate-800/90 rounded-xl p-2.5 sm:p-3 flex items-center justify-between gap-3 shadow-inner">
+            <div className="flex items-center gap-2.5 overflow-hidden">
+              <span className="text-[10px] text-slate-500 font-mono uppercase tracking-wider shrink-0 bg-slate-900 px-2 py-0.5 rounded border border-slate-800">
+                推荐手法
               </span>
-              <div className="font-mono text-lg sm:text-xl font-black text-amber-300 tracking-wider select-all break-words">
+              <div className="font-mono text-base sm:text-lg font-black text-amber-300 tracking-wider select-all truncate">
                 {currentCase.algorithm}
               </div>
             </div>
 
             <button
               onClick={handleCopy}
-              className="px-3.5 py-2 rounded-xl bg-slate-800 hover:bg-slate-700 text-slate-200 hover:text-white transition flex items-center justify-center gap-1.5 border border-slate-700 shrink-0 text-xs font-medium"
+              className="px-3 py-1.5 rounded-lg bg-slate-800 hover:bg-slate-700 text-slate-200 hover:text-white transition flex items-center justify-center gap-1.5 border border-slate-700 shrink-0 text-xs font-medium"
             >
-              {copied ? <Check className="w-4 h-4 text-emerald-400" /> : <Copy className="w-4 h-4" />}
-              <span>{copied ? '已复制公式' : '复制公式'}</span>
+              {copied ? <Check className="w-3.5 h-3.5 text-emerald-400" /> : <Copy className="w-3.5 h-3.5" />}
+              <span>{copied ? '已复制' : '复制公式'}</span>
             </button>
           </div>
         </div>
