@@ -6,66 +6,66 @@
 export const F2L_GROUPS = {
   "Easy": {
     "code": "Easy",
-    "nameZh": "基础入槽",
-    "abbrZh": "基础入槽",
+    "nameZh": "基础形态",
+    "abbrZh": "基础形态",
     "fullEn": "Easy Cases",
     "literalZh": "基础形态 / 简易入槽",
-    "desc": "标准3步入槽或棱角已成对情况，无复杂遮挡",
+    "desc": "标准3步入槽或天然已成对，无复杂遮挡的基础还原",
     "color": "emerald",
     "accent": "#10b981",
     "iconImg": "/assets/cubes/Easy-01.png"
   },
   "RE": {
     "code": "RE",
-    "nameZh": "旋转棱块",
-    "abbrZh": "旋转棱块",
-    "fullEn": "Reposition Edge",
-    "literalZh": "重置棱块位置（调整棱块）",
-    "desc": "角块白朝侧面，棱角分离，先藏角转动顶层重置棱块位置后再配对",
+    "nameZh": "顶色相异",
+    "abbrZh": "顶色相异",
+    "fullEn": "Reposition Edge (Diff Color)",
+    "literalZh": "角白朝侧 · 顶色相异",
+    "desc": "角块白朝侧面且顶色相异，藏角转动顶层重置棱块，配对入槽",
     "color": "blue",
     "accent": "#3b82f6",
     "iconImg": "/assets/cubes/RE-05.png"
   },
   "REFC": {
     "code": "REFC",
-    "nameZh": "顶白翻角",
-    "abbrZh": "顶白翻角",
-    "fullEn": "Reposition Edge, Flip Corner",
-    "literalZh": "重置棱块 · 翻转角块",
-    "desc": "角块白面朝上(白朝天)，先借空槽翻转角块使白色朝侧面，再对棱入槽",
+    "nameZh": "侧白错配",
+    "abbrZh": "侧白错配",
+    "fullEn": "Reposition Edge, Facing Corner",
+    "literalZh": "角白朝侧 · 调棱配对",
+    "desc": "角块白朝侧面，棱角错位或假连接，翻转角向或调整棱位后结合入槽",
     "color": "amber",
     "accent": "#f59e0b",
     "iconImg": "/assets/cubes/REFC-10.png"
   },
-  "PMS": {
-    "code": "PMS",
-    "nameZh": "连体错配",
-    "abbrZh": "连体错配",
-    "fullEn": "Pair Mismatched",
-    "literalZh": "配对错位（错误连接的对子）",
-    "desc": "顶层棱角粘连成对但颜色错接成假对子，需拆分后重新正确结合",
-    "color": "purple",
-    "accent": "#a855f7",
-    "iconImg": "/assets/cubes/PMS-19.png"
-  },
   "SPGO": {
     "code": "SPGO",
-    "nameZh": "顶色相同",
-    "abbrZh": "顶色相同",
-    "fullEn": "Separate Pair, Go Out",
-    "literalZh": "分离对子 · 移出槽位",
-    "desc": "顶层棱块与角块顶面同色，通过藏角将棱角分离并推出后入槽",
+    "nameZh": "顶色同向",
+    "abbrZh": "顶色同向",
+    "fullEn": "Same-color Pair & Group Orientation",
+    "literalZh": "顶色相同 · 连体/对子重整",
+    "desc": "顶层棱角顶面同色（或白顶相邻），通过拆分再结合，顺畅入槽",
     "color": "cyan",
     "accent": "#06b6d4",
     "iconImg": "/assets/cubes/SPGO-15.png"
   },
+  "PMS": {
+    "code": "PMS",
+    "nameZh": "白顶分离",
+    "abbrZh": "白顶分离",
+    "fullEn": "Pair Misaligned & Separated",
+    "literalZh": "白面朝上 · 分离错配",
+    "desc": "角块白面朝上(白朝天)，棱角错位分离，藏棱翻转顶层配对成组入槽",
+    "color": "purple",
+    "accent": "#a855f7",
+    "iconImg": "/assets/cubes/PMS-19.png"
+  },
   "Weird": {
     "code": "Weird",
-    "nameZh": "别扭怪异",
-    "abbrZh": "别扭怪异",
+    "nameZh": "怪异别扭",
+    "abbrZh": "怪异别扭",
     "fullEn": "Weird Cases",
-    "literalZh": "怪异 / 别扭情况",
-    "desc": "角块白朝天且与棱块紧贴粘连成异色块，解法特殊或需转体做性感手法",
+    "literalZh": "白顶异色 · 怪异形态",
+    "desc": "角块白朝天且与棱块呈特殊连接/远距排列，需多次复合指法或转体解出",
     "color": "rose",
     "accent": "#f43f5e",
     "iconImg": "/assets/cubes/Weird-23.png"
@@ -75,8 +75,8 @@ export const F2L_GROUPS = {
     "nameZh": "角底棱顶",
     "abbrZh": "角底棱顶",
     "fullEn": "Corner in Place, Edge in U-layer",
-    "literalZh": "角块在底槽 · 棱块在顶层(U层)",
-    "desc": "角块已在底层槽位中，棱块仍在顶层，需借槽或直接结合入槽",
+    "literalZh": "角块在底槽 · 棱块在顶层",
+    "desc": "角块已在底层槽位中，棱块仍在顶层，借出底角或原地配对入槽",
     "color": "indigo",
     "accent": "#6366f1",
     "iconImg": "/assets/cubes/CPEU-25.png"
@@ -86,8 +86,8 @@ export const F2L_GROUPS = {
     "nameZh": "棱底角顶",
     "abbrZh": "棱底角顶",
     "fullEn": "Edge in Place, Corner in U-layer",
-    "literalZh": "棱块在底槽 · 角块在顶层(U层)",
-    "desc": "棱块已在底层槽位中，角块仍在顶层，需带出棱块或翻角入槽",
+    "literalZh": "棱块在底槽 · 角块在顶层",
+    "desc": "棱块已在底层槽位中，角块仍在顶层，提棱或利用空槽旋转角块入槽",
     "color": "orange",
     "accent": "#f97316",
     "iconImg": "/assets/cubes/EPCU-31.png"
@@ -98,7 +98,7 @@ export const F2L_GROUPS = {
     "abbrZh": "棱角在槽",
     "fullEn": "Edge & Corner in Place",
     "literalZh": "棱块与角块均在底槽中",
-    "desc": "角块和棱块均已在底槽中但色向颠倒或未对齐，需提至顶层重整入槽",
+    "desc": "角块与棱块均已在底槽中但色向颠倒或未对齐，提至顶层重整入槽",
     "color": "teal",
     "accent": "#14b8a6",
     "iconImg": "/assets/cubes/ECP-39.png"
@@ -279,7 +279,7 @@ export const F2L_CASES = [
     "duration": 18,
     "algorithm": "U' R U' R' d R' U' R",
     "grip": "中起手",
-    "description": "顶面白色·角块白朝上，棱块对色，藏棱配对",
+    "description": "侧白错配·角白朝右，UF前侧假对，借空槽翻转配对入槽",
     "cubeImg": "/assets/cubes/REFC-09.png",
     "cardImg": "/assets/cards/REFC-09.png",
     "frameImg": "/assets/frames/REFC-09.jpg"
@@ -296,7 +296,7 @@ export const F2L_CASES = [
     "duration": 15,
     "algorithm": "U' R U R' U R U R'",
     "grip": "中起手",
-    "description": "顶面白色·角块白朝上，棱块错位，连续抬角",
+    "description": "侧白错配·角白朝前，UL左侧远端，连续抬角顺手入槽",
     "cubeImg": "/assets/cubes/REFC-10.png",
     "cardImg": "/assets/cards/REFC-10.png",
     "frameImg": "/assets/frames/REFC-10.jpg"
@@ -313,7 +313,7 @@ export const F2L_CASES = [
     "duration": 16,
     "algorithm": "U' R U2 R' d R' U' R",
     "grip": "中起手",
-    "description": "顶面白色·角块白朝上，棱角相隔1格，藏角分拆",
+    "description": "侧白错配·角白朝右，UR右侧相连假对，藏角分拆再对齐",
     "cubeImg": "/assets/cubes/REFC-11.png",
     "cardImg": "/assets/cards/REFC-11.png",
     "frameImg": "/assets/frames/REFC-11.jpg"
@@ -330,7 +330,7 @@ export const F2L_CASES = [
     "duration": 19,
     "algorithm": "R U' R' U R U' R' U2 R U' R'",
     "grip": "中起手",
-    "description": "顶面白色·角块白朝上，棱块同侧，拆分再配对",
+    "description": "侧白错配·角白朝前，UB对角远端分离，拆分再配对",
     "cubeImg": "/assets/cubes/REFC-12.png",
     "cardImg": "/assets/cards/REFC-12.png",
     "frameImg": "/assets/frames/REFC-12.jpg"
@@ -347,7 +347,7 @@ export const F2L_CASES = [
     "duration": 16,
     "algorithm": "d R' U R U' R' U' R",
     "grip": "上起手",
-    "description": "顶面白色·角块白朝上，棱块在后，转体提角配对",
+    "description": "侧白错配·角白朝右，UB对角远端分离，转体提角配对",
     "cubeImg": "/assets/cubes/REFC-13.png",
     "cardImg": "/assets/cards/REFC-13.png",
     "frameImg": "/assets/frames/REFC-13.jpg"
@@ -364,7 +364,7 @@ export const F2L_CASES = [
     "duration": 17,
     "algorithm": "U' R U' R' U R U R'",
     "grip": "中起手",
-    "description": "顶面白色·角块白朝上，棱块相对，三步连招",
+    "description": "侧白错配·角白朝前，UR右侧相连假对，三步连招化解",
     "cubeImg": "/assets/cubes/REFC-14.png",
     "cardImg": "/assets/cards/REFC-14.png",
     "frameImg": "/assets/frames/REFC-14.jpg"
@@ -381,7 +381,7 @@ export const F2L_CASES = [
     "duration": 17,
     "algorithm": "U R U2 R' U R U' R'",
     "grip": "中起手",
-    "description": "连体错配·角白朝前，棱在右侧，藏棱错开",
+    "description": "白顶分离·角白朝天，UF前侧分离错位，藏棱翻转配对入槽",
     "cubeImg": "/assets/cubes/PMS-19.png",
     "cardImg": "/assets/cards/PMS-19.png",
     "frameImg": "/assets/frames/PMS-19.jpg"
@@ -398,7 +398,7 @@ export const F2L_CASES = [
     "duration": 18,
     "algorithm": "y' U' R' U2 R U' R' U R",
     "grip": "上起手",
-    "description": "连体错配·角白朝右，棱在左侧，转体分离",
+    "description": "白顶分离·角白朝天，UL左侧远端分离，转体藏棱配对",
     "cubeImg": "/assets/cubes/PMS-20.png",
     "cardImg": "/assets/cards/PMS-20.png",
     "frameImg": "/assets/frames/PMS-20.jpg"
@@ -415,7 +415,7 @@ export const F2L_CASES = [
     "duration": 16,
     "algorithm": "(U2) R U R' U R U' R'",
     "grip": "中起手",
-    "description": "连体配对·角白朝前但颜色接错，分离后入槽",
+    "description": "白顶分离·角白朝天，UL左侧同色分离，对准顶色顺势入槽",
     "cubeImg": "/assets/cubes/PMS-21.png",
     "cardImg": "/assets/cards/PMS-21.png",
     "frameImg": "/assets/frames/PMS-21.jpg"
@@ -432,7 +432,7 @@ export const F2L_CASES = [
     "duration": 16,
     "algorithm": "y' U2 R' U' R U' R' U R",
     "grip": "中起手",
-    "description": "连体配对·角白朝右且错连，转体分离入槽",
+    "description": "白顶分离·角白朝天，UF前侧同色分离，转体顺手入槽",
     "cubeImg": "/assets/cubes/PMS-22.png",
     "cardImg": "/assets/cards/PMS-22.png",
     "frameImg": "/assets/frames/PMS-22.jpg"
@@ -449,7 +449,7 @@ export const F2L_CASES = [
     "duration": 18,
     "algorithm": "R' D' R U' R' D R U R U' R'",
     "grip": "中起手",
-    "description": "顶色相同·分离入槽，杜宇生底层Keyhole绝活手法",
+    "description": "顶色同向·角白朝右，UB对角分离，杜宇生底层Keyhole绝活",
     "cubeImg": "/assets/cubes/SPGO-15.png",
     "cardImg": "/assets/cards/SPGO-15.png",
     "frameImg": "/assets/frames/SPGO-15.jpg"
@@ -466,7 +466,7 @@ export const F2L_CASES = [
     "duration": 15,
     "algorithm": "R U' R' U d R' U' R",
     "grip": "中起手",
-    "description": "顶色相同·角白朝右，分离并转体入槽",
+    "description": "顶色同向·角白朝前，UR右侧紧贴相连，分离并转体入槽",
     "cubeImg": "/assets/cubes/SPGO-16.png",
     "cardImg": "/assets/cards/SPGO-16.png",
     "frameImg": "/assets/frames/SPGO-16.jpg"
@@ -483,7 +483,7 @@ export const F2L_CASES = [
     "duration": 17,
     "algorithm": "R U2 R' U' R U R'",
     "grip": "下起手",
-    "description": "顶色不同·角白朝前，顶面异色，拆分配对入槽",
+    "description": "白顶相连·角白朝天，UR右侧相连假对，借空槽拆分配对入槽",
     "cubeImg": "/assets/cubes/SPGO-17.png",
     "cardImg": "/assets/cards/SPGO-17.png",
     "frameImg": "/assets/frames/SPGO-17.jpg"
@@ -500,7 +500,7 @@ export const F2L_CASES = [
     "duration": 18,
     "algorithm": "y' R' U2 R U R' U' R",
     "grip": "中起手",
-    "description": "顶色不同·角白朝右，顶面异色，转体拆分入槽",
+    "description": "白顶对角·角白朝天，UB对角远端分离，转体拆分入槽",
     "cubeImg": "/assets/cubes/SPGO-18.png",
     "cardImg": "/assets/cards/SPGO-18.png",
     "frameImg": "/assets/frames/SPGO-18.jpg"
@@ -687,7 +687,7 @@ export const F2L_CASES = [
     "duration": 17,
     "algorithm": "U' R U' R' U2 R U' R'",
     "grip": "中起手",
-    "description": "棱块在槽·棱翻转，角块白朝前，提棱并拆配对",
+    "description": "棱在底槽·棱方向正确，角块白朝右，提棱拆分配对",
     "cubeImg": "/assets/cubes/EPCU-33.png",
     "cardImg": "/assets/cards/EPCU-33.png",
     "frameImg": "/assets/frames/EPCU-33.jpg"
@@ -704,7 +704,7 @@ export const F2L_CASES = [
     "duration": 17,
     "algorithm": "U' R' D' R U R' D R",
     "grip": "下起手",
-    "description": "棱块在槽·棱翻转，角块白朝右，D层钥匙孔妙解",
+    "description": "棱在底槽·棱方向正确，角块白朝前，D层钥匙孔妙解",
     "cubeImg": "/assets/cubes/EPCU-34.png",
     "cardImg": "/assets/cards/EPCU-34.png",
     "frameImg": "/assets/frames/EPCU-34.jpg"
@@ -721,7 +721,7 @@ export const F2L_CASES = [
     "duration": 18,
     "algorithm": "U' R U R' d R' U' R",
     "grip": "中起手",
-    "description": "棱块在槽·棱翻转，角块白朝上，提棱转体入槽",
+    "description": "棱在底槽·棱块翻转，角块白朝右，提棱转体入槽",
     "cubeImg": "/assets/cubes/EPCU-35.png",
     "cardImg": "/assets/cards/EPCU-35.png",
     "frameImg": "/assets/frames/EPCU-35.jpg"
@@ -738,7 +738,7 @@ export const F2L_CASES = [
     "duration": 17,
     "algorithm": "U F' U' F U' R U R'",
     "grip": "中起手",
-    "description": "棱块在槽·棱翻转，角块白朝右顶，前层配对入槽",
+    "description": "棱在底槽·棱块翻转，角块白朝前，前层配对入槽",
     "cubeImg": "/assets/cubes/EPCU-36.png",
     "cardImg": "/assets/cards/EPCU-36.png",
     "frameImg": "/assets/frames/EPCU-36.jpg"
