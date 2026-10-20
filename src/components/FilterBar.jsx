@@ -2,76 +2,82 @@ import React from 'react';
 import { Layers } from 'lucide-react';
 import { F2L_GROUPS } from '../data/f2lCases';
 
-const GROUP_THEMES = {
-  all: {
-    border: 'border-slate-700',
-    activeBgDark: 'bg-blue-600 border-blue-500 shadow-blue-500/25 text-white',
-    activeBgLight: 'bg-blue-600 border-blue-500 shadow-blue-500/25 text-white',
-    textColor: 'text-blue-400'
-  },
-  Easy: {
+const COLOR_THEMES = {
+  emerald: {
     activeBgDark: 'bg-emerald-950/90 border-emerald-400 text-emerald-300',
     activeBgLight: 'bg-emerald-100 border-emerald-500 text-emerald-900',
     textColor: 'text-emerald-500'
   },
-  RE: {
+  blue: {
     activeBgDark: 'bg-blue-950/90 border-blue-400 text-blue-300',
     activeBgLight: 'bg-blue-100 border-blue-500 text-blue-900',
     textColor: 'text-blue-500'
   },
-  REFC: {
+  amber: {
     activeBgDark: 'bg-amber-950/90 border-amber-400 text-amber-300',
     activeBgLight: 'bg-amber-100 border-amber-500 text-amber-900',
     textColor: 'text-amber-500'
   },
-  PMS: {
+  purple: {
     activeBgDark: 'bg-purple-950/90 border-purple-400 text-purple-300',
     activeBgLight: 'bg-purple-100 border-purple-500 text-purple-900',
     textColor: 'text-purple-500'
   },
-  SPGO: {
+  cyan: {
     activeBgDark: 'bg-cyan-950/90 border-cyan-400 text-cyan-300',
     activeBgLight: 'bg-cyan-100 border-cyan-500 text-cyan-900',
     textColor: 'text-cyan-500'
   },
-  Weird: {
+  rose: {
     activeBgDark: 'bg-rose-950/90 border-rose-400 text-rose-300',
     activeBgLight: 'bg-rose-100 border-rose-500 text-rose-900',
     textColor: 'text-rose-500'
   },
-  CPEU: {
+  indigo: {
     activeBgDark: 'bg-indigo-950/90 border-indigo-400 text-indigo-300',
     activeBgLight: 'bg-indigo-100 border-indigo-500 text-indigo-900',
     textColor: 'text-indigo-500'
   },
-  EPCU: {
+  orange: {
     activeBgDark: 'bg-orange-950/90 border-orange-400 text-orange-300',
     activeBgLight: 'bg-orange-100 border-orange-500 text-orange-900',
     textColor: 'text-orange-500'
   },
-  ECP: {
+  teal: {
     activeBgDark: 'bg-teal-950/90 border-teal-400 text-teal-300',
     activeBgLight: 'bg-teal-100 border-teal-500 text-teal-900',
     textColor: 'text-teal-500'
   }
 };
 
+const DEFAULT_THEME = {
+  border: 'border-slate-700',
+  activeBgDark: 'bg-blue-600 border-blue-500 shadow-blue-500/25 text-white',
+  activeBgLight: 'bg-blue-600 border-blue-500 shadow-blue-500/25 text-white',
+  textColor: 'text-blue-400'
+};
+
 export default function FilterBar({
+  groups = F2L_GROUPS,
   selectedGroup,
   onSelectGroup,
   groupCounts = {},
-  theme = 'dark'
+  theme = 'dark',
+  title = '情况分类',
+  subtitle = '(9大类)',
+  totalCount = 41
 }) {
   const isDark = theme === 'dark';
 
-  // 9 csTimer F2L Categories (without 'all', which is placed separately in the top-right header)
-  const categoryGroups = Object.entries(F2L_GROUPS).map(([key, info]) => ({
+  // Categories in grid (without 'all', which is placed separately in the top-right header)
+  const categoryGroups = Object.entries(groups).map(([key, info]) => ({
     key,
-    en: key,
+    en: info.code || key,
     zh: info.abbrZh || info.nameZh,
     desc: info.desc,
     count: groupCounts[key] || 0,
-    img: info.iconImg
+    img: info.iconImg,
+    color: info.color
   }));
 
   return (
@@ -85,17 +91,17 @@ export default function FilterBar({
         <div className="flex items-center gap-1.5">
           <Layers className="w-4 h-4 text-blue-500" />
           <span className={`text-xs sm:text-sm font-bold tracking-tight ${isDark ? 'text-slate-200' : 'text-slate-800'}`}>
-            F2L情况分类
+            {title}
           </span>
           <span className={`text-[11px] font-medium ${isDark ? 'text-slate-500' : 'text-slate-400'}`}>
-            (9大类)
+            {subtitle}
           </span>
         </div>
 
         {/* Dedicated "全部" (All) button in the top-right corner */}
         <button
           onClick={() => onSelectGroup('all')}
-          title="显示全部 41 种常规手法"
+          title={`显示全部 ${totalCount} 种手法`}
           className={`flex items-center gap-1.5 px-2.5 py-0.5 sm:py-1 rounded text-xs font-bold transition-all duration-150 border ${
             selectedGroup === 'all'
               ? 'bg-blue-600 border-blue-500 text-white shadow-xs'
@@ -110,7 +116,7 @@ export default function FilterBar({
               ? 'bg-white/20 text-white'
               : isDark ? 'bg-slate-900 text-slate-400' : 'bg-white text-slate-600'
           }`}>
-            {groupCounts.all || 41}
+            {groupCounts.all || totalCount}
           </span>
         </button>
       </div>
@@ -119,7 +125,7 @@ export default function FilterBar({
       <div className="grid grid-cols-3 gap-1.5 sm:gap-2">
         {categoryGroups.map(g => {
           const isSelected = selectedGroup === g.key;
-          const themeConfig = GROUP_THEMES[g.key] || GROUP_THEMES.all;
+          const themeConfig = COLOR_THEMES[g.color] || DEFAULT_THEME;
           const activeClass = isDark ? themeConfig.activeBgDark : themeConfig.activeBgLight;
 
           return (

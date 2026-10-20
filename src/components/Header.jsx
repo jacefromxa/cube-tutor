@@ -2,6 +2,9 @@ import React from 'react';
 import { HelpCircle, CheckCircle2, RotateCcw, Sun, Moon } from 'lucide-react';
 
 export default function Header({ 
+  activeModule = 'f2l',
+  onSelectModule,
+  moduleCounts = { f2l: 41, oll: 57, pll: 21 },
   totalCases = 41, 
   masteredCount = 0, 
   masteredFilter = 'all',
@@ -11,8 +14,8 @@ export default function Header({
   onResetProgress,
   onOpenShortcuts
 }) {
-  const percent = Math.round((masteredCount / totalCases) * 100);
-  const unmasteredCount = totalCases - masteredCount;
+  const percent = totalCases > 0 ? Math.round((masteredCount / totalCases) * 100) : 0;
+  const unmasteredCount = Math.max(0, totalCases - masteredCount);
 
   const isDark = theme === 'dark';
 
@@ -23,22 +26,79 @@ export default function Header({
         : 'bg-white/95 border-slate-200 text-slate-900 shadow-sm'
     }`}>
       <div className="max-w-[1920px] mx-auto px-3 sm:px-4 lg:px-6 h-14 flex items-center justify-between gap-3">
-        {/* Left: Logo & Prominent Title */}
-        <div className="flex items-center gap-3">
+        {/* Left: Logo & Product Name: Cube-Tutor */}
+        <div className="flex items-center gap-2.5 sm:gap-3 shrink-0">
           <div className="w-8 h-8 sm:w-9 sm:h-9 rounded-md bg-gradient-to-tr from-blue-600 via-indigo-600 to-amber-500 p-0.5 shadow-md shadow-blue-500/20 flex items-center justify-center shrink-0">
-            <div className={`w-full h-full rounded-[4px] flex items-center justify-center font-black text-sm sm:text-base ${
+            <div className={`w-full h-full rounded-[4px] flex items-center justify-center font-black text-sm sm:text-base font-mono ${
               isDark ? 'bg-slate-900 text-amber-300' : 'bg-white text-blue-600'
             }`}>
               3×3
             </div>
           </div>
-          <h1 className="text-base sm:text-lg md:text-xl font-black tracking-tight">
-            CFOP · F2L 41 种常规手法
-          </h1>
+          <div className="flex items-center gap-2">
+            <h1 className="text-base sm:text-lg md:text-xl font-black tracking-tight font-mono">
+              Cube-Tutor
+            </h1>
+            <span className={`hidden xl:inline-block text-[10px] uppercase font-bold tracking-wider px-1.5 py-0.5 rounded border ${
+              isDark ? 'bg-slate-800/80 text-slate-400 border-slate-700' : 'bg-slate-100 text-slate-600 border-slate-300'
+            }`}>
+              CFOP 精讲
+            </span>
+          </div>
+        </div>
+
+        {/* Center: Prominent 3-Segment Navigation Switcher (F2L | OLL | PLL) */}
+        <div className={`flex items-center p-0.5 sm:p-1 rounded-lg border shadow-xs transition-colors ${
+          isDark ? 'bg-slate-900/90 border-slate-800' : 'bg-slate-100 border-slate-300/80'
+        }`}>
+          {/* F2L Tab */}
+          <button
+            onClick={() => onSelectModule && onSelectModule('f2l')}
+            className={`px-3 sm:px-4 py-1 sm:py-1.5 rounded-md text-xs sm:text-sm font-black transition-all flex items-center gap-1.5 ${
+              activeModule === 'f2l'
+                ? 'bg-blue-600 text-white shadow-md shadow-blue-500/25 scale-[1.02]'
+                : isDark 
+                  ? 'text-slate-400 hover:text-white hover:bg-slate-800/80' 
+                  : 'text-slate-600 hover:text-slate-900 hover:bg-white/80'
+            }`}
+          >
+            <span className="font-mono">F2L</span>
+            <span className="text-[11px] font-mono opacity-80 font-normal">({moduleCounts.f2l || 41})</span>
+          </button>
+
+          {/* OLL Tab */}
+          <button
+            onClick={() => onSelectModule && onSelectModule('oll')}
+            className={`px-3 sm:px-4 py-1 sm:py-1.5 rounded-md text-xs sm:text-sm font-black transition-all flex items-center gap-1.5 ${
+              activeModule === 'oll'
+                ? 'bg-amber-500 text-slate-950 shadow-md shadow-amber-500/25 scale-[1.02]'
+                : isDark 
+                  ? 'text-slate-400 hover:text-white hover:bg-slate-800/80' 
+                  : 'text-slate-600 hover:text-slate-900 hover:bg-white/80'
+            }`}
+          >
+            <span className="font-mono">OLL</span>
+            <span className="text-[11px] font-mono opacity-80 font-normal">({moduleCounts.oll || 57})</span>
+          </button>
+
+          {/* PLL Tab */}
+          <button
+            onClick={() => onSelectModule && onSelectModule('pll')}
+            className={`px-3 sm:px-4 py-1 sm:py-1.5 rounded-md text-xs sm:text-sm font-black transition-all flex items-center gap-1.5 ${
+              activeModule === 'pll'
+                ? 'bg-emerald-600 text-white shadow-md shadow-emerald-500/25 scale-[1.02]'
+                : isDark 
+                  ? 'text-slate-400 hover:text-white hover:bg-slate-800/80' 
+                  : 'text-slate-600 hover:text-slate-900 hover:bg-white/80'
+            }`}
+          >
+            <span className="font-mono">PLL</span>
+            <span className="text-[11px] font-mono opacity-80 font-normal">({moduleCounts.pll || 21})</span>
+          </button>
         </div>
 
         {/* Right: Mastery Filter Tabs + Progress Bar + Theme Toggle + Shortcuts */}
-        <div className="flex items-center gap-2 sm:gap-3">
+        <div className="flex items-center gap-2 sm:gap-3 shrink-0">
           {/* Requirement 3: 全部 / 待练习 / 已掌握 Filter Tabs placed beside progress */}
           <div className={`flex items-center p-0.5 rounded-md border text-xs ${
             isDark ? 'bg-slate-900 border-slate-800' : 'bg-slate-100 border-slate-200'

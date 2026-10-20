@@ -12,7 +12,9 @@ const VideoPlayer = forwardRef(function VideoPlayer({
   onSelectCase,
   isMastered,
   onToggleMastered,
-  theme = 'dark'
+  theme = 'dark',
+  videoPath = VIDEO_PATH,
+  groups = F2L_GROUPS
 }, ref) {
   const videoRef = useRef(null);
   const progressBarRef = useRef(null);
@@ -39,7 +41,7 @@ const VideoPlayer = forwardRef(function VideoPlayer({
   const currentOffset = currentCase ? Math.max(0, Math.min(caseDuration, currentTime - currentCase.startSec)) : 0;
   const progressPercent = Math.min(100, Math.max(0, (currentOffset / caseDuration) * 100));
 
-  // Jump to startSec when currentCase changes
+  // Jump to startSec when currentCase or videoPath changes
   useEffect(() => {
     if (!currentCase || !videoRef.current) return;
     const v = videoRef.current;
@@ -51,7 +53,7 @@ const VideoPlayer = forwardRef(function VideoPlayer({
     }).catch(() => {
       setIsPlaying(false);
     });
-  }, [currentCase]);
+  }, [currentCase?.id, videoPath]);
 
   // Handle timeupdate for looping & progress
   const handleTimeUpdate = useCallback(() => {
@@ -218,7 +220,7 @@ const VideoPlayer = forwardRef(function VideoPlayer({
       <div className="relative aspect-video max-h-[calc(100%-210px)] bg-black w-full overflow-hidden select-none group flex items-center justify-center">
         <video
           ref={videoRef}
-          src={VIDEO_PATH}
+          src={videoPath}
           playsInline
           muted
           onTimeUpdate={handleTimeUpdate}
@@ -463,9 +465,21 @@ const VideoPlayer = forwardRef(function VideoPlayer({
                   }`}>
                     {currentCase.code}
                   </span>
-                  <span className="text-xs px-2 py-0.5 rounded bg-blue-500/15 text-blue-500 border border-blue-500/30 font-semibold font-mono">
-                    {groupInfo?.nameZh}
-                  </span>
+                  {groupInfo?.nameZh && (
+                    <span className="text-xs px-2 py-0.5 rounded bg-blue-500/15 text-blue-500 border border-blue-500/30 font-semibold font-mono">
+                      {groupInfo.nameZh}
+                    </span>
+                  )}
+                  {currentCase.subName && (
+                    <span className="text-xs px-2 py-0.5 rounded bg-emerald-500/15 text-emerald-600 dark:text-emerald-400 border border-emerald-500/30 font-semibold font-mono">
+                      {currentCase.subName}
+                    </span>
+                  )}
+                  {currentCase.name && currentCase.name !== currentCase.code && !currentCase.subName && (
+                    <span className="text-xs px-2 py-0.5 rounded bg-amber-500/15 text-amber-600 dark:text-amber-400 border border-amber-500/30 font-semibold">
+                      {currentCase.name}
+                    </span>
+                  )}
                   {currentCase.grip && (
                     <span className="text-xs px-2 py-0.5 rounded bg-amber-500/15 text-amber-500 border border-amber-500/30 font-semibold flex items-center gap-1">
                       <Hand className="w-3 h-3" />
