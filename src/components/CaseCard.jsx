@@ -94,11 +94,13 @@ export default function CaseCard({
         </button>
       </div>
 
-      {/* Middle: Prominent 3D Cube Graphic (Enlarged to fill width for superior visibility) */}
-      <div className={`relative w-20 h-20 sm:w-24 sm:h-24 mx-auto rounded bg-white p-1.5 my-1 overflow-hidden flex items-center justify-center shadow-inner group/cube shrink-0 border ${
-        isMastered 
-          ? (isDark ? 'border-emerald-600/40' : 'border-emerald-300') 
-          : (isDark ? 'border-slate-700/60' : 'border-slate-200')
+      {/* Middle: Prominent 3D Cube Graphic (Unobstructed, Never blurred or blocked) */}
+      <div className={`relative w-20 h-20 sm:w-24 sm:h-24 mx-auto rounded bg-white p-1.5 my-1 overflow-hidden flex items-center justify-center shadow-inner group/cube shrink-0 border transition-all ${
+        isActive
+          ? (isMastered ? 'ring-2 ring-emerald-500 border-emerald-400' : 'ring-2 ring-blue-500 border-blue-400')
+          : (isMastered 
+              ? (isDark ? 'border-emerald-600/40' : 'border-emerald-300') 
+              : (isDark ? 'border-slate-700/60' : 'border-slate-200'))
       }`}>
         <img
           src={caseItem.cubeImg}
@@ -107,24 +109,12 @@ export default function CaseCard({
           className="w-full h-full object-contain filter contrast-105 transition-transform duration-200 group-hover/cube:scale-105"
         />
 
-        {/* Hover play prompt */}
-        <div className={`absolute inset-0 bg-blue-950/60 backdrop-blur-[1px] rounded flex flex-col items-center justify-center gap-0.5 text-white transition-opacity duration-150 ${
-          isActive ? 'opacity-100 bg-blue-900/40' : 'opacity-0 group-hover:opacity-100'
-        }`}>
-          <div className="w-6 h-6 rounded-full bg-blue-600 flex items-center justify-center shadow-md shadow-blue-500/50">
-            <Play className="w-2.5 h-2.5 fill-white translate-x-0.2" />
-          </div>
-          <span className="text-[9px] font-medium leading-none">
-            {isActive ? '播放中' : '播放'}
-          </span>
-        </div>
-
-        {/* Active playing indicator badge */}
+        {/* Non-intrusive playing badge (Pinned to top-left corner, zero obstruction of cube facets) */}
         {isActive && (
-          <span className="absolute top-1 left-1 flex h-2 w-2">
-            <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-blue-400 opacity-75"></span>
-            <span className="relative inline-flex rounded-full h-2 w-2 bg-blue-500"></span>
-          </span>
+          <div className="absolute top-1 left-1 px-1.5 py-0.2 rounded bg-blue-600/90 text-white text-[9px] font-bold flex items-center gap-1 shadow-sm pointer-events-none">
+            <span className="w-1.5 h-1.5 rounded-full bg-emerald-400 animate-pulse" />
+            <span>播放中</span>
+          </div>
         )}
       </div>
 

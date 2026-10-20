@@ -94,7 +94,7 @@ export default function FilterBar({
         <div className="flex items-center gap-1.5">
           <Layers className="w-3.5 h-3.5 text-blue-500" />
           <span className={`text-xs font-bold tracking-tight ${isDark ? 'text-slate-200' : 'text-slate-800'}`}>
-            csTimer 分类
+            F2L情况分类
           </span>
           <span className={`text-[10px] ${isDark ? 'text-slate-500' : 'text-slate-400'}`}>
             (共 41 式)

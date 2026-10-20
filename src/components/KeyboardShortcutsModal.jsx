@@ -6,8 +6,8 @@ export default function KeyboardShortcutsModal({ onClose, theme = 'dark' }) {
 
   const shortcuts = [
     { key: '空格 (Space)', action: '播放 / 暂停视频' },
-    { key: '← / → (方向键)', action: '快退 3 秒 / 快进 3 秒 (精准微调手法)' },
-    { key: 'J / K', action: '快退 3 秒 / 快进 3 秒 (双手速拧备用键)' },
+    { key: '← / → (方向键)', action: '快退 2 秒 / 快进 2 秒 (精准微调手法)' },
+    { key: 'J / K', action: '快退 2 秒 / 快进 2 秒 (双手速拧备用键)' },
     { key: '[ / ] 或 P / N', action: '切换上一个 / 下一个 Case' },
     { key: 'R', action: '重新播放当前 Case' },
     { key: 'L', action: '开启 / 关闭单段循环模式' },

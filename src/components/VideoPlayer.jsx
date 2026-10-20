@@ -4,7 +4,7 @@ import {
   Volume2, VolumeX, Maximize2, Copy, Check, Eye, FastForward, Rewind,
   Hand
 } from 'lucide-react';
-import { VIDEO_PATH, F2L_GROUPS } from '../data/f2lCases';
+import { VIDEO_PATH, F2L_GROUPS, invertAlgorithm } from '../data/f2lCases';
 
 const VideoPlayer = forwardRef(function VideoPlayer({
   currentCase,
@@ -27,8 +27,12 @@ const VideoPlayer = forwardRef(function VideoPlayer({
   const [videoError, setVideoError] = useState(false);
   const [isDragging, setIsDragging] = useState(false);
   const [hoverRatio, setHoverRatio] = useState(null);
+  const [showScramble, setShowScramble] = useState(true);
 
   const isDark = theme === 'dark';
+
+  // Compute inverted scramble (setup formula)
+  const scramble = React.useMemo(() => invertAlgorithm(currentCase?.algorithm), [currentCase]);
 
   // Case duration and progress
   const caseDuration = currentCase ? Math.max(0.1, currentCase.endSec - currentCase.startSec) : 1;
@@ -171,7 +175,8 @@ const VideoPlayer = forwardRef(function VideoPlayer({
 
   const handleCopy = () => {
     if (!currentCase) return;
-    navigator.clipboard.writeText(currentCase.algorithm);
+    const textToCopy = showScramble ? scramble : currentCase.algorithm;
+    navigator.clipboard.writeText(textToCopy);
     setCopied(true);
     setTimeout(() => setCopied(false), 2000);
   };
@@ -248,7 +253,7 @@ const VideoPlayer = forwardRef(function VideoPlayer({
         onPointerUp={handlePointerUp}
         onPointerCancel={handlePointerUp}
         onMouseLeave={() => setHoverRatio(null)}
-        title="拖动或点击进度条跳转 (← 快退 3s / → 快进 3s)"
+        title="拖动或点击进度条跳转 (← 快退 2s / → 快进 2s)"
         className={`relative w-full h-3 cursor-pointer group/progress transition-all select-none flex items-center ${
           isDark ? 'bg-slate-950 hover:bg-slate-900' : 'bg-slate-200 hover:bg-slate-300'
         }`}
@@ -296,8 +301,8 @@ const VideoPlayer = forwardRef(function VideoPlayer({
           </button>
 
           <button
-            onClick={() => handleStep(-3)}
-            title="快退 3 秒 (← 方向键 / J)"
+            onClick={() => handleStep(-2)}
+            title="快退 2 秒 (← 方向键 / J)"
             className={`px-2 py-1.5 rounded border transition text-xs flex items-center gap-0.5 font-mono ${
               isDark 
                 ? 'bg-slate-800 hover:bg-slate-750 text-slate-300 border-slate-700' 
@@ -305,7 +310,7 @@ const VideoPlayer = forwardRef(function VideoPlayer({
             }`}
           >
             <Rewind className="w-3 h-3" />
-            <span className="text-[11px]">-3s</span>
+            <span className="text-[11px]">-2s</span>
           </button>
 
           <button
@@ -339,15 +344,15 @@ const VideoPlayer = forwardRef(function VideoPlayer({
           </button>
 
           <button
-            onClick={() => handleStep(3)}
-            title="快进 3 秒 (→ 方向键 / K)"
+            onClick={() => handleStep(2)}
+            title="快进 2 秒 (→ 方向键 / K)"
             className={`px-2 py-1.5 rounded border transition text-xs flex items-center gap-0.5 font-mono ${
               isDark 
                 ? 'bg-slate-800 hover:bg-slate-750 text-slate-300 border-slate-700' 
                 : 'bg-white hover:bg-slate-100 text-slate-700 border-slate-300'
             }`}
           >
-            <span className="text-[11px]">+3s</span>
+            <span className="text-[11px]">+2s</span>
             <FastForward className="w-3 h-3" />
           </button>
 
@@ -456,11 +461,6 @@ const VideoPlayer = forwardRef(function VideoPlayer({
                   }`}>
                     {currentCase.code}
                   </span>
-                  <span className={`text-[10px] px-1.5 py-0.2 rounded border font-mono ${
-                    isDark ? 'bg-slate-800 text-slate-300 border-slate-700' : 'bg-white text-slate-700 border-slate-300'
-                  }`}>
-                    csTimer #{currentCase.csTimerNum}
-                  </span>
                   <span className="text-[10px] px-1.5 py-0.2 rounded bg-blue-500/15 text-blue-500 border border-blue-500/30 font-medium">
                     {groupInfo?.nameZh}
                   </span>
@@ -469,17 +469,13 @@ const VideoPlayer = forwardRef(function VideoPlayer({
                     {currentCase.grip}
                   </span>
                 </div>
-                <div className={`flex items-center gap-2 text-xs ${isDark ? 'text-slate-400' : 'text-slate-600'}`}>
-                  <span className="truncate">{currentCase.description}</span>
-                  <span className="opacity-40 hidden sm:inline">·</span>
-                  <span className="text-[11px] font-mono shrink-0 hidden sm:inline opacity-70">
-                    时间轴: {currentCase.timestamp} ~ {formatTime(currentCase.endSec)} ({currentCase.duration}s)
-                  </span>
+                <div className={`text-xs truncate ${isDark ? 'text-slate-400' : 'text-slate-600'}`}>
+                  {currentCase.description}
                 </div>
               </div>
             </div>
 
-            {/* Quick Actions */}
+            {/* Quick Actions: Mastered Toggle ("未掌握" vs "已掌握") & Card Lightbox */}
             <div className="flex items-center gap-1.5 shrink-0">
               <button
                 onClick={() => onToggleMastered(currentCase.id)}
@@ -487,12 +483,12 @@ const VideoPlayer = forwardRef(function VideoPlayer({
                   isMastered 
                     ? 'bg-emerald-500/20 text-emerald-500 border-emerald-500/40 hover:bg-emerald-500/30'
                     : isDark 
-                      ? 'bg-slate-800 hover:bg-slate-750 text-slate-300 border-slate-700' 
-                      : 'bg-white hover:bg-slate-100 text-slate-700 border-slate-300'
+                      ? 'bg-slate-800 hover:bg-slate-750 text-slate-400 border-slate-700' 
+                      : 'bg-white hover:bg-slate-100 text-slate-400 border-slate-300'
                 }`}
               >
-                <Check className={`w-3.5 h-3.5 ${isMastered ? 'text-emerald-500' : 'opacity-40'}`} />
-                <span className="hidden sm:inline">{isMastered ? '已掌握' : '标记掌握'}</span>
+                <Check className={`w-3.5 h-3.5 ${isMastered ? 'text-emerald-500' : 'text-slate-400 opacity-60'}`} />
+                <span>{isMastered ? '已掌握' : '未掌握'}</span>
               </button>
 
               <button
@@ -509,18 +505,41 @@ const VideoPlayer = forwardRef(function VideoPlayer({
             </div>
           </div>
 
-          {/* Bottom row: Large Algorithm Banner with Copy Button */}
+          {/* Bottom row: Setup / Scramble Algorithm Banner (with Solution toggle & Copy button) */}
           <div className={`border rounded p-2 flex items-center justify-between gap-2.5 shadow-inner ${
             isDark ? 'bg-slate-950 border-slate-800' : 'bg-white border-slate-200'
           }`}>
             <div className="flex items-center gap-2 overflow-hidden">
-              <span className={`text-[10px] font-mono uppercase tracking-wider shrink-0 px-1.5 py-0.5 rounded border ${
-                isDark ? 'bg-slate-900 text-slate-400 border-slate-800' : 'bg-slate-100 text-slate-600 border-slate-200'
+              {/* Toggle between Inverted Scramble and Solution */}
+              <div className={`flex items-center p-0.5 rounded border shrink-0 text-[10px] ${
+                isDark ? 'bg-slate-900 border-slate-800' : 'bg-slate-100 border-slate-300'
               }`}>
-                推荐手法
-              </span>
+                <button
+                  onClick={() => setShowScramble(true)}
+                  title="生成该形态的打乱公式 (从复原槽位打乱)"
+                  className={`px-1.5 py-0.5 rounded font-mono uppercase tracking-wider transition ${
+                    showScramble 
+                      ? 'bg-amber-500 text-slate-950 font-black shadow-xs' 
+                      : (isDark ? 'text-slate-400 hover:text-white' : 'text-slate-600 hover:text-slate-900')
+                  }`}
+                >
+                  打乱公式
+                </button>
+                <button
+                  onClick={() => setShowScramble(false)}
+                  title="杜宇生常规速拧解法"
+                  className={`px-1.5 py-0.5 rounded font-mono uppercase tracking-wider transition ${
+                    !showScramble 
+                      ? 'bg-blue-600 text-white font-black shadow-xs' 
+                      : (isDark ? 'text-slate-400 hover:text-white' : 'text-slate-600 hover:text-slate-900')
+                  }`}
+                >
+                  还原手法
+                </button>
+              </div>
+
               <div className="font-mono text-sm sm:text-base font-black text-amber-500 tracking-wider select-all truncate">
-                {currentCase.algorithm}
+                {showScramble ? scramble : currentCase.algorithm}
               </div>
             </div>
 
@@ -533,7 +552,7 @@ const VideoPlayer = forwardRef(function VideoPlayer({
               }`}
             >
               {copied ? <Check className="w-3.5 h-3.5 text-emerald-500" /> : <Copy className="w-3.5 h-3.5" />}
-              <span>{copied ? '已复制' : '复制公式'}</span>
+              <span>{copied ? '已复制' : (showScramble ? '复制打乱' : '复制手法')}</span>
             </button>
           </div>
         </div>

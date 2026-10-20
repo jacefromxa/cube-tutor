@@ -142,7 +142,7 @@ export default function App() {
         e.preventDefault();
         playerRef.current?.togglePlay();
       } 
-      // Requirement 1: Arrow Left/Right controls 3-second rapid jump
+      // Arrow Left/Right controls 2-second rapid jump
       else if (e.code === 'ArrowLeft') {
         e.preventDefault();
         if (e.shiftKey) {
@@ -151,8 +151,8 @@ export default function App() {
           const idx = activeList.findIndex(c => c.id === currentCase?.id);
           if (idx > 0) handleSelectCase(activeList[idx - 1]);
         } else {
-          // Step 3s back
-          playerRef.current?.handleStep(-3);
+          // Step 2s back
+          playerRef.current?.handleStep(-2);
         }
       } else if (e.code === 'ArrowRight') {
         e.preventDefault();
@@ -162,8 +162,8 @@ export default function App() {
           const idx = activeList.findIndex(c => c.id === currentCase?.id);
           if (idx !== -1 && idx < activeList.length - 1) handleSelectCase(activeList[idx + 1]);
         } else {
-          // Step 3s forward
-          playerRef.current?.handleStep(3);
+          // Step 2s forward
+          playerRef.current?.handleStep(2);
         }
       } 
       // [ / ] or P / N for Case switching
@@ -178,13 +178,13 @@ export default function App() {
         const idx = activeList.findIndex(c => c.id === currentCase?.id);
         if (idx !== -1 && idx < activeList.length - 1) handleSelectCase(activeList[idx + 1]);
       } 
-      // J / K for 3s step (two-hand speedsolving backup)
+      // J / K for 2s step (two-hand speedsolving backup)
       else if (e.code === 'KeyJ') {
         e.preventDefault();
-        playerRef.current?.handleStep(-3);
+        playerRef.current?.handleStep(-2);
       } else if (e.code === 'KeyK') {
         e.preventDefault();
-        playerRef.current?.handleStep(3);
+        playerRef.current?.handleStep(2);
       } 
       // R: Replay
       else if (e.code === 'KeyR') {
@@ -278,69 +278,72 @@ export default function App() {
             theme={theme}
           />
 
-          {/* Category Top Explanation Area (英文缩写 + 英语单词原文 + 中文直译标注 + 要点说明，已取消"显示全部") */}
-          <div className={`border rounded px-2.5 py-1.5 flex flex-col gap-0.5 shrink-0 text-xs transition-colors ${
-            isDark ? 'bg-slate-900/90 border-slate-800' : 'bg-white border-slate-200 shadow-sm'
+          {/* Unified Case Area: Header Fused Directly with Case Scroll Grid */}
+          <div className={`flex-1 min-h-0 flex flex-col border rounded-md overflow-hidden transition-colors ${
+            isDark ? 'bg-slate-900/60 border-slate-800' : 'bg-white border-slate-200 shadow-sm'
           }`}>
-            <div className="flex items-center gap-1.5 flex-wrap">
-              <span className="px-1.5 py-0.2 rounded text-[10px] font-black uppercase bg-blue-500/15 text-blue-500 border border-blue-500/30 font-mono shrink-0">
-                {selectedGroup === 'all' ? 'ALL' : activeGroupInfo?.code}
-              </span>
-              <span className="font-mono text-xs font-bold text-amber-500 shrink-0">
-                {selectedGroup === 'all' ? 'All 41 F2L Cases' : activeGroupInfo?.fullEn}
-              </span>
-              <span className={`text-[11px] font-semibold px-1 rounded ${
-                isDark ? 'bg-slate-800 text-slate-200' : 'bg-slate-100 text-slate-800'
-              }`}>
-                直译: {selectedGroup === 'all' ? '全部形态 / 41 种常规情况' : activeGroupInfo?.literalZh}
-              </span>
+            {/* Category Explanation Banner as Integrated Section Header ("直译:" Removed, Enlarged, Stronger Title Presence) */}
+            <div className={`px-3 py-2 border-b flex flex-col gap-0.5 shrink-0 transition-colors ${
+              isDark ? 'bg-slate-900 border-slate-800' : 'bg-slate-50/95 border-slate-200'
+            }`}>
+              <div className="flex items-center gap-2 flex-wrap">
+                <span className="px-2 py-0.5 rounded text-xs font-black uppercase bg-blue-500/15 text-blue-600 dark:text-blue-400 border border-blue-500/30 font-mono shrink-0">
+                  {selectedGroup === 'all' ? 'ALL' : activeGroupInfo?.code}
+                </span>
+                <span className="font-mono text-sm sm:text-base font-black text-amber-600 dark:text-amber-400 shrink-0">
+                  {selectedGroup === 'all' ? 'All 41 F2L Cases' : activeGroupInfo?.fullEn}
+                </span>
+                <span className={`text-xs sm:text-sm font-bold px-1.5 py-0.5 rounded ${
+                  isDark ? 'bg-slate-800 text-slate-100' : 'bg-white text-slate-800 border border-slate-200 shadow-xs'
+                }`}>
+                  {selectedGroup === 'all' ? '全部形态（41 种常规情况）' : activeGroupInfo?.literalZh}
+                </span>
+              </div>
+              <p className={`text-xs leading-tight truncate ${isDark ? 'text-slate-400' : 'text-slate-600'}`}>
+                {selectedGroup === 'all' 
+                  ? '涵盖基础入槽、旋转棱块、顶白翻角、连体错配、钥匙孔分离与底槽情况等 41 种指法' 
+                  : activeGroupInfo?.desc
+                }
+              </p>
             </div>
-            <p className={`text-[11px] leading-tight truncate ${isDark ? 'text-slate-400' : 'text-slate-600'}`}>
-              {selectedGroup === 'all' 
-                ? '涵盖基础入槽、旋转棱块、顶白翻角、连体错配、钥匙孔分离与底槽情况等 41 种指法' 
-                : activeGroupInfo?.desc
-              }
-            </p>
-          </div>
 
-          {/* INDEPENDENT CASE SCROLL CONTAINER (Scrolls smoothly without moving the page or the video!) */}
-          <div 
-            ref={caseListScrollRef}
-            className="flex-1 min-h-0 overflow-y-auto pr-1 pb-2 overscroll-contain scrollbar-thin"
-          >
-            {filteredCases.length > 0 ? (
-              <div className="grid grid-cols-2 sm:grid-cols-3 gap-2">
-                {filteredCases.map(item => (
-                  <CaseCard
-                    key={item.id}
-                    caseItem={item}
-                    isActive={currentCase?.id === item.id}
-                    isMastered={masteredSet.has(item.id)}
-                    onSelect={handleSelectCase}
-                    onToggleMastered={toggleMastered}
-                    theme={theme}
-                  />
-                ))}
-              </div>
-            ) : (
-              <div className={`border rounded-lg p-6 text-center flex flex-col items-center justify-center gap-2 my-auto ${
-                isDark ? 'bg-slate-900/50 border-slate-800' : 'bg-white border-slate-200'
-              }`}>
-                <AlertCircle className="w-6 h-6 text-slate-400" />
-                <p className={`text-xs font-semibold ${isDark ? 'text-slate-300' : 'text-slate-700'}`}>
-                  暂无匹配的 Case
-                </p>
-                <button
-                  onClick={() => {
-                    setSelectedGroup('all');
-                    setMasteredFilter('all');
-                  }}
-                  className="mt-1 px-3 py-1 rounded bg-blue-600 text-white text-xs font-semibold hover:bg-blue-500 transition"
-                >
-                  重置为全部
-                </button>
-              </div>
-            )}
+            {/* INDEPENDENT CASE SCROLL CONTAINER (Scrolls smoothly inside the unified container) */}
+            <div 
+              ref={caseListScrollRef}
+              className="flex-1 min-h-0 overflow-y-auto p-2 overscroll-contain scrollbar-thin"
+            >
+              {filteredCases.length > 0 ? (
+                <div className="grid grid-cols-2 sm:grid-cols-3 gap-2">
+                  {filteredCases.map(item => (
+                    <CaseCard
+                      key={item.id}
+                      caseItem={item}
+                      isActive={currentCase?.id === item.id}
+                      isMastered={masteredSet.has(item.id)}
+                      onSelect={handleSelectCase}
+                      onToggleMastered={toggleMastered}
+                      theme={theme}
+                    />
+                  ))}
+                </div>
+              ) : (
+                <div className="p-8 text-center flex flex-col items-center justify-center gap-2 my-auto">
+                  <AlertCircle className="w-6 h-6 text-slate-400" />
+                  <p className={`text-xs font-semibold ${isDark ? 'text-slate-300' : 'text-slate-700'}`}>
+                    暂无匹配的 Case
+                  </p>
+                  <button
+                    onClick={() => {
+                      setSelectedGroup('all');
+                      setMasteredFilter('all');
+                    }}
+                    className="mt-1 px-3 py-1 rounded bg-blue-600 text-white text-xs font-semibold hover:bg-blue-500 transition"
+                  >
+                    重置为全部
+                  </button>
+                </div>
+              )}
+            </div>
           </div>
         </div>
 

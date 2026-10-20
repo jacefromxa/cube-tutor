@@ -105,6 +105,31 @@ export const F2L_GROUPS = {
   }
 };
 
+/**
+ * Compute the inverse of a Rubik's cube algorithm to generate the Scramble (Setup formula)
+ * from a solved slot.
+ */
+export function invertAlgorithm(alg) {
+  if (!alg) return '';
+  const tokens = alg.trim().match(/(\([^)]+\)|[A-Za-z]['2]?)/g) || [];
+  
+  const invertMove = (m) => {
+    if (m.startsWith('(') && m.endsWith(')')) {
+      const inner = m.slice(1, -1);
+      return `(${invertMove(inner)})`;
+    }
+    if (m.endsWith("'")) {
+      return m.slice(0, -1);
+    } else if (m.endsWith("2")) {
+      return m;
+    } else {
+      return `${m}'`;
+    }
+  };
+
+  return tokens.map(invertMove).reverse().join(' ');
+}
+
 export const F2L_CASES = [
   {
     "id": "Easy-01",
