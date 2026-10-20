@@ -23,7 +23,8 @@ const VideoPlayer = forwardRef(function VideoPlayer({
   const [playbackRate, setPlaybackRate] = useState(1.0);
   const [currentTime, setCurrentTime] = useState(0);
   const [isMuted, setIsMuted] = useState(false);
-  const [copied, setCopied] = useState(false);
+  const [copiedScramble, setCopiedScramble] = useState(false);
+  const [copiedSolution, setCopiedSolution] = useState(false);
   const [videoError, setVideoError] = useState(false);
   const [isDragging, setIsDragging] = useState(false);
   const [hoverRatio, setHoverRatio] = useState(null);
@@ -174,12 +175,18 @@ const VideoPlayer = forwardRef(function VideoPlayer({
     }
   };
 
-  const handleCopy = () => {
+  const handleCopyScramble = () => {
+    if (!scramble) return;
+    navigator.clipboard.writeText(scramble);
+    setCopiedScramble(true);
+    setTimeout(() => setCopiedScramble(false), 2000);
+  };
+
+  const handleCopySolution = () => {
     if (!currentCase) return;
-    const textToCopy = showScramble ? scramble : currentCase.algorithm;
-    navigator.clipboard.writeText(textToCopy);
-    setCopied(true);
-    setTimeout(() => setCopied(false), 2000);
+    navigator.clipboard.writeText(currentCase.algorithm);
+    setCopiedSolution(true);
+    setTimeout(() => setCopiedSolution(false), 2000);
   };
 
   const currentIndex = casesList.findIndex(c => c.id === currentCase?.id);
@@ -205,7 +212,7 @@ const VideoPlayer = forwardRef(function VideoPlayer({
   };
 
   return (
-    <div className={`border rounded-lg overflow-hidden flex flex-col shadow-xl transition-colors ${
+    <div className={`h-full border rounded-md overflow-hidden flex flex-col justify-between shadow-xl transition-colors ${
       isDark ? 'bg-slate-900 border-slate-800' : 'bg-white border-slate-200'
     }`}>
       {/* Video Container */}
@@ -432,9 +439,9 @@ const VideoPlayer = forwardRef(function VideoPlayer({
         </div>
       </div>
 
-      {/* Case Details & Algorithm Box */}
+      {/* Case Details & Algorithm Box (flex-1 to stretch and align bottom edge with right column) */}
       {currentCase && (
-        <div className={`p-2.5 sm:p-3 flex flex-col gap-2 transition-colors ${
+        <div className={`flex-1 min-h-0 p-2.5 sm:p-3 flex flex-col justify-between gap-2.5 transition-colors ${
           isDark ? 'bg-slate-950/90' : 'bg-slate-50/90'
         }`}>
           {/* Top row: Thumbnail & Metadata */}
@@ -499,7 +506,7 @@ const VideoPlayer = forwardRef(function VideoPlayer({
                 title="查看原视频图解卡片"
                 className={`p-1.5 rounded border transition ${
                   isDark 
-                    ? 'bg-slate-800 hover:bg-slate-700 text-slate-300 hover:text-white border-slate-700' 
+                    ? 'bg-slate-800 hover:bg-slate-750 text-slate-300 hover:text-white border-slate-700' 
                     : 'bg-white hover:bg-slate-100 text-slate-700 hover:text-slate-900 border-slate-300'
                 }`}
               >
@@ -508,55 +515,65 @@ const VideoPlayer = forwardRef(function VideoPlayer({
             </div>
           </div>
 
-          {/* Bottom row: Setup / Scramble Algorithm Banner (with Solution toggle & Copy button) */}
-          <div className={`border rounded p-2 flex items-center justify-between gap-2.5 shadow-inner ${
-            isDark ? 'bg-slate-950 border-slate-800' : 'bg-white border-slate-200'
-          }`}>
-            <div className="flex items-center gap-2 overflow-hidden">
-              {/* Toggle between Inverted Scramble and Solution */}
-              <div className={`flex items-center p-0.5 rounded border shrink-0 text-[10px] ${
-                isDark ? 'bg-slate-900 border-slate-800' : 'bg-slate-100 border-slate-300'
-              }`}>
-                <button
-                  onClick={() => setShowScramble(true)}
-                  title="生成该形态的打乱公式 (从复原槽位打乱)"
-                  className={`px-1.5 py-0.5 rounded font-mono uppercase tracking-wider transition ${
-                    showScramble 
-                      ? 'bg-amber-500 text-slate-950 font-black shadow-xs' 
-                      : (isDark ? 'text-slate-400 hover:text-white' : 'text-slate-600 hover:text-slate-900')
-                  }`}
-                >
-                  打乱公式
-                </button>
-                <button
-                  onClick={() => setShowScramble(false)}
-                  title="杜宇生常规速拧解法"
-                  className={`px-1.5 py-0.5 rounded font-mono uppercase tracking-wider transition ${
-                    !showScramble 
-                      ? 'bg-blue-600 text-white font-black shadow-xs' 
-                      : (isDark ? 'text-slate-400 hover:text-white' : 'text-slate-600 hover:text-slate-900')
-                  }`}
-                >
-                  还原手法
-                </button>
+          {/* Two-Line Formulas: Line 1 (打乱公式) & Line 2 (求解手法) to fill height and align bottom */}
+          <div className="flex flex-col gap-1.5">
+            {/* Line 1: 打乱公式 (Setup) */}
+            <div className={`border rounded p-1.5 sm:p-2 flex items-center justify-between gap-2 shadow-xs transition-colors ${
+              isDark ? 'bg-slate-950/80 border-slate-800/90' : 'bg-white border-slate-200'
+            }`}>
+              <div className="flex items-center gap-2 overflow-hidden">
+                <span className={`text-[10px] font-mono uppercase tracking-wider shrink-0 px-1.5 py-0.5 rounded border font-bold ${
+                  isDark ? 'bg-amber-500/15 text-amber-400 border-amber-500/30' : 'bg-amber-50 text-amber-700 border-amber-200'
+                }`}>
+                  打乱公式 (生成)
+                </span>
+                <div className="font-mono text-xs sm:text-sm font-black text-amber-500 tracking-wider select-all truncate">
+                  {scramble}
+                </div>
               </div>
 
-              <div className="font-mono text-sm sm:text-base font-black text-amber-500 tracking-wider select-all truncate">
-                {showScramble ? scramble : currentCase.algorithm}
-              </div>
+              <button
+                onClick={handleCopyScramble}
+                title="复制打乱公式"
+                className={`px-2 py-0.5 rounded transition flex items-center justify-center gap-1 border shrink-0 text-xs font-medium ${
+                  isDark 
+                    ? 'bg-slate-800 hover:bg-slate-700 text-slate-200 border-slate-700' 
+                    : 'bg-slate-100 hover:bg-slate-200 text-slate-700 border-slate-300'
+                }`}
+              >
+                {copiedScramble ? <Check className="w-3 h-3 text-emerald-500" /> : <Copy className="w-3 h-3" />}
+                <span>{copiedScramble ? '已复制' : '复制打乱'}</span>
+              </button>
             </div>
 
-            <button
-              onClick={handleCopy}
-              className={`px-2.5 py-1 rounded transition flex items-center justify-center gap-1 border shrink-0 text-xs font-medium ${
-                isDark 
-                  ? 'bg-slate-800 hover:bg-slate-700 text-slate-200 border-slate-700' 
-                  : 'bg-slate-100 hover:bg-slate-200 text-slate-700 border-slate-300'
-              }`}
-            >
-              {copied ? <Check className="w-3.5 h-3.5 text-emerald-500" /> : <Copy className="w-3.5 h-3.5" />}
-              <span>{copied ? '已复制' : (showScramble ? '复制打乱' : '复制手法')}</span>
-            </button>
+            {/* Line 2: 求解手法 (Solution) */}
+            <div className={`border rounded p-1.5 sm:p-2 flex items-center justify-between gap-2 shadow-xs transition-colors ${
+              isDark ? 'bg-slate-950/80 border-slate-800/90' : 'bg-white border-slate-200'
+            }`}>
+              <div className="flex items-center gap-2 overflow-hidden">
+                <span className={`text-[10px] font-mono uppercase tracking-wider shrink-0 px-1.5 py-0.5 rounded border font-bold ${
+                  isDark ? 'bg-blue-500/15 text-blue-400 border-blue-500/30' : 'bg-blue-50 text-blue-700 border-blue-200'
+                }`}>
+                  求解手法 (还原)
+                </span>
+                <div className="font-mono text-xs sm:text-sm font-black text-blue-500 tracking-wider select-all truncate">
+                  {currentCase.algorithm}
+                </div>
+              </div>
+
+              <button
+                onClick={handleCopySolution}
+                title="复制求解手法公式"
+                className={`px-2 py-0.5 rounded transition flex items-center justify-center gap-1 border shrink-0 text-xs font-medium ${
+                  isDark 
+                    ? 'bg-slate-800 hover:bg-slate-750 text-slate-200 border-slate-700' 
+                    : 'bg-slate-100 hover:bg-slate-200 text-slate-700 border-slate-300'
+                }`}
+              >
+                {copiedSolution ? <Check className="w-3 h-3 text-emerald-500" /> : <Copy className="w-3 h-3" />}
+                <span>{copiedSolution ? '已复制' : '复制手法'}</span>
+              </button>
+            </div>
           </div>
         </div>
       )}
