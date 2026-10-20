@@ -216,10 +216,23 @@ const VideoPlayer = forwardRef(function VideoPlayer({
           playsInline
           muted
           onTimeUpdate={handleTimeUpdate}
+          onPlay={() => setIsPlaying(true)}
+          onPause={() => setIsPlaying(false)}
           onError={() => setVideoError(true)}
           onClick={togglePlay}
           className="w-full h-full object-contain cursor-pointer"
         />
+
+        {/* Pause indicator at bottom-right of video playback window */}
+        {!isPlaying && (
+          <div 
+            onClick={togglePlay}
+            title="点击继续播放 (快捷键: 空格)"
+            className="absolute bottom-3 right-3 p-2 rounded-md bg-black/60 backdrop-blur-md border border-white/25 text-white shadow-xl cursor-pointer hover:bg-black/80 hover:scale-110 transition-all flex items-center justify-center group/pause animate-in fade-in duration-150"
+          >
+            <Pause className="w-5 h-5 fill-white text-white transition-transform group-hover/pause:scale-110" />
+          </div>
+        )}
 
         {videoError && (
           <div className="absolute inset-0 flex flex-col items-center justify-center bg-slate-950/90 text-center p-6">
