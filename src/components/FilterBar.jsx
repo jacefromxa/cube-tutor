@@ -133,7 +133,7 @@ export default function FilterBar({
               key={g.key}
               onClick={() => onSelectGroup(g.key)}
               title={`${g.en} · ${g.zh} (${g.count}个) - ${g.desc}`}
-              className={`group relative rounded p-1.5 text-left transition-all duration-150 flex items-center gap-2 border overflow-hidden ${
+              className={`group relative rounded p-1 sm:p-1.5 text-left transition-all duration-150 flex items-center gap-1.5 sm:gap-2 border overflow-hidden ${
                 isSelected
                   ? `${activeClass} ring-1.5 ring-blue-500/40 shadow-sm scale-[1.01]`
                   : isDark
@@ -141,8 +141,8 @@ export default function FilterBar({
                     : 'bg-slate-50 hover:bg-slate-100 border-slate-200 hover:border-slate-300'
               }`}
             >
-              {/* Enlarged 3D Cube Graphic Thumbnail */}
-              <div className={`w-8 h-8 sm:w-9 sm:h-9 rounded bg-white p-0.5 shrink-0 overflow-hidden flex items-center justify-center border shadow-xs ${
+              {/* 3D Cube Graphic Thumbnail */}
+              <div className={`w-7 h-7 sm:w-8 sm:h-8 md:w-9 md:h-9 rounded bg-white p-0.5 shrink-0 overflow-hidden flex items-center justify-center border shadow-xs ${
                 isDark ? 'border-slate-700/60' : 'border-slate-200'
               }`}>
                 <img
@@ -154,15 +154,15 @@ export default function FilterBar({
 
               {/* Text info: Category Code & Count on top, Chinese description on bottom */}
               <div className="flex flex-col min-w-0 flex-1 leading-tight overflow-hidden">
-                <div className="flex items-center justify-between gap-1">
-                  <span className={`text-xs sm:text-sm font-black tracking-tight uppercase truncate ${
+                <div className="flex items-center justify-between gap-0.5">
+                  <span className={`text-[10px] sm:text-xs md:text-sm font-black tracking-tight uppercase truncate ${
                     isSelected 
                       ? (isDark ? 'text-white' : 'text-blue-900 font-bold') 
                       : (themeConfig.textColor || (isDark ? 'text-slate-200' : 'text-slate-700'))
                   }`}>
                     {g.en}
                   </span>
-                  <span className={`text-[10px] font-mono px-1 rounded font-semibold shrink-0 ${
+                  <span className={`text-[9px] sm:text-[10px] font-mono px-0.5 sm:px-1 rounded font-semibold shrink-0 ${
                     isSelected
                       ? (isDark ? 'bg-white/20 text-white' : 'bg-blue-600 text-white')
                       : (isDark ? 'bg-slate-800 text-slate-400' : 'bg-slate-200 text-slate-600')
@@ -170,7 +170,7 @@ export default function FilterBar({
                     {g.count}
                   </span>
                 </div>
-                <span className={`text-[10px] sm:text-[11px] truncate leading-tight mt-0.5 ${
+                <span className={`text-[9px] sm:text-[11px] truncate leading-tight mt-0.5 ${
                   isSelected 
                     ? (isDark ? 'text-slate-200 font-medium' : 'text-blue-800 font-medium')
                     : (isDark ? 'text-slate-400 group-hover:text-slate-300' : 'text-slate-500 group-hover:text-slate-700')

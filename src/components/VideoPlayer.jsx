@@ -217,7 +217,7 @@ const VideoPlayer = forwardRef(function VideoPlayer({
       isDark ? 'bg-slate-900 border-slate-800' : 'bg-white border-slate-200'
     }`}>
       {/* Video Container */}
-      <div className="relative aspect-video max-h-[calc(100%-210px)] bg-black w-full overflow-hidden select-none group flex items-center justify-center">
+      <div className="relative aspect-video lg:max-h-[calc(100%-210px)] bg-black w-full overflow-hidden select-none group flex items-center justify-center">
         <video
           ref={videoRef}
           src={videoPath}

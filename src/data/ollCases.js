@@ -40,7 +40,7 @@ export const OLL_GROUPS = {
     iconImg: '/assets/cubes_oll/OLL37.png'
   },
   'Awkward': {
-    code: 'Awkward',
+    code: 'AWK',
     nameZh: '狙击枪',
     abbrZh: '狙击枪',
     fullEn: 'Awkward / Gun Shapes (G & F)',
@@ -51,7 +51,7 @@ export const OLL_GROUPS = {
     iconImg: '/assets/cubes_oll/OLL41.png'
   },
   'Lightning': {
-    code: 'Lightning',
+    code: 'LIGHT',
     nameZh: '闪电形',
     abbrZh: '闪电形',
     fullEn: 'Lightning Bolts (Small & Big)',

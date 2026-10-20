@@ -315,7 +315,7 @@ export default function App() {
   const activeGroupInfo = activeConfig.groups && selectedGroup !== 'all' ? activeConfig.groups[selectedGroup] : null;
 
   return (
-    <div className={`h-screen flex flex-col font-sans select-none overflow-hidden transition-colors duration-150 ${
+    <div className={`min-h-screen lg:h-screen flex flex-col font-sans select-none overflow-y-auto lg:overflow-hidden transition-colors duration-150 ${
       isDark ? 'bg-slate-950 text-slate-100' : 'bg-slate-100 text-slate-800'
     }`}>
       {/* Header: Product Title Cube-Tutor + 3-Segment Switcher (F2L / OLL / PLL) + Controls */}
@@ -337,14 +337,14 @@ export default function App() {
         onOpenShortcuts={() => setShowShortcuts(true)}
       />
 
-      {/* Main Dual-Column Layout:
-          - Left: Maximized Video Stage (Fixed, No scroll away, Maximized height, Interactive Scrubber)
-          - Right: Option Menu (Category Filter if F2L/OLL, Independent scroll container)
+      {/* Main Responsive Layout:
+          - Desktop (lg:): Fixed Dual-Column Viewport with pixel-perfect bottom alignment
+          - Mobile (< lg): Natural vertical flow where users can browse video, formulas, categories and cases seamlessly
       */}
-      <main className="flex-1 min-h-0 max-w-[1920px] w-full mx-auto px-2.5 sm:px-3 lg:px-5 py-2 sm:py-2.5 flex flex-col lg:flex-row gap-2.5 sm:gap-3 lg:gap-4 items-stretch overflow-hidden">
+      <main className="flex-1 min-h-0 max-w-[1920px] w-full mx-auto px-2 sm:px-3 lg:px-5 py-2 sm:py-2.5 flex flex-col lg:flex-row gap-2.5 sm:gap-3 lg:gap-4 items-stretch lg:overflow-hidden">
         
-        {/* LEFT COLUMN: Maximized Video Player & Action Bar (Permanently Fixed in Viewport!) */}
-        <div className="w-full lg:w-[57%] xl:w-[61%] 2xl:w-[64%] shrink-0 h-full flex flex-col justify-start overflow-hidden">
+        {/* LEFT COLUMN: Video Player & Action Bar */}
+        <div className="w-full lg:w-[57%] xl:w-[61%] 2xl:w-[64%] shrink-0 h-auto lg:h-full flex flex-col justify-start">
           <VideoPlayer
             ref={playerRef}
             currentCase={currentCase}
@@ -360,7 +360,7 @@ export default function App() {
         </div>
 
         {/* RIGHT COLUMN: Selection Menu & Independent Scrollable Case Grid */}
-        <div className="flex-1 min-w-0 h-full flex flex-col gap-2 overflow-hidden">
+        <div className="flex-1 min-w-0 h-auto lg:h-full flex flex-col gap-2">
           {/* Category Filter Bar (Only shown for F2L and OLL; PLL cases are shown directly) */}
           {activeConfig.groups && (
             <FilterBar
@@ -410,10 +410,10 @@ export default function App() {
               </p>
             </div>
 
-            {/* INDEPENDENT CASE SCROLL CONTAINER (Scrolls smoothly inside the unified container) */}
+            {/* CASE CONTAINER (Naturally scrolls on mobile, independently scrolls inside container on desktop) */}
             <div 
               ref={caseListScrollRef}
-              className="flex-1 min-h-0 overflow-y-auto p-2 overscroll-contain scrollbar-thin"
+              className="flex-1 min-h-0 lg:overflow-y-auto p-2 overscroll-contain scrollbar-thin"
             >
               {filteredCases.length > 0 ? (
                 <div className="grid grid-cols-2 sm:grid-cols-3 gap-2">
