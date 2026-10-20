@@ -7,7 +7,7 @@ import CaseCard from './components/CaseCard';
 import CardModal from './components/CardModal';
 import KeyboardShortcutsModal from './components/KeyboardShortcutsModal';
 import { F2L_CASES, F2L_GROUPS, TOTAL_CASES } from './data/f2lCases';
-import { Layers, Sparkles, AlertCircle, ArrowUp } from 'lucide-react';
+import { Layers, Sparkles, AlertCircle } from 'lucide-react';
 
 const STORAGE_KEY = 'f2l_mastered_cases_v1';
 
@@ -189,11 +189,86 @@ export default function App() {
         onOpenShortcuts={() => setShowShortcuts(true)}
       />
 
-      {/* Main Dual-Column Stage (No whole-page scroll!) */}
-      <main className="flex-1 min-h-0 max-w-[1720px] w-full mx-auto px-3 sm:px-5 lg:px-6 py-3 sm:py-4 flex flex-col lg:flex-row gap-4 lg:gap-6 items-stretch overflow-hidden">
+      {/* Main Dual-Column Layout:
+          - Left: Compact Menu / Selection Area (Search, Categories with 3D icons, Case Grid with independent scroll)
+          - Right: Enlarged Hero Video Area (Always fixed and prominently displayed!)
+      */}
+      <main className="flex-1 min-h-0 max-w-[1920px] w-full mx-auto px-3 sm:px-4 lg:px-6 py-3 flex flex-col lg:flex-row gap-4 lg:gap-5 items-stretch overflow-hidden">
         
-        {/* LEFT COLUMN: Sticky / Fixed Video Player & Case Details (Always Visible!) */}
-        <div className="w-full lg:w-[480px] xl:w-[560px] 2xl:w-[620px] shrink-0 flex flex-col gap-3 overflow-y-auto pr-1 scrollbar-thin">
+        {/* LEFT COLUMN: Option Menu (Compact, Independent Scroll, Category Buttons + 41 Case Grid) */}
+        <div className="w-full lg:w-[380px] xl:w-[420px] 2xl:w-[460px] shrink-0 h-full flex flex-col gap-2.5 overflow-hidden">
+          {/* Filter Bar with English + Chinese + 3D Image Category Buttons */}
+          <FilterBar
+            selectedGroup={selectedGroup}
+            onSelectGroup={setSelectedGroup}
+            searchQuery={searchQuery}
+            onSearchChange={setSearchQuery}
+            sortBy={sortBy}
+            onSortChange={setSortBy}
+            masteredFilter={masteredFilter}
+            onMasteredFilterChange={setMasteredFilter}
+            groupCounts={groupCounts}
+          />
+
+          {/* Active Category Mini Tag */}
+          {activeGroupInfo && (
+            <div className="bg-slate-900/90 border border-slate-800 rounded-2xl px-3 py-1.5 flex items-center justify-between shrink-0">
+              <div className="flex items-center gap-2">
+                <span className="px-2 py-0.5 rounded text-[11px] font-bold bg-blue-500/20 text-blue-300 border border-blue-500/30">
+                  {selectedGroup}
+                </span>
+                <span className="text-xs font-semibold text-slate-200">
+                  {activeGroupInfo.nameZh}
+                </span>
+              </div>
+              <button
+                onClick={() => setSelectedGroup('all')}
+                className="text-[11px] text-blue-400 hover:text-blue-300 font-medium"
+              >
+                重置
+              </button>
+            </div>
+          )}
+
+          {/* INDEPENDENT CASE SCROLL CONTAINER (Scrolls smoothly without moving the page or the video!) */}
+          <div 
+            ref={caseListScrollRef}
+            className="flex-1 min-h-0 overflow-y-auto pr-1.5 pb-2 overscroll-contain scrollbar-thin"
+          >
+            {filteredCases.length > 0 ? (
+              <div className="grid grid-cols-2 gap-2 sm:gap-2.5">
+                {filteredCases.map(item => (
+                  <CaseCard
+                    key={item.id}
+                    caseItem={item}
+                    isActive={currentCase?.id === item.id}
+                    isMastered={masteredSet.has(item.id)}
+                    onSelect={handleSelectCase}
+                    onToggleMastered={toggleMastered}
+                  />
+                ))}
+              </div>
+            ) : (
+              <div className="bg-slate-900/50 border border-slate-800 rounded-3xl p-8 text-center flex flex-col items-center justify-center gap-2 my-auto">
+                <AlertCircle className="w-7 h-7 text-slate-600" />
+                <p className="text-xs font-semibold text-slate-300">未找到匹配的 Case</p>
+                <button
+                  onClick={() => {
+                    setSelectedGroup('all');
+                    setSearchQuery('');
+                    setMasteredFilter('all');
+                  }}
+                  className="mt-1 px-3 py-1 rounded-xl bg-blue-600 text-white text-xs font-semibold hover:bg-blue-500 transition"
+                >
+                  重置筛选
+                </button>
+              </div>
+            )}
+          </div>
+        </div>
+
+        {/* RIGHT COLUMN: Enlarged Video & Action Stage (Always Visible & Prominently Positioned!) */}
+        <div className="flex-1 min-w-0 h-full flex flex-col gap-3 overflow-y-auto pr-1 scrollbar-thin">
           <VideoPlayer
             ref={playerRef}
             currentCase={currentCase}
@@ -215,86 +290,6 @@ export default function App() {
                 本套 41 式精选自杜宇生常规指法体系，特点是无转体入槽、后槽顺手做以及 D 层 Keyhole 提速。建议开启右上角“循环练习”，配合键盘空格键与 0.5x / 0.75x 慢放反复巩固肌肉记忆。
               </p>
             </div>
-          </div>
-        </div>
-
-        {/* RIGHT COLUMN: FilterBar + Scrollable Case Grid Container */}
-        <div className="flex-1 min-h-0 flex flex-col gap-3 overflow-hidden">
-          {/* Top of right column: Filter Bar with Visual Category Buttons */}
-          <FilterBar
-            selectedGroup={selectedGroup}
-            onSelectGroup={setSelectedGroup}
-            searchQuery={searchQuery}
-            onSearchChange={setSearchQuery}
-            sortBy={sortBy}
-            onSortChange={setSortBy}
-            masteredFilter={masteredFilter}
-            onMasteredFilterChange={setMasteredFilter}
-            groupCounts={groupCounts}
-          />
-
-          {/* Active Group Description Banner (if filtering by group) */}
-          {activeGroupInfo && (
-            <div className="bg-gradient-to-r from-blue-950/40 via-slate-900 to-slate-900 border border-blue-900/40 rounded-2xl px-4 py-2.5 flex items-center justify-between shrink-0">
-              <div className="flex items-center gap-2.5">
-                <span className="px-2.5 py-0.5 rounded-lg text-xs font-bold bg-blue-500/20 text-blue-300 border border-blue-500/30">
-                  {selectedGroup}
-                </span>
-                <div>
-                  <span className="text-xs font-bold text-white mr-2">
-                    {activeGroupInfo.nameZh}
-                  </span>
-                  <span className="text-xs text-slate-400 hidden sm:inline">
-                    {activeGroupInfo.desc}
-                  </span>
-                </div>
-              </div>
-              <button
-                onClick={() => setSelectedGroup('all')}
-                className="text-xs text-blue-400 hover:text-blue-300 font-medium shrink-0"
-              >
-                查看全部 41 种
-              </button>
-            </div>
-          )}
-
-          {/* INDEPENDENT SCROLL CONTAINER: ONLY THIS BOX SCROLLS UP AND DOWN */}
-          <div 
-            ref={caseListScrollRef}
-            className="flex-1 min-h-0 overflow-y-auto pr-1.5 pb-4 overscroll-contain scrollbar-thin"
-          >
-            {filteredCases.length > 0 ? (
-              <div className="grid grid-cols-2 sm:grid-cols-3 xl:grid-cols-4 2xl:grid-cols-5 gap-3">
-                {filteredCases.map(item => (
-                  <CaseCard
-                    key={item.id}
-                    caseItem={item}
-                    isActive={currentCase?.id === item.id}
-                    isMastered={masteredSet.has(item.id)}
-                    onSelect={handleSelectCase}
-                    onToggleMastered={toggleMastered}
-                  />
-                ))}
-              </div>
-            ) : (
-              <div className="bg-slate-900/50 border border-slate-800 rounded-3xl p-10 text-center flex flex-col items-center justify-center gap-2.5 my-auto">
-                <AlertCircle className="w-8 h-8 text-slate-600" />
-                <p className="text-sm font-semibold text-slate-300">未找到符合条件的 F2L Case</p>
-                <p className="text-xs text-slate-500">
-                  请尝试更改搜索词，或重置分类筛选和掌握状态条件。
-                </p>
-                <button
-                  onClick={() => {
-                    setSelectedGroup('all');
-                    setSearchQuery('');
-                    setMasteredFilter('all');
-                  }}
-                  className="mt-1 px-4 py-1.5 rounded-xl bg-blue-600 text-white text-xs font-semibold hover:bg-blue-500 transition"
-                >
-                  重置筛选
-                </button>
-              </div>
-            )}
           </div>
         </div>
 
