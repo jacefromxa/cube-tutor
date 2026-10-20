@@ -215,7 +215,7 @@ const VideoPlayer = forwardRef(function VideoPlayer({
       isDark ? 'bg-slate-900 border-slate-800' : 'bg-white border-slate-200'
     }`}>
       {/* Video Container */}
-      <div className="relative aspect-video bg-black w-full overflow-hidden select-none group">
+      <div className="relative aspect-video max-h-[calc(100%-210px)] bg-black w-full overflow-hidden select-none group flex items-center justify-center">
         <video
           ref={videoRef}
           src={VIDEO_PATH}
@@ -440,17 +440,17 @@ const VideoPlayer = forwardRef(function VideoPlayer({
 
       {/* Case Details & Algorithm Box (flex-1 to stretch and align bottom edge with right column) */}
       {currentCase && (
-        <div className={`flex-1 min-h-0 p-3 sm:p-3.5 flex flex-col justify-between gap-3 transition-colors ${
+        <div className={`flex-1 min-h-0 px-3 sm:px-3.5 py-2.5 sm:py-3 flex flex-col justify-between gap-2 sm:gap-2.5 transition-colors ${
           isDark ? 'bg-slate-950/90' : 'bg-slate-50/90'
         }`}>
-          {/* Top row: Enlarged Thumbnail, Title & Mastery Button (Card modal & Eye icon removed) */}
+          {/* Top row: Thumbnail, Title & Mastery Button */}
           <div className="flex items-center justify-between gap-3">
-            <div className="flex items-center gap-3 min-w-0">
+            <div className="flex items-center gap-2.5 sm:gap-3 min-w-0">
               <div className="shrink-0">
                 <img 
                   src={currentCase.cubeImg} 
                   alt={currentCase.code} 
-                  className={`w-13 h-13 sm:w-15 sm:h-15 rounded-md bg-white p-1 object-contain shadow-xs border transition ${
+                  className={`w-12 h-12 sm:w-13 sm:h-13 rounded-md bg-white p-1 object-contain shadow-xs border transition ${
                     isDark ? 'border-slate-700' : 'border-slate-300'
                   }`}
                 />
@@ -458,7 +458,7 @@ const VideoPlayer = forwardRef(function VideoPlayer({
 
               <div className="flex flex-col justify-center gap-1 min-w-0">
                 <div className="flex items-center gap-2 flex-wrap">
-                  <span className={`text-xl sm:text-2xl font-black tracking-tight font-mono ${
+                  <span className={`text-lg sm:text-xl md:text-2xl font-black tracking-tight font-mono ${
                     isDark ? 'text-white' : 'text-slate-900'
                   }`}>
                     {currentCase.code}
@@ -480,7 +480,7 @@ const VideoPlayer = forwardRef(function VideoPlayer({
             <div className="flex items-center shrink-0">
               <button
                 onClick={() => onToggleMastered(currentCase.id)}
-                className={`px-3.5 py-2 rounded-md border text-xs sm:text-sm font-bold flex items-center gap-1.5 transition ${
+                className={`px-3 py-1.5 sm:px-3.5 sm:py-2 rounded-md border text-xs sm:text-sm font-bold flex items-center gap-1.5 transition ${
                   isMastered 
                     ? 'bg-emerald-500/20 text-emerald-500 border-emerald-500/40 hover:bg-emerald-500/30 shadow-xs'
                     : isDark 
@@ -494,19 +494,19 @@ const VideoPlayer = forwardRef(function VideoPlayer({
             </div>
           </div>
 
-          {/* Two-Line Formulas: Line 1 (打乱公式) & Line 2 (求解手法) - Prominently Enlarged */}
-          <div className="flex flex-col gap-2">
-            {/* Line 1: 打乱公式 (Setup) */}
-            <div className={`border rounded-md p-2 sm:p-2.5 flex items-center justify-between gap-3 shadow-xs transition-colors ${
+          {/* Two-Line Formulas: Line 1 (打乱公式) & Line 2 (求解公式) */}
+          <div className="flex flex-col gap-1.5 sm:gap-2">
+            {/* Line 1: 打乱公式 */}
+            <div className={`border rounded-md px-2.5 py-1.5 sm:px-3 sm:py-2 flex items-center justify-between gap-2.5 sm:gap-3 shadow-xs transition-colors ${
               isDark ? 'bg-slate-950/80 border-slate-800/90' : 'bg-white border-slate-200'
             }`}>
               <div className="flex items-center gap-2.5 overflow-hidden">
                 <span className={`text-xs font-mono uppercase tracking-wider shrink-0 px-2 py-0.5 rounded border font-bold ${
                   isDark ? 'bg-amber-500/15 text-amber-400 border-amber-500/30' : 'bg-amber-50 text-amber-700 border-amber-200'
                 }`}>
-                  打乱公式 (生成)
+                  打乱公式
                 </span>
-                <div className="font-mono text-sm sm:text-base font-black text-amber-500 tracking-wider select-all truncate">
+                <div className="font-mono text-xs sm:text-sm md:text-base font-black text-amber-500 tracking-wider select-all truncate">
                   {scramble}
                 </div>
               </div>
@@ -525,24 +525,24 @@ const VideoPlayer = forwardRef(function VideoPlayer({
               </button>
             </div>
 
-            {/* Line 2: 求解手法 (Solution) */}
-            <div className={`border rounded-md p-2 sm:p-2.5 flex items-center justify-between gap-3 shadow-xs transition-colors ${
+            {/* Line 2: 求解公式 */}
+            <div className={`border rounded-md px-2.5 py-1.5 sm:px-3 sm:py-2 flex items-center justify-between gap-2.5 sm:gap-3 shadow-xs transition-colors ${
               isDark ? 'bg-slate-950/80 border-slate-800/90' : 'bg-white border-slate-200'
             }`}>
               <div className="flex items-center gap-2.5 overflow-hidden">
                 <span className={`text-xs font-mono uppercase tracking-wider shrink-0 px-2 py-0.5 rounded border font-bold ${
                   isDark ? 'bg-blue-500/15 text-blue-400 border-blue-500/30' : 'bg-blue-50 text-blue-700 border-blue-200'
                 }`}>
-                  求解手法 (还原)
+                  求解公式
                 </span>
-                <div className="font-mono text-sm sm:text-base font-black text-blue-500 tracking-wider select-all truncate">
+                <div className="font-mono text-xs sm:text-sm md:text-base font-black text-blue-500 tracking-wider select-all truncate">
                   {currentCase.algorithm}
                 </div>
               </div>
 
               <button
                 onClick={handleCopySolution}
-                title="复制求解手法公式"
+                title="复制求解公式"
                 className={`px-2.5 py-1 rounded transition flex items-center justify-center gap-1.5 border shrink-0 text-xs font-semibold ${
                   isDark 
                     ? 'bg-slate-800 hover:bg-slate-750 text-slate-200 border-slate-700' 
@@ -550,7 +550,7 @@ const VideoPlayer = forwardRef(function VideoPlayer({
                 }`}
               >
                 {copiedSolution ? <Check className="w-3.5 h-3.5 text-emerald-500" /> : <Copy className="w-3.5 h-3.5" />}
-                <span>{copiedSolution ? '已复制' : '复制手法'}</span>
+                <span>{copiedSolution ? '已复制' : '复制公式'}</span>
               </button>
             </div>
           </div>
