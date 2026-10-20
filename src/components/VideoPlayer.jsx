@@ -1,7 +1,7 @@
 import React, { useRef, useEffect, useState, useCallback, useImperativeHandle, forwardRef } from 'react';
 import { 
   Play, Pause, RotateCcw, Repeat, ChevronLeft, ChevronRight, 
-  Volume2, VolumeX, Maximize2, Copy, Check, Eye, FastForward, Rewind,
+  Maximize2, Copy, Check, Eye, FastForward, Rewind,
   Hand
 } from 'lucide-react';
 import { VIDEO_PATH, F2L_GROUPS, invertAlgorithm } from '../data/f2lCases';
@@ -43,6 +43,7 @@ const VideoPlayer = forwardRef(function VideoPlayer({
   useEffect(() => {
     if (!currentCase || !videoRef.current) return;
     const v = videoRef.current;
+    v.muted = true;
     v.currentTime = currentCase.startSec;
     setCurrentTime(currentCase.startSec);
     v.play().then(() => {
@@ -213,6 +214,7 @@ const VideoPlayer = forwardRef(function VideoPlayer({
           ref={videoRef}
           src={VIDEO_PATH}
           playsInline
+          muted
           onTimeUpdate={handleTimeUpdate}
           onError={() => setVideoError(true)}
           onClick={togglePlay}
@@ -401,20 +403,8 @@ const VideoPlayer = forwardRef(function VideoPlayer({
           ))}
         </div>
 
-        {/* Mute & Fullscreen */}
+        {/* Fullscreen */}
         <div className="flex items-center gap-1">
-          <button
-            onClick={toggleMute}
-            title={isMuted ? "取消静音 (M)" : "静音 (M)"}
-            className={`p-1.5 rounded border transition ${
-              isDark 
-                ? 'bg-slate-800 hover:bg-slate-750 text-slate-300 border-slate-700' 
-                : 'bg-white hover:bg-slate-100 text-slate-700 border-slate-300'
-            }`}
-          >
-            {isMuted ? <VolumeX className="w-3.5 h-3.5 text-red-500" /> : <Volume2 className="w-3.5 h-3.5" />}
-          </button>
-
           <button
             onClick={requestFullscreen}
             title="全屏播放 (F)"

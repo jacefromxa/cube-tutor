@@ -196,11 +196,6 @@ export default function App() {
         e.preventDefault();
         playerRef.current?.toggleLooping();
       } 
-      // M: Mute
-      else if (e.code === 'KeyM') {
-        e.preventDefault();
-        playerRef.current?.toggleMute();
-      } 
       // F: Fullscreen
       else if (e.code === 'KeyF') {
         e.preventDefault();

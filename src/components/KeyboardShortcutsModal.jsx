@@ -12,7 +12,6 @@ export default function KeyboardShortcutsModal({ onClose, theme = 'dark' }) {
     { key: 'R', action: '重新播放当前 Case' },
     { key: 'L', action: '开启 / 关闭单段循环模式' },
     { key: '1 ~ 4', action: '切换播放倍速 (0.5x, 0.75x, 1x, 1.25x)' },
-    { key: 'M', action: '静音 / 取消静音' },
     { key: 'F', action: '视频全屏模式' }
   ];
 
