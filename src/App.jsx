@@ -315,7 +315,7 @@ export default function App() {
   const activeGroupInfo = activeConfig.groups && selectedGroup !== 'all' ? activeConfig.groups[selectedGroup] : null;
 
   return (
-    <div className={`min-h-screen lg:h-screen flex flex-col font-sans select-none overflow-y-auto lg:overflow-hidden transition-colors duration-150 ${
+    <div className={`min-h-screen lg:h-screen flex flex-col font-sans select-none overflow-visible lg:overflow-hidden transition-colors duration-150 ${
       isDark ? 'bg-slate-950 text-slate-100' : 'bg-slate-100 text-slate-800'
     }`}>
       {/* Header: Product Title Cube-Tutor + 3-Segment Switcher (F2L / OLL / PLL) + Controls */}
@@ -339,12 +339,14 @@ export default function App() {
 
       {/* Main Responsive Layout:
           - Desktop (lg:): Fixed Dual-Column Viewport with pixel-perfect bottom alignment
-          - Mobile (< lg): Natural vertical flow where users can browse video, formulas, categories and cases seamlessly
+          - Mobile (< lg): Sticky Video Player at top (never scrolls away), scrollable categories and cases below
       */}
       <main className="flex-1 min-h-0 max-w-[1920px] w-full mx-auto px-2 sm:px-3 lg:px-5 py-2 sm:py-2.5 flex flex-col lg:flex-row gap-2.5 sm:gap-3 lg:gap-4 items-stretch lg:overflow-hidden">
         
-        {/* LEFT COLUMN: Video Player & Action Bar */}
-        <div className="w-full lg:w-[57%] xl:w-[61%] 2xl:w-[64%] shrink-0 h-auto lg:h-full flex flex-col justify-start">
+        {/* LEFT COLUMN: Video Player & Action Bar (Mobile: Sticky top-0 to ensure video stays always visible!) */}
+        <div className={`w-full lg:w-[57%] xl:w-[61%] 2xl:w-[64%] shrink-0 h-auto lg:h-full flex flex-col justify-start sticky lg:static top-0 z-30 transition-colors ${
+          isDark ? 'bg-slate-950/95' : 'bg-slate-100/95'
+        } backdrop-blur-sm -mx-2 px-2 pt-1 pb-1 lg:mx-0 lg:px-0 lg:py-0 lg:bg-transparent lg:backdrop-blur-none`}>
           <VideoPlayer
             ref={playerRef}
             currentCase={currentCase}

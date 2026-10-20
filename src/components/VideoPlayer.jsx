@@ -2,7 +2,7 @@ import React, { useRef, useEffect, useState, useCallback, useImperativeHandle, f
 import { 
   Play, Pause, RotateCcw, Repeat, ChevronLeft, ChevronRight, 
   Maximize2, Copy, Check, FastForward, Rewind,
-  Hand
+  Hand, ChevronDown, ChevronUp
 } from 'lucide-react';
 import { VIDEO_PATH, F2L_GROUPS, invertAlgorithm } from '../data/f2lCases';
 
@@ -29,6 +29,7 @@ const VideoPlayer = forwardRef(function VideoPlayer({
   const [videoError, setVideoError] = useState(false);
   const [isDragging, setIsDragging] = useState(false);
   const [hoverRatio, setHoverRatio] = useState(null);
+  const [isMobileDetailsExpanded, setIsMobileDetailsExpanded] = useState(true);
   const [showScramble, setShowScramble] = useState(true);
 
   const isDark = theme === 'dark';
@@ -406,22 +407,38 @@ const VideoPlayer = forwardRef(function VideoPlayer({
         <div className={`flex items-center gap-0.5 p-0.5 rounded border ${
           isDark ? 'bg-slate-950 border-slate-800' : 'bg-white border-slate-300'
         }`}>
-          <span className="text-[10px] text-slate-400 px-1 font-mono uppercase">倍速:</span>
-          {[0.5, 0.75, 1.0, 1.25].map(rate => (
-            <button
-              key={rate}
-              onClick={() => changeSpeed(rate)}
-              className={`px-1.5 py-0.5 rounded text-xs font-mono transition ${
-                playbackRate === rate
-                  ? 'bg-blue-600 text-white font-bold shadow-sm'
-                  : isDark 
-                    ? 'text-slate-400 hover:text-white hover:bg-slate-800' 
-                    : 'text-slate-600 hover:text-slate-900 hover:bg-slate-100'
-              }`}
-            >
-              {rate}x
-            </button>
-          ))}
+          {/* Mobile Speed Cycle Button */}
+          <button
+            onClick={() => {
+              const rates = [0.5, 0.75, 1.0, 1.25];
+              const nextIndex = (rates.indexOf(playbackRate) + 1) % rates.length;
+              changeSpeed(rates[nextIndex]);
+            }}
+            title="点击切换播放倍速 (0.5x / 0.75x / 1.0x / 1.25x)"
+            className="sm:hidden px-2 py-0.5 rounded text-xs font-mono font-bold text-blue-500 hover:bg-blue-500/10 transition flex items-center gap-0.5"
+          >
+            <span>{playbackRate}x</span>
+          </button>
+
+          {/* Desktop Full Speed Selector */}
+          <div className="hidden sm:flex items-center gap-0.5">
+            <span className="text-[10px] text-slate-400 px-1 font-mono uppercase">倍速:</span>
+            {[0.5, 0.75, 1.0, 1.25].map(rate => (
+              <button
+                key={rate}
+                onClick={() => changeSpeed(rate)}
+                className={`px-1.5 py-0.5 rounded text-xs font-mono transition ${
+                  playbackRate === rate
+                    ? 'bg-blue-600 text-white font-bold shadow-sm'
+                    : isDark 
+                      ? 'text-slate-400 hover:text-white hover:bg-slate-800' 
+                      : 'text-slate-600 hover:text-slate-900 hover:bg-slate-100'
+                }`}
+              >
+                {rate}x
+              </button>
+            ))}
+          </div>
         </div>
 
         {/* Fullscreen */}
@@ -440,135 +457,204 @@ const VideoPlayer = forwardRef(function VideoPlayer({
         </div>
       </div>
 
-      {/* Case Details & Algorithm Box (flex-1 to stretch and align bottom edge with right column) */}
+      {/* Case Details & Algorithm Box:
+          - Desktop (lg:): Permanently expanded, stretches vertically to align 0px with right column
+          - Mobile (< lg): Compact by default, with one-tap collapse to allow maximum browsing space
+      */}
       {currentCase && (
-        <div className={`flex-1 min-h-0 px-3 sm:px-3.5 py-2.5 sm:py-3 flex flex-col justify-between gap-2 sm:gap-2.5 transition-colors ${
-          isDark ? 'bg-slate-950/90' : 'bg-slate-50/90'
-        }`}>
-          {/* Top row: Thumbnail, Title & Mastery Button */}
-          <div className="flex items-center justify-between gap-3">
-            <div className="flex items-center gap-2.5 sm:gap-3 min-w-0">
-              <div className="shrink-0">
+        <>
+          {/* Collapsed state on Mobile (< lg) */}
+          {!isMobileDetailsExpanded && (
+            <div className={`lg:hidden px-2.5 py-1.5 border-t flex items-center justify-between gap-2 transition-colors ${
+              isDark ? 'bg-slate-950/95 border-slate-800' : 'bg-slate-50 border-slate-200'
+            }`}>
+              <div className="flex items-center gap-2 min-w-0">
                 <img 
                   src={currentCase.cubeImg} 
                   alt={currentCase.code} 
-                  className={`w-12 h-12 sm:w-13 sm:h-13 rounded-md bg-white p-1 object-contain shadow-xs border transition ${
+                  className={`w-7 h-7 rounded bg-white p-0.5 object-contain shadow-xs border shrink-0 ${
                     isDark ? 'border-slate-700' : 'border-slate-300'
                   }`}
                 />
-              </div>
-
-              <div className="flex flex-col justify-center gap-1 min-w-0">
-                <div className="flex items-center gap-2 flex-wrap">
-                  <span className={`text-lg sm:text-xl md:text-2xl font-black tracking-tight font-mono ${
-                    isDark ? 'text-white' : 'text-slate-900'
-                  }`}>
-                    {currentCase.code}
-                  </span>
-                  {groupInfo?.nameZh && (
-                    <span className="text-xs px-2 py-0.5 rounded bg-blue-500/15 text-blue-500 border border-blue-500/30 font-semibold font-mono">
-                      {groupInfo.nameZh}
-                    </span>
-                  )}
-                  {currentCase.subName && (
-                    <span className="text-xs px-2 py-0.5 rounded bg-emerald-500/15 text-emerald-600 dark:text-emerald-400 border border-emerald-500/30 font-semibold font-mono">
-                      {currentCase.subName}
-                    </span>
-                  )}
-                  {currentCase.name && currentCase.name !== currentCase.code && !currentCase.subName && (
-                    <span className="text-xs px-2 py-0.5 rounded bg-amber-500/15 text-amber-600 dark:text-amber-400 border border-amber-500/30 font-semibold">
-                      {currentCase.name}
-                    </span>
-                  )}
-                  {currentCase.grip && (
-                    <span className="text-xs px-2 py-0.5 rounded bg-amber-500/15 text-amber-500 border border-amber-500/30 font-semibold flex items-center gap-1">
-                      <Hand className="w-3 h-3" />
-                      {currentCase.grip}
-                    </span>
-                  )}
-                </div>
-              </div>
-            </div>
-
-            {/* Quick Actions: Mastered Toggle ("未掌握" vs "已掌握") */}
-            <div className="flex items-center shrink-0">
-              <button
-                onClick={() => onToggleMastered(currentCase.id)}
-                className={`px-3 py-1.5 sm:px-3.5 sm:py-2 rounded-md border text-xs sm:text-sm font-bold flex items-center gap-1.5 transition ${
-                  isMastered 
-                    ? 'bg-emerald-500/20 text-emerald-500 border-emerald-500/40 hover:bg-emerald-500/30 shadow-xs'
-                    : isDark 
-                      ? 'bg-slate-800 hover:bg-slate-750 text-slate-400 border-slate-700' 
-                      : 'bg-white hover:bg-slate-100 text-slate-500 border-slate-300 shadow-xs'
-                }`}
-              >
-                <Check className={`w-4 h-4 ${isMastered ? 'text-emerald-500' : 'text-slate-400 opacity-60'}`} />
-                <span>{isMastered ? '已掌握' : '未掌握'}</span>
-              </button>
-            </div>
-          </div>
-
-          {/* Two-Line Formulas: Line 1 (打乱公式) & Line 2 (求解公式) */}
-          <div className="flex flex-col gap-1.5 sm:gap-2">
-            {/* Line 1: 打乱公式 */}
-            <div className={`border rounded-md px-2.5 py-1.5 sm:px-3 sm:py-2 flex items-center justify-between gap-2.5 sm:gap-3 shadow-xs transition-colors ${
-              isDark ? 'bg-slate-950/80 border-slate-800/90' : 'bg-white border-slate-200'
-            }`}>
-              <div className="flex items-center gap-2.5 overflow-hidden">
-                <span className={`text-xs font-mono uppercase tracking-wider shrink-0 px-2 py-0.5 rounded border font-bold ${
-                  isDark ? 'bg-amber-500/15 text-amber-400 border-amber-500/30' : 'bg-amber-50 text-amber-700 border-amber-200'
+                <span className={`font-mono font-black text-sm tracking-tight shrink-0 ${
+                  isDark ? 'text-white' : 'text-slate-900'
                 }`}>
-                  打乱公式
+                  {currentCase.code}
                 </span>
-                <div className="font-mono text-xs sm:text-sm md:text-base font-black text-amber-500 tracking-wider select-all truncate">
-                  {scramble}
-                </div>
-              </div>
-
-              <button
-                onClick={handleCopyScramble}
-                title="复制打乱公式"
-                className={`px-2.5 py-1 rounded transition flex items-center justify-center gap-1.5 border shrink-0 text-xs font-semibold ${
-                  isDark 
-                    ? 'bg-slate-800 hover:bg-slate-750 text-slate-200 border-slate-700' 
-                    : 'bg-slate-100 hover:bg-slate-200 text-slate-700 border-slate-300'
-                }`}
-              >
-                {copiedScramble ? <Check className="w-3.5 h-3.5 text-emerald-500" /> : <Copy className="w-3.5 h-3.5" />}
-                <span>{copiedScramble ? '已复制' : '复制打乱'}</span>
-              </button>
-            </div>
-
-            {/* Line 2: 求解公式 */}
-            <div className={`border rounded-md px-2.5 py-1.5 sm:px-3 sm:py-2 flex items-center justify-between gap-2.5 sm:gap-3 shadow-xs transition-colors ${
-              isDark ? 'bg-slate-950/80 border-slate-800/90' : 'bg-white border-slate-200'
-            }`}>
-              <div className="flex items-center gap-2.5 overflow-hidden">
-                <span className={`text-xs font-mono uppercase tracking-wider shrink-0 px-2 py-0.5 rounded border font-bold ${
-                  isDark ? 'bg-blue-500/15 text-blue-400 border-blue-500/30' : 'bg-blue-50 text-blue-700 border-blue-200'
-                }`}>
-                  求解公式
-                </span>
-                <div className="font-mono text-xs sm:text-sm md:text-base font-black text-blue-500 tracking-wider select-all truncate">
+                <span className="font-mono text-xs text-blue-500 font-semibold truncate">
                   {currentCase.algorithm}
+                </span>
+              </div>
+
+              <div className="flex items-center gap-1.5 shrink-0">
+                <button
+                  onClick={() => onToggleMastered(currentCase.id)}
+                  title={isMastered ? "已掌握 (点击取消)" : "标记为已掌握"}
+                  className={`p-1 rounded border text-[11px] font-bold transition flex items-center gap-1 ${
+                    isMastered 
+                      ? 'bg-emerald-500/20 text-emerald-500 border-emerald-500/40' 
+                      : isDark ? 'bg-slate-800 text-slate-400 border-slate-700' : 'bg-white text-slate-500 border-slate-300'
+                  }`}
+                >
+                  <Check className={`w-3.5 h-3.5 ${isMastered ? 'text-emerald-500' : 'opacity-40'}`} />
+                  <span className="hidden xs:inline">{isMastered ? '已掌握' : '未掌握'}</span>
+                </button>
+
+                <button
+                  onClick={() => setIsMobileDetailsExpanded(true)}
+                  title="展开公式详情"
+                  className={`px-1.5 py-1 rounded border text-[11px] font-medium transition flex items-center gap-0.5 ${
+                    isDark ? 'bg-blue-600/20 text-blue-400 border-blue-500/40' : 'bg-blue-50 text-blue-600 border-blue-200'
+                  }`}
+                >
+                  <span>展开公式</span>
+                  <ChevronDown className="w-3 h-3" />
+                </button>
+              </div>
+            </div>
+          )}
+
+          {/* Expanded state (Always visible on lg:, toggled on mobile) */}
+          <div className={`${!isMobileDetailsExpanded ? 'hidden lg:flex' : 'flex'} flex-1 min-h-0 px-2.5 sm:px-3.5 py-1.5 sm:py-3 flex-col justify-between gap-1.5 sm:gap-2.5 transition-colors ${
+            isDark ? 'bg-slate-950/90' : 'bg-slate-50/90'
+          }`}>
+            {/* Top row: Thumbnail, Title, Mastery Button & Mobile Collapse Toggle */}
+            <div className="flex items-center justify-between gap-2 sm:gap-3">
+              <div className="flex items-center gap-2 sm:gap-3 min-w-0">
+                <div className="shrink-0">
+                  <img 
+                    src={currentCase.cubeImg} 
+                    alt={currentCase.code} 
+                    className={`w-9 h-9 sm:w-12 sm:h-12 rounded-md bg-white p-0.5 sm:p-1 object-contain shadow-xs border transition ${
+                      isDark ? 'border-slate-700' : 'border-slate-300'
+                    }`}
+                  />
+                </div>
+
+                <div className="flex flex-col justify-center gap-0.5 sm:gap-1 min-w-0">
+                  <div className="flex items-center gap-1.5 sm:gap-2 flex-wrap">
+                    <span className={`text-base sm:text-xl md:text-2xl font-black tracking-tight font-mono ${
+                      isDark ? 'text-white' : 'text-slate-900'
+                    }`}>
+                      {currentCase.code}
+                    </span>
+                    {groupInfo?.nameZh && (
+                      <span className="text-[10px] sm:text-xs px-1.5 py-0.5 rounded bg-blue-500/15 text-blue-500 border border-blue-500/30 font-semibold font-mono">
+                        {groupInfo.nameZh}
+                      </span>
+                    )}
+                    {currentCase.subName && (
+                      <span className="text-[10px] sm:text-xs px-1.5 py-0.5 rounded bg-emerald-500/15 text-emerald-600 dark:text-emerald-400 border border-emerald-500/30 font-semibold font-mono">
+                        {currentCase.subName}
+                      </span>
+                    )}
+                    {currentCase.name && currentCase.name !== currentCase.code && !currentCase.subName && (
+                      <span className="text-[10px] sm:text-xs px-1.5 py-0.5 rounded bg-amber-500/15 text-amber-600 dark:text-amber-400 border border-amber-500/30 font-semibold">
+                        {currentCase.name}
+                      </span>
+                    )}
+                    {currentCase.grip && (
+                      <span className="text-[10px] sm:text-xs px-1.5 py-0.5 rounded bg-amber-500/15 text-amber-500 border border-amber-500/30 font-semibold flex items-center gap-1">
+                        <Hand className="w-2.5 h-2.5 sm:w-3 sm:h-3" />
+                        {currentCase.grip}
+                      </span>
+                    )}
+                  </div>
                 </div>
               </div>
 
-              <button
-                onClick={handleCopySolution}
-                title="复制求解公式"
-                className={`px-2.5 py-1 rounded transition flex items-center justify-center gap-1.5 border shrink-0 text-xs font-semibold ${
-                  isDark 
-                    ? 'bg-slate-800 hover:bg-slate-750 text-slate-200 border-slate-700' 
-                    : 'bg-slate-100 hover:bg-slate-200 text-slate-700 border-slate-300'
-                }`}
-              >
-                {copiedSolution ? <Check className="w-3.5 h-3.5 text-emerald-500" /> : <Copy className="w-3.5 h-3.5" />}
-                <span>{copiedSolution ? '已复制' : '复制公式'}</span>
-              </button>
+              {/* Quick Actions: Mastered Toggle + Mobile Collapse Toggle */}
+              <div className="flex items-center gap-1.5 shrink-0">
+                <button
+                  onClick={() => onToggleMastered(currentCase.id)}
+                  className={`px-2 py-1 sm:px-3.5 sm:py-2 rounded-md border text-xs sm:text-sm font-bold flex items-center gap-1 sm:gap-1.5 transition ${
+                    isMastered 
+                      ? 'bg-emerald-500/20 text-emerald-500 border-emerald-500/40 hover:bg-emerald-500/30 shadow-xs'
+                      : isDark 
+                        ? 'bg-slate-800 hover:bg-slate-750 text-slate-400 border-slate-700' 
+                        : 'bg-white hover:bg-slate-100 text-slate-500 border-slate-300 shadow-xs'
+                  }`}
+                >
+                  <Check className={`w-3.5 h-3.5 sm:w-4 sm:h-4 ${isMastered ? 'text-emerald-500' : 'text-slate-400 opacity-60'}`} />
+                  <span>{isMastered ? '已掌握' : '未掌握'}</span>
+                </button>
+
+                {/* Mobile-only collapse toggle */}
+                <button
+                  onClick={() => setIsMobileDetailsExpanded(false)}
+                  title="收起公式详情以扩大列表浏览空间"
+                  className={`lg:hidden p-1 sm:p-1.5 rounded-md border text-slate-400 hover:text-slate-200 transition ${
+                    isDark ? 'bg-slate-800 border-slate-700' : 'bg-slate-100 border-slate-300'
+                  }`}
+                >
+                  <ChevronUp className="w-3.5 h-3.5" />
+                </button>
+              </div>
+            </div>
+
+            {/* Two-Line Formulas: Line 1 (打乱公式) & Line 2 (求解公式) */}
+            <div className="flex flex-col gap-1 sm:gap-2">
+              {/* Line 1: 打乱公式 */}
+              <div className={`border rounded-md px-2 py-1 sm:px-3 sm:py-2 flex items-center justify-between gap-2 sm:gap-3 shadow-xs transition-colors ${
+                isDark ? 'bg-slate-950/80 border-slate-800/90' : 'bg-white border-slate-200'
+              }`}>
+                <div className="flex items-center gap-1.5 sm:gap-2.5 overflow-hidden">
+                  <span className={`text-[10px] sm:text-xs font-mono uppercase tracking-wider shrink-0 px-1.5 py-0.5 rounded border font-bold ${
+                    isDark ? 'bg-amber-500/15 text-amber-400 border-amber-500/30' : 'bg-amber-50 text-amber-700 border-amber-200'
+                  }`}>
+                    打乱公式
+                  </span>
+                  <div className="font-mono text-xs sm:text-sm md:text-base font-black text-amber-500 tracking-wider select-all truncate">
+                    {scramble}
+                  </div>
+                </div>
+
+                <button
+                  onClick={handleCopyScramble}
+                  title="复制打乱公式"
+                  className={`px-2 py-0.5 sm:px-2.5 sm:py-1 rounded transition flex items-center justify-center gap-1 border shrink-0 text-[11px] sm:text-xs font-semibold ${
+                    isDark 
+                      ? 'bg-slate-800 hover:bg-slate-750 text-slate-200 border-slate-700' 
+                      : 'bg-slate-100 hover:bg-slate-200 text-slate-700 border-slate-300'
+                  }`}
+                >
+                  {copiedScramble ? <Check className="w-3 h-3 sm:w-3.5 sm:h-3.5 text-emerald-500" /> : <Copy className="w-3 h-3 sm:w-3.5 sm:h-3.5" />}
+                  <span className="hidden xs:inline">{copiedScramble ? '已复制' : '复制打乱'}</span>
+                </button>
+              </div>
+
+              {/* Line 2: 求解公式 */}
+              <div className={`border rounded-md px-2 py-1 sm:px-3 sm:py-2 flex items-center justify-between gap-2 sm:gap-3 shadow-xs transition-colors ${
+                isDark ? 'bg-slate-950/80 border-slate-800/90' : 'bg-white border-slate-200'
+              }`}>
+                <div className="flex items-center gap-1.5 sm:gap-2.5 overflow-hidden">
+                  <span className={`text-[10px] sm:text-xs font-mono uppercase tracking-wider shrink-0 px-1.5 py-0.5 rounded border font-bold ${
+                    isDark ? 'bg-blue-500/15 text-blue-400 border-blue-500/30' : 'bg-blue-50 text-blue-700 border-blue-200'
+                  }`}>
+                    求解公式
+                  </span>
+                  <div className="font-mono text-xs sm:text-sm md:text-base font-black text-blue-500 tracking-wider select-all truncate">
+                    {currentCase.algorithm}
+                  </div>
+                </div>
+
+                <button
+                  onClick={handleCopySolution}
+                  title="复制求解公式"
+                  className={`px-2 py-0.5 sm:px-2.5 sm:py-1 rounded transition flex items-center justify-center gap-1 border shrink-0 text-[11px] sm:text-xs font-semibold ${
+                    isDark 
+                      ? 'bg-slate-800 hover:bg-slate-750 text-slate-200 border-slate-700' 
+                      : 'bg-slate-100 hover:bg-slate-200 text-slate-700 border-slate-300'
+                  }`}
+                >
+                  {copiedSolution ? <Check className="w-3 h-3 sm:w-3.5 sm:h-3.5 text-emerald-500" /> : <Copy className="w-3 h-3 sm:w-3.5 sm:h-3.5" />}
+                  <span className="hidden xs:inline">{copiedSolution ? '已复制' : '复制公式'}</span>
+                </button>
+              </div>
             </div>
           </div>
-        </div>      )}
+        </>
+      )}
     </div>
   );
 });
