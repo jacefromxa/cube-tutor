@@ -13,3 +13,4 @@ export function resolveAssetUrl(path) {
   const cleanPath = path.startsWith('/') ? path.slice(1) : path;
   return `${cleanBase}${cleanPath}`;
 }
+
