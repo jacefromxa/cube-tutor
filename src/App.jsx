@@ -4,7 +4,6 @@ import Header from './components/Header';
 import VideoPlayer from './components/VideoPlayer';
 import FilterBar from './components/FilterBar';
 import CaseCard from './components/CaseCard';
-import CardModal from './components/CardModal';
 import KeyboardShortcutsModal from './components/KeyboardShortcutsModal';
 import { F2L_CASES, F2L_GROUPS, TOTAL_CASES } from './data/f2lCases';
 import { AlertCircle } from 'lucide-react';
@@ -16,7 +15,6 @@ export default function App() {
   const [currentCase, setCurrentCase] = useState(() => F2L_CASES[0]);
   const [selectedGroup, setSelectedGroup] = useState('all');
   const [masteredFilter, setMasteredFilter] = useState('all');
-  const [modalCase, setModalCase] = useState(null);
   const [showShortcuts, setShowShortcuts] = useState(false);
   
   // Theme state: light | dark (default: light)
@@ -213,7 +211,6 @@ export default function App() {
       } 
       // Escape closes modals
       else if (e.key === 'Escape') {
-        setModalCase(null);
         setShowShortcuts(false);
       }
     };
@@ -256,7 +253,6 @@ export default function App() {
             currentCase={currentCase}
             casesList={filteredCases.length > 0 ? filteredCases : F2L_CASES}
             onSelectCase={handleSelectCase}
-            onViewCard={(item) => setModalCase(item)}
             isMastered={masteredSet.has(currentCase?.id)}
             onToggleMastered={toggleMastered}
             theme={theme}
@@ -343,16 +339,6 @@ export default function App() {
         </div>
 
       </main>
-
-      {/* Snapshot Card Lightbox Modal */}
-      {modalCase && (
-        <CardModal
-          caseItem={modalCase}
-          onClose={() => setModalCase(null)}
-          onPlay={handleSelectCase}
-          theme={theme}
-        />
-      )}
 
       {/* Keyboard Shortcuts Modal */}
       {showShortcuts && (
