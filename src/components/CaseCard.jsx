@@ -1,17 +1,5 @@
 import React from 'react';
-import { Play, Check, Clock, Hand } from 'lucide-react';
-
-const GROUP_COLOR_MAP = {
-  Easy: 'bg-emerald-500/15 text-emerald-500 border-emerald-500/30',
-  RE: 'bg-blue-500/15 text-blue-500 border-blue-500/30',
-  REFC: 'bg-amber-500/15 text-amber-500 border-amber-500/30',
-  PMS: 'bg-purple-500/15 text-purple-500 border-purple-500/30',
-  SPGO: 'bg-cyan-500/15 text-cyan-500 border-cyan-500/30',
-  Weird: 'bg-rose-500/15 text-rose-500 border-rose-500/30',
-  CPEU: 'bg-indigo-500/15 text-indigo-500 border-indigo-500/30',
-  EPCU: 'bg-orange-500/15 text-orange-500 border-orange-500/30',
-  ECP: 'bg-teal-500/15 text-teal-500 border-teal-500/30'
-};
+import { Check, Hand } from 'lucide-react';
 
 const GRIP_COLOR_MAP = {
   '中起手': 'bg-slate-700/40 text-slate-300 border-slate-600/50',
@@ -28,7 +16,6 @@ export default function CaseCard({
   theme = 'dark'
 }) {
   const isDark = theme === 'dark';
-  const groupBadgeClass = GROUP_COLOR_MAP[caseItem.group] || 'bg-slate-700/30 text-slate-400 border-slate-700';
   const gripBadgeClass = GRIP_COLOR_MAP[caseItem.grip] || 'bg-slate-700/30 text-slate-400';
 
   // Card container theme and mastered style calculation
@@ -58,21 +45,24 @@ export default function CaseCard({
   return (
     <div
       onClick={() => onSelect(caseItem)}
-      className={`relative group rounded-md p-2 transition-all duration-150 cursor-pointer flex flex-col justify-between border ${containerStyle}`}
+      className={`relative group rounded-md p-1.5 sm:p-2 transition-all duration-150 cursor-pointer flex flex-col justify-between border ${containerStyle}`}
     >
-      {/* Top Header: Code, Badges & Master Toggle */}
+      {/* Top Header: Code, Grip Badge & Master Toggle (High space efficiency) */}
       <div className="flex items-center justify-between gap-1 mb-1">
-        <div className="flex items-center gap-1 min-w-0">
-          <span className={`font-bold text-xs sm:text-sm tracking-tight truncate ${
+        <div className="flex items-center gap-1.5 min-w-0">
+          <span className={`font-black text-xs sm:text-sm tracking-tight font-mono truncate ${
             isMastered 
               ? (isDark ? 'text-emerald-200' : 'text-emerald-900') 
               : (isDark ? 'text-white' : 'text-slate-900')
           }`}>
             {caseItem.code}
           </span>
-          <span className={`text-[9px] font-semibold px-1 py-0.2 rounded border shrink-0 ${groupBadgeClass}`}>
-            {caseItem.group}
-          </span>
+          {caseItem.grip && (
+            <span className={`text-[9px] px-1 py-0.2 rounded border font-medium flex items-center gap-0.5 shrink-0 ${gripBadgeClass}`}>
+              <Hand className="w-2 h-2" />
+              {caseItem.grip}
+            </span>
+          )}
         </div>
 
         {/* Mastered checkbox button */}
@@ -95,7 +85,7 @@ export default function CaseCard({
       </div>
 
       {/* Middle: Prominent 3D Cube Graphic (Unobstructed, Never blurred or blocked) */}
-      <div className={`relative w-20 h-20 sm:w-24 sm:h-24 mx-auto rounded bg-white p-1.5 my-1 overflow-hidden flex items-center justify-center shadow-inner group/cube shrink-0 border transition-all ${
+      <div className={`relative w-20 h-20 sm:w-24 sm:h-24 mx-auto rounded bg-white p-1 my-0.5 overflow-hidden flex items-center justify-center shadow-inner group/cube shrink-0 border transition-all ${
         isActive
           ? (isMastered ? 'ring-2 ring-emerald-500 border-emerald-400' : 'ring-2 ring-blue-500 border-blue-400')
           : (isMastered 
@@ -118,30 +108,14 @@ export default function CaseCard({
         )}
       </div>
 
-      {/* Bottom Info: Timestamp & Grip & Formula */}
-      <div className={`mt-1 pt-1 border-t flex flex-col gap-1 ${
+      {/* Bottom Info: Clean, Full-Width Algorithm Box (Timestamp row eliminated to save height) */}
+      <div className={`mt-1 pt-1 border-t flex flex-col ${
         isMastered 
           ? (isDark ? 'border-emerald-800/40' : 'border-emerald-200') 
           : (isDark ? 'border-slate-800/80' : 'border-slate-200')
       }`}>
-        <div className="flex items-center justify-between text-[10px]">
-          <span className={`flex items-center gap-0.5 font-mono ${
-            isMastered 
-              ? (isDark ? 'text-emerald-300/80' : 'text-emerald-700') 
-              : (isDark ? 'text-slate-400' : 'text-slate-500')
-          }`}>
-            <Clock className="w-2.5 h-2.5 opacity-70" />
-            {caseItem.timestamp}
-          </span>
-          <span className={`text-[9px] px-1 py-0.2 rounded border font-medium flex items-center gap-0.5 ${gripBadgeClass}`}>
-            <Hand className="w-2 h-2" />
-            {caseItem.grip}
-          </span>
-        </div>
-
-        {/* Algorithm text */}
         <div 
-          className={`rounded px-1.5 py-0.5 font-mono text-[11px] font-semibold truncate border ${
+          className={`rounded px-1.5 py-0.5 font-mono text-[11px] sm:text-xs font-semibold text-center truncate border ${
             isMastered 
               ? isDark 
                 ? 'bg-emerald-950/90 text-emerald-300 border-emerald-800/60' 
