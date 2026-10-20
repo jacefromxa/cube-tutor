@@ -10,16 +10,44 @@ import { F2L_CASES, F2L_GROUPS, TOTAL_CASES } from './data/f2lCases';
 import { AlertCircle } from 'lucide-react';
 
 const STORAGE_KEY = 'f2l_mastered_cases_v1';
+const THEME_STORAGE_KEY = 'f2l_theme_mode_v1';
 
 export default function App() {
   const [currentCase, setCurrentCase] = useState(() => F2L_CASES[0]);
   const [selectedGroup, setSelectedGroup] = useState('all');
-  const [searchQuery, setSearchQuery] = useState('');
-  const [sortBy, setSortBy] = useState('category');
   const [masteredFilter, setMasteredFilter] = useState('all');
   const [modalCase, setModalCase] = useState(null);
   const [showShortcuts, setShowShortcuts] = useState(false);
   
+  // Theme state: dark | light (default: dark)
+  const [theme, setTheme] = useState(() => {
+    try {
+      return localStorage.getItem(THEME_STORAGE_KEY) || 'dark';
+    } catch {
+      return 'dark';
+    }
+  });
+
+  const toggleTheme = useCallback(() => {
+    setTheme(prev => {
+      const next = prev === 'dark' ? 'light' : 'dark';
+      try {
+        localStorage.setItem(THEME_STORAGE_KEY, next);
+      } catch {}
+      return next;
+    });
+  }, []);
+
+  useEffect(() => {
+    if (theme === 'dark') {
+      document.documentElement.classList.add('dark');
+      document.documentElement.classList.remove('light');
+    } else {
+      document.documentElement.classList.add('light');
+      document.documentElement.classList.remove('dark');
+    }
+  }, [theme]);
+
   const playerRef = useRef(null);
   const caseListScrollRef = useRef(null);
 
@@ -53,7 +81,9 @@ export default function App() {
         next.delete(caseId);
       }
       const arr = Array.from(next);
-      localStorage.setItem(STORAGE_KEY, JSON.stringify(arr));
+      try {
+        localStorage.setItem(STORAGE_KEY, JSON.stringify(arr));
+      } catch {}
       return arr;
     });
   }, []);
@@ -61,7 +91,9 @@ export default function App() {
   const resetProgress = useCallback(() => {
     if (window.confirm('确定要清空已掌握的学习进度吗？')) {
       setMasteredIds([]);
-      localStorage.removeItem(STORAGE_KEY);
+      try {
+        localStorage.removeItem(STORAGE_KEY);
+      } catch {}
     }
   }, []);
 
@@ -74,48 +106,24 @@ export default function App() {
     return counts;
   }, []);
 
-  // Filter & Sort Cases
+  // Filter Cases: strictly csTimer classification order (search and sorting dropdown removed)
   const filteredCases = useMemo(() => {
     let list = [...F2L_CASES];
 
-    // Group filter
+    // Group filter (csTimer category)
     if (selectedGroup !== 'all') {
       list = list.filter(c => c.group === selectedGroup);
     }
 
-    // Mastered filter
+    // Mastered filter (all / unmastered / mastered)
     if (masteredFilter === 'mastered') {
       list = list.filter(c => masteredSet.has(c.id));
     } else if (masteredFilter === 'unmastered') {
       list = list.filter(c => !masteredSet.has(c.id));
     }
 
-    // Search query filter
-    if (searchQuery.trim()) {
-      const q = searchQuery.toLowerCase().trim();
-      list = list.filter(c => 
-        c.code.toLowerCase().includes(q) ||
-        c.group.toLowerCase().includes(q) ||
-        c.algorithm.toLowerCase().includes(q) ||
-        c.grip.toLowerCase().includes(q) ||
-        c.description.toLowerCase().includes(q) ||
-        c.csTimerNum.toString().includes(q)
-      );
-    }
-
-    // Sort
-    list.sort((a, b) => {
-      if (sortBy === 'csTimerNum') {
-        return a.csTimerNum - b.csTimerNum;
-      }
-      if (sortBy === 'videoOrder') {
-        return a.videoOrder - b.videoOrder;
-      }
-      return 0;
-    });
-
     return list;
-  }, [selectedGroup, masteredFilter, searchQuery, sortBy, masteredSet]);
+  }, [selectedGroup, masteredFilter, masteredSet]);
 
   const handleSelectCase = useCallback((item) => {
     setCurrentCase(item);
@@ -128,38 +136,77 @@ export default function App() {
         return;
       }
 
+      // Space: Toggle Play/Pause
       if (e.code === 'Space') {
         e.preventDefault();
         playerRef.current?.togglePlay();
-      } else if (e.code === 'ArrowLeft') {
+      } 
+      // Requirement 1: Arrow Left/Right controls 3-second rapid jump
+      else if (e.code === 'ArrowLeft') {
+        e.preventDefault();
+        if (e.shiftKey) {
+          // Shift + ArrowLeft switches to previous case
+          const activeList = filteredCases.length > 0 ? filteredCases : F2L_CASES;
+          const idx = activeList.findIndex(c => c.id === currentCase?.id);
+          if (idx > 0) handleSelectCase(activeList[idx - 1]);
+        } else {
+          // Step 3s back
+          playerRef.current?.handleStep(-3);
+        }
+      } else if (e.code === 'ArrowRight') {
+        e.preventDefault();
+        if (e.shiftKey) {
+          // Shift + ArrowRight switches to next case
+          const activeList = filteredCases.length > 0 ? filteredCases : F2L_CASES;
+          const idx = activeList.findIndex(c => c.id === currentCase?.id);
+          if (idx !== -1 && idx < activeList.length - 1) handleSelectCase(activeList[idx + 1]);
+        } else {
+          // Step 3s forward
+          playerRef.current?.handleStep(3);
+        }
+      } 
+      // [ / ] or P / N for Case switching
+      else if (e.code === 'BracketLeft' || e.code === 'KeyP') {
         e.preventDefault();
         const activeList = filteredCases.length > 0 ? filteredCases : F2L_CASES;
         const idx = activeList.findIndex(c => c.id === currentCase?.id);
         if (idx > 0) handleSelectCase(activeList[idx - 1]);
-      } else if (e.code === 'ArrowRight') {
+      } else if (e.code === 'BracketRight' || e.code === 'KeyN') {
         e.preventDefault();
         const activeList = filteredCases.length > 0 ? filteredCases : F2L_CASES;
         const idx = activeList.findIndex(c => c.id === currentCase?.id);
         if (idx !== -1 && idx < activeList.length - 1) handleSelectCase(activeList[idx + 1]);
-      } else if (e.code === 'KeyR') {
+      } 
+      // J / K for 3s step (two-hand speedsolving backup)
+      else if (e.code === 'KeyJ') {
         e.preventDefault();
-        playerRef.current?.handleReplay();
-      } else if (e.code === 'KeyL') {
-        e.preventDefault();
-        playerRef.current?.toggleLooping();
-      } else if (e.code === 'KeyM') {
-        e.preventDefault();
-        playerRef.current?.toggleMute();
-      } else if (e.code === 'KeyF') {
-        e.preventDefault();
-        playerRef.current?.requestFullscreen();
-      } else if (e.code === 'KeyJ') {
-        e.preventDefault();
-        playerRef.current?.handleStep(-2);
+        playerRef.current?.handleStep(-3);
       } else if (e.code === 'KeyK') {
         e.preventDefault();
-        playerRef.current?.handleStep(2);
-      } else if (e.key === '1') {
+        playerRef.current?.handleStep(3);
+      } 
+      // R: Replay
+      else if (e.code === 'KeyR') {
+        e.preventDefault();
+        playerRef.current?.handleReplay();
+      } 
+      // L: Toggle Loop
+      else if (e.code === 'KeyL') {
+        e.preventDefault();
+        playerRef.current?.toggleLooping();
+      } 
+      // M: Mute
+      else if (e.code === 'KeyM') {
+        e.preventDefault();
+        playerRef.current?.toggleMute();
+      } 
+      // F: Fullscreen
+      else if (e.code === 'KeyF') {
+        e.preventDefault();
+        playerRef.current?.requestFullscreen();
+      } 
+      // Number keys for speed
+      else if (e.key === '1') {
         playerRef.current?.changeSpeed(0.5);
       } else if (e.key === '2') {
         playerRef.current?.changeSpeed(0.75);
@@ -167,7 +214,9 @@ export default function App() {
         playerRef.current?.changeSpeed(1.0);
       } else if (e.key === '4') {
         playerRef.current?.changeSpeed(1.25);
-      } else if (e.key === 'Escape') {
+      } 
+      // Escape closes modals
+      else if (e.key === 'Escape') {
         setModalCase(null);
         setShowShortcuts(false);
       }
@@ -178,22 +227,31 @@ export default function App() {
   }, [filteredCases, currentCase, handleSelectCase]);
 
   const activeGroupInfo = selectedGroup !== 'all' ? F2L_GROUPS[selectedGroup] : null;
+  const isDark = theme === 'dark';
 
   return (
-    <div className="h-screen w-screen overflow-hidden flex flex-col bg-slate-950 text-slate-100 font-sans selection:bg-blue-600 selection:text-white">
-      {/* Header (Fixed at top) */}
+    <div className={`h-screen w-screen overflow-hidden flex flex-col font-sans transition-colors duration-150 ${
+      isDark 
+        ? 'bg-slate-950 text-slate-100 selection:bg-blue-600 selection:text-white' 
+        : 'bg-slate-100 text-slate-900 selection:bg-blue-500 selection:text-white'
+    }`}>
+      {/* Header (Fixed at top, with theme toggle & mastery tabs) */}
       <Header
         totalCases={TOTAL_CASES}
         masteredCount={masteredIds.length}
+        masteredFilter={masteredFilter}
+        onMasteredFilterChange={setMasteredFilter}
+        theme={theme}
+        onToggleTheme={toggleTheme}
         onResetProgress={resetProgress}
         onOpenShortcuts={() => setShowShortcuts(true)}
       />
 
       {/* Main Dual-Column Layout:
-          - Left: Maximized Video Stage (Fixed, No scroll away, Maximized height, No black bar waste)
-          - Right: Option Menu (Compact Case cards reduced 50%, Independent scroll container)
+          - Left: Maximized Video Stage (Fixed, No scroll away, Maximized height, Interactive Scrubber)
+          - Right: Option Menu (Compact csTimer Categories, Case cards with prominent mastery color switch, Independent scroll container)
       */}
-      <main className="flex-1 min-h-0 max-w-[1920px] w-full mx-auto px-3 sm:px-4 lg:px-6 py-2.5 sm:py-3 flex flex-col lg:flex-row gap-3 sm:gap-4 lg:gap-5 items-stretch overflow-hidden">
+      <main className="flex-1 min-h-0 max-w-[1920px] w-full mx-auto px-2.5 sm:px-3 lg:px-5 py-2 sm:py-2.5 flex flex-col lg:flex-row gap-2.5 sm:gap-3 lg:gap-4 items-stretch overflow-hidden">
         
         {/* LEFT COLUMN: Maximized Video Player & Action Bar (Permanently Fixed in Viewport!) */}
         <div className="w-full lg:w-[57%] xl:w-[61%] 2xl:w-[64%] shrink-0 h-full flex flex-col justify-start overflow-hidden">
@@ -205,41 +263,39 @@ export default function App() {
             onViewCard={(item) => setModalCase(item)}
             isMastered={masteredSet.has(currentCase?.id)}
             onToggleMastered={toggleMastered}
+            theme={theme}
           />
         </div>
 
         {/* RIGHT COLUMN: Selection Menu & Independent Scrollable Case Grid */}
         <div className="flex-1 min-w-0 h-full flex flex-col gap-2 overflow-hidden">
-          {/* Filter Bar with English + Chinese + 3D Image Category Buttons */}
+          {/* Category Filter Bar (Search and sort dropdown removed, only csTimer categories kept) */}
           <FilterBar
             selectedGroup={selectedGroup}
             onSelectGroup={setSelectedGroup}
-            searchQuery={searchQuery}
-            onSearchChange={setSearchQuery}
-            sortBy={sortBy}
-            onSortChange={setSortBy}
-            masteredFilter={masteredFilter}
-            onMasteredFilterChange={setMasteredFilter}
             groupCounts={groupCounts}
+            theme={theme}
           />
 
           {/* Active Category Mini Tag */}
           {activeGroupInfo && (
-            <div className="bg-slate-900/90 border border-slate-800 rounded-xl px-3 py-1.5 flex items-center justify-between shrink-0">
-              <div className="flex items-center gap-2">
-                <span className="px-2 py-0.5 rounded text-[11px] font-bold bg-blue-500/20 text-blue-300 border border-blue-500/30">
+            <div className={`border rounded px-2.5 py-1 flex items-center justify-between shrink-0 text-xs ${
+              isDark ? 'bg-slate-900/90 border-slate-800' : 'bg-white border-slate-200 shadow-sm'
+            }`}>
+              <div className="flex items-center gap-1.5">
+                <span className="px-1.5 py-0.2 rounded text-[10px] font-bold bg-blue-500/20 text-blue-500 border border-blue-500/30">
                   {selectedGroup}
                 </span>
-                <span className="text-xs font-semibold text-slate-200">
+                <span className={`font-semibold ${isDark ? 'text-slate-200' : 'text-slate-800'}`}>
                   {activeGroupInfo.nameZh}
                 </span>
-                <span className="text-[11px] text-slate-400 hidden xl:inline">
+                <span className={`text-[11px] hidden xl:inline ${isDark ? 'text-slate-400' : 'text-slate-500'}`}>
                   · {activeGroupInfo.desc}
                 </span>
               </div>
               <button
                 onClick={() => setSelectedGroup('all')}
-                className="text-[11px] text-blue-400 hover:text-blue-300 font-medium"
+                className="text-[11px] text-blue-500 hover:underline font-medium"
               >
                 显示全部
               </button>
@@ -261,22 +317,26 @@ export default function App() {
                     isMastered={masteredSet.has(item.id)}
                     onSelect={handleSelectCase}
                     onToggleMastered={toggleMastered}
+                    theme={theme}
                   />
                 ))}
               </div>
             ) : (
-              <div className="bg-slate-900/50 border border-slate-800 rounded-3xl p-8 text-center flex flex-col items-center justify-center gap-2 my-auto">
-                <AlertCircle className="w-7 h-7 text-slate-600" />
-                <p className="text-xs font-semibold text-slate-300">未找到匹配的 Case</p>
+              <div className={`border rounded-lg p-6 text-center flex flex-col items-center justify-center gap-2 my-auto ${
+                isDark ? 'bg-slate-900/50 border-slate-800' : 'bg-white border-slate-200'
+              }`}>
+                <AlertCircle className="w-6 h-6 text-slate-400" />
+                <p className={`text-xs font-semibold ${isDark ? 'text-slate-300' : 'text-slate-700'}`}>
+                  暂无匹配的 Case
+                </p>
                 <button
                   onClick={() => {
                     setSelectedGroup('all');
-                    setSearchQuery('');
                     setMasteredFilter('all');
                   }}
-                  className="mt-1 px-3 py-1 rounded-xl bg-blue-600 text-white text-xs font-semibold hover:bg-blue-500 transition"
+                  className="mt-1 px-3 py-1 rounded bg-blue-600 text-white text-xs font-semibold hover:bg-blue-500 transition"
                 >
-                  重置筛选
+                  重置为全部
                 </button>
               </div>
             )}
@@ -291,12 +351,16 @@ export default function App() {
           caseItem={modalCase}
           onClose={() => setModalCase(null)}
           onPlay={handleSelectCase}
+          theme={theme}
         />
       )}
 
       {/* Keyboard Shortcuts Modal */}
       {showShortcuts && (
-        <KeyboardShortcutsModal onClose={() => setShowShortcuts(false)} />
+        <KeyboardShortcutsModal 
+          onClose={() => setShowShortcuts(false)} 
+          theme={theme}
+        />
       )}
     </div>
   );

@@ -2,8 +2,9 @@ import React from 'react';
 import { X, Play } from 'lucide-react';
 import { F2L_GROUPS } from '../data/f2lCases';
 
-export default function CardModal({ caseItem, onClose, onPlay }) {
+export default function CardModal({ caseItem, onClose, onPlay, theme = 'dark' }) {
   if (!caseItem) return null;
+  const isDark = theme === 'dark';
   const group = F2L_GROUPS[caseItem.group];
 
   return (
@@ -12,32 +13,42 @@ export default function CardModal({ caseItem, onClose, onPlay }) {
       onClick={onClose}
     >
       <div 
-        className="relative max-w-2xl w-full bg-slate-900 border border-slate-700 rounded-3xl overflow-hidden shadow-2xl flex flex-col"
+        className={`relative max-w-xl w-full border rounded-lg overflow-hidden shadow-2xl flex flex-col ${
+          isDark ? 'bg-slate-900 border-slate-700 text-white' : 'bg-white border-slate-300 text-slate-900'
+        }`}
         onClick={(e) => e.stopPropagation()}
       >
         {/* Header */}
-        <div className="p-4 sm:p-5 border-b border-slate-800 flex items-center justify-between">
-          <div className="flex items-center gap-2.5">
-            <span className="text-xl font-black text-white">{caseItem.code}</span>
-            <span className="text-xs px-2.5 py-0.5 rounded-full bg-blue-500/15 text-blue-400 border border-blue-500/30 font-medium">
+        <div className={`p-3.5 border-b flex items-center justify-between ${
+          isDark ? 'border-slate-800' : 'border-slate-200'
+        }`}>
+          <div className="flex items-center gap-2">
+            <span className="text-lg font-black">{caseItem.code}</span>
+            <span className="text-xs px-2 py-0.5 rounded bg-blue-500/15 text-blue-500 border border-blue-500/30 font-medium">
               csTimer #{caseItem.csTimerNum} · {group?.nameZh}
             </span>
-            <span className="text-xs px-2 py-0.5 rounded-full bg-amber-500/15 text-amber-400 border border-amber-500/30 font-medium">
+            <span className="text-xs px-2 py-0.5 rounded bg-amber-500/15 text-amber-500 border border-amber-500/30 font-medium">
               {caseItem.grip}
             </span>
           </div>
 
           <button
             onClick={onClose}
-            className="p-2 rounded-xl text-slate-400 hover:text-white hover:bg-slate-800 transition"
+            className={`p-1 rounded transition ${
+              isDark ? 'text-slate-400 hover:text-white hover:bg-slate-800' : 'text-slate-500 hover:text-slate-900 hover:bg-slate-100'
+            }`}
           >
-            <X className="w-5 h-5" />
+            <X className="w-4 h-4" />
           </button>
         </div>
 
         {/* Original Card Snapshot from Video */}
-        <div className="p-4 sm:p-6 bg-slate-950 flex flex-col items-center justify-center gap-4">
-          <div className="rounded-2xl overflow-hidden border border-slate-800 shadow-xl bg-white max-w-lg w-full">
+        <div className={`p-4 flex flex-col items-center justify-center gap-3 ${
+          isDark ? 'bg-slate-950' : 'bg-slate-100'
+        }`}>
+          <div className={`rounded overflow-hidden border shadow bg-white max-w-md w-full ${
+            isDark ? 'border-slate-800' : 'border-slate-300'
+          }`}>
             <img
               src={caseItem.cardImg}
               alt={caseItem.code}
@@ -50,29 +61,28 @@ export default function CardModal({ caseItem, onClose, onPlay }) {
         </div>
 
         {/* Bottom Actions */}
-        <div className="p-4 sm:p-5 bg-slate-900 border-t border-slate-800 flex items-center justify-between gap-3">
+        <div className={`p-3.5 border-t flex items-center justify-between gap-3 ${
+          isDark ? 'bg-slate-900 border-slate-800' : 'bg-white border-slate-200'
+        }`}>
           <div className="flex flex-col">
-            <span className="text-[11px] text-slate-400">操作手法:</span>
-            <span className="font-mono text-base font-bold text-amber-300">
+            <span className="text-[10px] text-slate-500 uppercase tracking-wider font-mono">操作手法:</span>
+            <span className="font-mono text-sm sm:text-base font-bold text-amber-500">
               {caseItem.algorithm}
             </span>
           </div>
 
-          <div className="flex items-center gap-2">
-            <button
-              onClick={() => {
-                onPlay(caseItem);
-                onClose();
-              }}
-              className="px-4 py-2.5 rounded-xl bg-blue-600 hover:bg-blue-500 text-white font-medium text-xs flex items-center gap-1.5 shadow-lg shadow-blue-600/30 transition"
-            >
-              <Play className="w-4 h-4 fill-white" />
-              <span>跳转播放实况</span>
-            </button>
-          </div>
+          <button
+            onClick={() => {
+              onPlay(caseItem);
+              onClose();
+            }}
+            className="px-3.5 py-1.5 rounded bg-blue-600 hover:bg-blue-500 text-white font-medium text-xs flex items-center gap-1.5 shadow-md shadow-blue-600/30 transition"
+          >
+            <Play className="w-3.5 h-3.5 fill-white" />
+            <span>跳转播放实况</span>
+          </button>
         </div>
       </div>
     </div>
   );
 }
-
