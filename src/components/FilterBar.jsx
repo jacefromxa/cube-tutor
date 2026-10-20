@@ -64,47 +64,60 @@ export default function FilterBar({
 }) {
   const isDark = theme === 'dark';
 
-  const groupsList = [
-    { 
-      key: 'all', 
-      en: 'ALL', 
-      zh: '全部形态',
-      desc: '全部 41 种常规手法',
-      count: groupCounts.all || 41,
-      img: '/assets/cubes/Easy-01.png'
-    },
-    ...Object.entries(F2L_GROUPS).map(([key, info]) => ({
-      key,
-      en: key,
-      zh: info.abbrZh || info.nameZh,
-      desc: info.desc,
-      count: groupCounts[key] || 0,
-      img: info.iconImg
-    }))
-  ];
+  // 9 csTimer F2L Categories (without 'all', which is placed separately in the top-right header)
+  const categoryGroups = Object.entries(F2L_GROUPS).map(([key, info]) => ({
+    key,
+    en: key,
+    zh: info.abbrZh || info.nameZh,
+    desc: info.desc,
+    count: groupCounts[key] || 0,
+    img: info.iconImg
+  }));
 
   return (
-    <div className={`border rounded-md p-2 flex flex-col gap-1.5 shrink-0 transition-colors ${
+    <div className={`border rounded-md p-2 sm:p-2.5 flex flex-col gap-2 shrink-0 transition-colors ${
       isDark 
         ? 'bg-slate-900/95 border-slate-800 shadow-md' 
         : 'bg-white border-slate-200 shadow-sm'
     }`}>
-      {/* Category Header: Ultra-slim row */}
-      <div className="flex items-center justify-between px-0.5 leading-none">
+      {/* Category Header: Section Title on Left + Dedicated "全部" Button on Right */}
+      <div className="flex items-center justify-between px-0.5">
         <div className="flex items-center gap-1.5">
-          <Layers className="w-3.5 h-3.5 text-blue-500" />
-          <span className={`text-xs font-bold tracking-tight ${isDark ? 'text-slate-200' : 'text-slate-800'}`}>
+          <Layers className="w-4 h-4 text-blue-500" />
+          <span className={`text-xs sm:text-sm font-bold tracking-tight ${isDark ? 'text-slate-200' : 'text-slate-800'}`}>
             F2L情况分类
           </span>
-          <span className={`text-[10px] ${isDark ? 'text-slate-500' : 'text-slate-400'}`}>
-            (共 41 式)
+          <span className={`text-[11px] font-medium ${isDark ? 'text-slate-500' : 'text-slate-400'}`}>
+            (9大类)
           </span>
         </div>
+
+        {/* Dedicated "全部" (All) button in the top-right corner */}
+        <button
+          onClick={() => onSelectGroup('all')}
+          title="显示全部 41 种常规手法"
+          className={`flex items-center gap-1.5 px-2.5 py-0.5 sm:py-1 rounded text-xs font-bold transition-all duration-150 border ${
+            selectedGroup === 'all'
+              ? 'bg-blue-600 border-blue-500 text-white shadow-xs'
+              : isDark
+                ? 'bg-slate-800/90 hover:bg-slate-750 text-slate-300 hover:text-white border-slate-700'
+                : 'bg-slate-100 hover:bg-slate-200 text-slate-700 hover:text-slate-900 border-slate-300'
+          }`}
+        >
+          <span>全部</span>
+          <span className={`text-[10px] font-mono px-1 rounded font-semibold ${
+            selectedGroup === 'all'
+              ? 'bg-white/20 text-white'
+              : isDark ? 'bg-slate-900 text-slate-400' : 'bg-white text-slate-600'
+          }`}>
+            {groupCounts.all || 41}
+          </span>
+        </button>
       </div>
 
-      {/* 10 Visual Category Buttons in 5 Columns x 2 Rows: Highly Economical & Zero Scrolling! */}
-      <div className="grid grid-cols-2 min-[420px]:grid-cols-3 sm:grid-cols-5 gap-1.5 overflow-hidden">
-        {groupsList.map(g => {
+      {/* 9 Categories in 3 Columns x 3 Rows: Spacious, clear 3D thumbnails, and readable text */}
+      <div className="grid grid-cols-3 gap-1.5 sm:gap-2">
+        {categoryGroups.map(g => {
           const isSelected = selectedGroup === g.key;
           const themeConfig = GROUP_THEMES[g.key] || GROUP_THEMES.all;
           const activeClass = isDark ? themeConfig.activeBgDark : themeConfig.activeBgLight;
@@ -114,7 +127,7 @@ export default function FilterBar({
               key={g.key}
               onClick={() => onSelectGroup(g.key)}
               title={`${g.en} · ${g.zh} (${g.count}个) - ${g.desc}`}
-              className={`group relative rounded p-1 text-left transition-all duration-150 flex items-center gap-1.5 border overflow-hidden ${
+              className={`group relative rounded p-1.5 text-left transition-all duration-150 flex items-center gap-2 border overflow-hidden ${
                 isSelected
                   ? `${activeClass} ring-1.5 ring-blue-500/40 shadow-sm scale-[1.01]`
                   : isDark
@@ -122,8 +135,8 @@ export default function FilterBar({
                     : 'bg-slate-50 hover:bg-slate-100 border-slate-200 hover:border-slate-300'
               }`}
             >
-              {/* 3D Cube Graphic Thumbnail */}
-              <div className={`w-5 h-5 sm:w-6 sm:h-6 rounded bg-white p-0.5 shrink-0 overflow-hidden flex items-center justify-center border shadow-inner ${
+              {/* Enlarged 3D Cube Graphic Thumbnail */}
+              <div className={`w-8 h-8 sm:w-9 sm:h-9 rounded bg-white p-0.5 shrink-0 overflow-hidden flex items-center justify-center border shadow-xs ${
                 isDark ? 'border-slate-700/60' : 'border-slate-200'
               }`}>
                 <img
@@ -133,17 +146,17 @@ export default function FilterBar({
                 />
               </div>
 
-              {/* Text info: English + Count on top, Chinese on bottom */}
+              {/* Text info: Category Code & Count on top, Chinese description on bottom */}
               <div className="flex flex-col min-w-0 flex-1 leading-tight overflow-hidden">
-                <div className="flex items-center justify-between gap-0.5">
-                  <span className={`text-[10px] font-black tracking-tight uppercase truncate ${
+                <div className="flex items-center justify-between gap-1">
+                  <span className={`text-xs sm:text-sm font-black tracking-tight uppercase truncate ${
                     isSelected 
                       ? (isDark ? 'text-white' : 'text-blue-900 font-bold') 
                       : (themeConfig.textColor || (isDark ? 'text-slate-200' : 'text-slate-700'))
                   }`}>
                     {g.en}
                   </span>
-                  <span className={`text-[9px] font-mono px-1 rounded font-semibold shrink-0 ${
+                  <span className={`text-[10px] font-mono px-1 rounded font-semibold shrink-0 ${
                     isSelected
                       ? (isDark ? 'bg-white/20 text-white' : 'bg-blue-600 text-white')
                       : (isDark ? 'bg-slate-800 text-slate-400' : 'bg-slate-200 text-slate-600')
@@ -151,7 +164,7 @@ export default function FilterBar({
                     {g.count}
                   </span>
                 </div>
-                <span className={`text-[9px] truncate leading-none mt-0.5 ${
+                <span className={`text-[10px] sm:text-[11px] truncate leading-tight mt-0.5 ${
                   isSelected 
                     ? (isDark ? 'text-slate-200 font-medium' : 'text-blue-800 font-medium')
                     : (isDark ? 'text-slate-400 group-hover:text-slate-300' : 'text-slate-500 group-hover:text-slate-700')
