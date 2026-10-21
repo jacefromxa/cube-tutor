@@ -18,7 +18,7 @@ export const PLL_CASES = [
     "name": "Ua Perm",
     "subName": "三棱顺时针换",
     "algorithm": "R U' R U R U R U' R' U' R2",
-    "cubeImg": "/assets/cubes_pll/Ua.png"
+    "cubeImg": "/assets/cubes_pll/Ua.webp"
   },
   {
     "id": "PLL-Ub",
@@ -32,7 +32,7 @@ export const PLL_CASES = [
     "name": "Ub Perm",
     "subName": "三棱逆时针换",
     "algorithm": "R2 U R U R' U' R' U' R' U R'",
-    "cubeImg": "/assets/cubes_pll/Ub.png"
+    "cubeImg": "/assets/cubes_pll/Ub.webp"
   },
   {
     "id": "PLL-H",
@@ -46,7 +46,7 @@ export const PLL_CASES = [
     "name": "H Perm",
     "subName": "对棱互换",
     "algorithm": "M2 U M2 U2 M2 U M2",
-    "cubeImg": "/assets/cubes_pll/H.png"
+    "cubeImg": "/assets/cubes_pll/H.webp"
   },
   {
     "id": "PLL-Z",
@@ -60,7 +60,7 @@ export const PLL_CASES = [
     "name": "Z Perm",
     "subName": "邻棱互换",
     "algorithm": "M' U M2 U M2 U M' U2 M2",
-    "cubeImg": "/assets/cubes_pll/Z.png"
+    "cubeImg": "/assets/cubes_pll/Z.webp"
   },
   {
     "id": "PLL-Aa",
@@ -74,7 +74,7 @@ export const PLL_CASES = [
     "name": "Aa Perm",
     "subName": "三角顺转",
     "algorithm": "x R' U R' D2 R U' R' D2 R2 x'",
-    "cubeImg": "/assets/cubes_pll/Aa.png"
+    "cubeImg": "/assets/cubes_pll/Aa.webp"
   },
   {
     "id": "PLL-Ab",
@@ -88,7 +88,7 @@ export const PLL_CASES = [
     "name": "Ab Perm",
     "subName": "三角逆转",
     "algorithm": "x R2 D2 R U R' D2 R U' l",
-    "cubeImg": "/assets/cubes_pll/Ab.png"
+    "cubeImg": "/assets/cubes_pll/Ab.webp"
   },
   {
     "id": "PLL-E",
@@ -102,7 +102,7 @@ export const PLL_CASES = [
     "name": "E Perm",
     "subName": "四角对换",
     "algorithm": "l U' R' D R U R' D' R U R' D R U' R' D' x",
-    "cubeImg": "/assets/cubes_pll/E.png"
+    "cubeImg": "/assets/cubes_pll/E.webp"
   },
   {
     "id": "PLL-Ja",
@@ -116,7 +116,7 @@ export const PLL_CASES = [
     "name": "Ja Perm",
     "subName": "邻角邻棱平移",
     "algorithm": "R' U L' U2 R U' R' U2 R r x'",
-    "cubeImg": "/assets/cubes_pll/Ja.png"
+    "cubeImg": "/assets/cubes_pll/Ja.webp"
   },
   {
     "id": "PLL-Jb",
@@ -130,7 +130,7 @@ export const PLL_CASES = [
     "name": "Jb Perm",
     "subName": "同侧棱角置换",
     "algorithm": "R U R' F' R U R' U' R' F R2 U' R'",
-    "cubeImg": "/assets/cubes_pll/Jb.png"
+    "cubeImg": "/assets/cubes_pll/Jb.webp"
   },
   {
     "id": "PLL-Ra",
@@ -144,7 +144,7 @@ export const PLL_CASES = [
     "name": "Ra Perm",
     "subName": "右侧棱角置换",
     "algorithm": "R U' R' U' R U R D R' U' R D' R' U2 R'",
-    "cubeImg": "/assets/cubes_pll/Ra.png"
+    "cubeImg": "/assets/cubes_pll/Ra.webp"
   },
   {
     "id": "PLL-Rb",
@@ -158,7 +158,7 @@ export const PLL_CASES = [
     "name": "Rb Perm",
     "subName": "左侧棱角置换",
     "algorithm": "R' U2 R U2 R' F R U R' U' R' F' R2",
-    "cubeImg": "/assets/cubes_pll/Rb.png"
+    "cubeImg": "/assets/cubes_pll/Rb.webp"
   },
   {
     "id": "PLL-T",
@@ -172,7 +172,7 @@ export const PLL_CASES = [
     "name": "T Perm",
     "subName": "经典T字棱角对换",
     "algorithm": "R U R' U' R' F R2 U' R' U' R U R' F'",
-    "cubeImg": "/assets/cubes_pll/T.png"
+    "cubeImg": "/assets/cubes_pll/T.webp"
   },
   {
     "id": "PLL-F",
@@ -186,7 +186,7 @@ export const PLL_CASES = [
     "name": "F Perm",
     "subName": "同侧双棱双角换",
     "algorithm": "R' U' F' R U R' U' R' F R2 U' R' U' R U R' U R",
-    "cubeImg": "/assets/cubes_pll/F.png"
+    "cubeImg": "/assets/cubes_pll/F.webp"
   },
   {
     "id": "PLL-Ga",
@@ -200,7 +200,7 @@ export const PLL_CASES = [
     "name": "Ga Perm",
     "subName": "G字排列顺转",
     "algorithm": "R2 U R' U R' U' R U' R2 D U' R' U R D'",
-    "cubeImg": "/assets/cubes_pll/Ga.png"
+    "cubeImg": "/assets/cubes_pll/Ga.webp"
   },
   {
     "id": "PLL-Gb",
@@ -214,7 +214,7 @@ export const PLL_CASES = [
     "name": "Gb Perm",
     "subName": "G字排列逆转",
     "algorithm": "D R' U' R U D' R2 U R' U R U' R U' R2",
-    "cubeImg": "/assets/cubes_pll/Gb.png"
+    "cubeImg": "/assets/cubes_pll/Gb.webp"
   },
   {
     "id": "PLL-Gc",
@@ -228,7 +228,7 @@ export const PLL_CASES = [
     "name": "Gc Perm",
     "subName": "G字顺转对称",
     "algorithm": "R2 U' R U' R U R' U R2 D' U R U' R' D",
-    "cubeImg": "/assets/cubes_pll/Gc.png"
+    "cubeImg": "/assets/cubes_pll/Gc.webp"
   },
   {
     "id": "PLL-Gd",
@@ -242,7 +242,7 @@ export const PLL_CASES = [
     "name": "Gd Perm",
     "subName": "G字逆转对称",
     "algorithm": "D' R U R' U' D R2 U' R U' R' U R' U R2",
-    "cubeImg": "/assets/cubes_pll/Gd.png"
+    "cubeImg": "/assets/cubes_pll/Gd.webp"
   },
   {
     "id": "PLL-Y",
@@ -256,7 +256,7 @@ export const PLL_CASES = [
     "name": "Y Perm",
     "subName": "对角对棱置换",
     "algorithm": "F R U' R' U' R U R' F' R U R' U' R' F R F'",
-    "cubeImg": "/assets/cubes_pll/Y.png"
+    "cubeImg": "/assets/cubes_pll/Y.webp"
   },
   {
     "id": "PLL-V",
@@ -270,7 +270,7 @@ export const PLL_CASES = [
     "name": "V Perm",
     "subName": "斜向角棱置换",
     "algorithm": "R' U R' U' R D' R' D R' U D' R2 U' R2 D R2",
-    "cubeImg": "/assets/cubes_pll/V.png"
+    "cubeImg": "/assets/cubes_pll/V.webp"
   },
   {
     "id": "PLL-Na",
@@ -284,7 +284,7 @@ export const PLL_CASES = [
     "name": "Na Perm",
     "subName": "对角双棱对换A",
     "algorithm": "R U R' U R U R' F' R U R' U' R' F R2 U' R' U2 R U' R'",
-    "cubeImg": "/assets/cubes_pll/Na.png"
+    "cubeImg": "/assets/cubes_pll/Na.webp"
   },
   {
     "id": "PLL-Nb",
@@ -298,6 +298,6 @@ export const PLL_CASES = [
     "name": "Nb Perm",
     "subName": "对角双棱对换B",
     "algorithm": "R' U R U' R' F' U' F R U R' F R' F' R U' R",
-    "cubeImg": "/assets/cubes_pll/Nb.png"
+    "cubeImg": "/assets/cubes_pll/Nb.webp"
   }
 ];

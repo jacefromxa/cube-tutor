@@ -96,7 +96,7 @@ export default function CaseCard({
         <img
           src={resolveAssetUrl(caseItem.cubeImg)}
           alt={caseItem.code}
-          loading="lazy"
+          decoding="async"
           className="w-full h-full object-contain filter contrast-105 transition-transform duration-200 group-hover/cube:scale-105"
         />
 

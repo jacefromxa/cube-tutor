@@ -2,4 +2,6 @@ node_modules
 dist
 .DS_Store
 *.log
+*.mp4
+public/videos/*.mp4
 

@@ -225,6 +225,7 @@ const VideoPlayer = forwardRef(function VideoPlayer({
           src={resolveAssetUrl(videoPath)}
           playsInline
           muted
+          preload="metadata"
           onTimeUpdate={handleTimeUpdate}
           onPlay={() => setIsPlaying(true)}
           onPause={() => setIsPlaying(false)}

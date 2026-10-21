@@ -15,7 +15,7 @@ export const OLL_GROUPS = {
     desc: '顶面黄色十字已成，7种经典小鱼、双头鱼、十字与大U翻角指法',
     color: 'emerald',
     accent: '#10b981',
-    iconImg: '/assets/cubes_oll/OLL27.png'
+    iconImg: '/assets/cubes_oll/OLL27.webp'
   },
   'Dot': {
     code: 'Dot',
@@ -26,7 +26,7 @@ export const OLL_GROUPS = {
     desc: '顶面无任何黄色棱块，8种点状复合转法，建立顶十字或一步到位',
     color: 'purple',
     accent: '#a855f7',
-    iconImg: '/assets/cubes_oll/OLL19.png'
+    iconImg: '/assets/cubes_oll/OLL19.webp'
   },
   'Fish': {
     code: 'Fish',
@@ -37,7 +37,7 @@ export const OLL_GROUPS = {
     desc: '顶面黄色呈现类似小鱼或K/Y字形，翻转特定棱角归位',
     color: 'cyan',
     accent: '#06b6d4',
-    iconImg: '/assets/cubes_oll/OLL37.png'
+    iconImg: '/assets/cubes_oll/OLL37.webp'
   },
   'Awkward': {
     code: 'AWK',
@@ -48,7 +48,7 @@ export const OLL_GROUPS = {
     desc: '棱角非对称分布，类似狙击枪或手枪形态，4种流畅指法',
     color: 'blue',
     accent: '#3b82f6',
-    iconImg: '/assets/cubes_oll/OLL41.png'
+    iconImg: '/assets/cubes_oll/OLL41.webp'
   },
   'Lightning': {
     code: 'LIGHT',
@@ -59,7 +59,7 @@ export const OLL_GROUPS = {
     desc: '对角阶梯状折线，6种含双向连贯起手的手法',
     color: 'amber',
     accent: '#f59e0b',
-    iconImg: '/assets/cubes_oll/OLL07.png'
+    iconImg: '/assets/cubes_oll/OLL07.webp'
   },
   'L-Shape': {
     code: 'L-Shape',
@@ -70,7 +70,7 @@ export const OLL_GROUPS = {
     desc: '顶面黄色呈现L型直角，包含10种顺滑指法',
     color: 'indigo',
     accent: '#6366f1',
-    iconImg: '/assets/cubes_oll/OLL54.png'
+    iconImg: '/assets/cubes_oll/OLL54.webp'
   },
   'P-Shape': {
     code: 'P-Shape',
@@ -81,7 +81,7 @@ export const OLL_GROUPS = {
     desc: '一侧两块成块，类似菜刀，短公式秒杀',
     color: 'rose',
     accent: '#f43f5e',
-    iconImg: '/assets/cubes_oll/OLL32.png'
+    iconImg: '/assets/cubes_oll/OLL32.webp'
   },
   'Lines': {
     code: 'Lines',
@@ -92,7 +92,7 @@ export const OLL_GROUPS = {
     desc: '顶面成一条直线或T字形，高频实用保稳手法',
     color: 'teal',
     accent: '#14b8a6',
-    iconImg: '/assets/cubes_oll/OLL33.png'
+    iconImg: '/assets/cubes_oll/OLL33.webp'
   },
   'Others': {
     code: 'Others',
@@ -103,7 +103,7 @@ export const OLL_GROUPS = {
     desc: '包含方块、W形、C形及只剩两棱的8种极简与对偶指法',
     color: 'orange',
     accent: '#ea580c',
-    iconImg: '/assets/cubes_oll/OLL05.png'
+    iconImg: '/assets/cubes_oll/OLL05.webp'
   }
 };
 
@@ -119,7 +119,7 @@ export const OLL_CASES = [
     "name": "S+ Case 小鱼",
     "algorithm": "R U R' U R U2 R'",
     "moves": 7,
-    "cubeImg": "/assets/cubes_oll/OLL27.png",
+    "cubeImg": "/assets/cubes_oll/OLL27.webp",
     "endSec": 25,
     "duration": 16
   },
@@ -134,7 +134,7 @@ export const OLL_CASES = [
     "name": "S- Case 小鱼",
     "algorithm": "R' U' R U' R' U2 R",
     "moves": 7,
-    "cubeImg": "/assets/cubes_oll/OLL26.png",
+    "cubeImg": "/assets/cubes_oll/OLL26.webp",
     "endSec": 41,
     "duration": 16
   },
@@ -149,7 +149,7 @@ export const OLL_CASES = [
     "name": "H Case",
     "algorithm": "y R' U2 R U R' U' R U R' U R",
     "moves": 11,
-    "cubeImg": "/assets/cubes_oll/OLL21.png",
+    "cubeImg": "/assets/cubes_oll/OLL21.webp",
     "endSec": 61,
     "duration": 20
   },
@@ -164,7 +164,7 @@ export const OLL_CASES = [
     "name": "Pi Case",
     "algorithm": "R U2 R2 U R2 U' R2 U2 R",
     "moves": 9,
-    "cubeImg": "/assets/cubes_oll/OLL22.png",
+    "cubeImg": "/assets/cubes_oll/OLL22.webp",
     "endSec": 81,
     "duration": 20
   },
@@ -179,7 +179,7 @@ export const OLL_CASES = [
     "name": "T Case",
     "algorithm": "y' R' U' R' D' R U R' D R2",
     "moves": 9,
-    "cubeImg": "/assets/cubes_oll/OLL24.png",
+    "cubeImg": "/assets/cubes_oll/OLL24.webp",
     "endSec": 99,
     "duration": 18
   },
@@ -194,7 +194,7 @@ export const OLL_CASES = [
     "name": "L Case",
     "algorithm": "l U' R' D R U R' D' x",
     "moves": 8,
-    "cubeImg": "/assets/cubes_oll/OLL25.png",
+    "cubeImg": "/assets/cubes_oll/OLL25.webp",
     "endSec": 122,
     "duration": 23
   },
@@ -209,7 +209,7 @@ export const OLL_CASES = [
     "name": "U Case",
     "algorithm": "R2 D' R U2 R' D R U2 R",
     "moves": 9,
-    "cubeImg": "/assets/cubes_oll/OLL23.png",
+    "cubeImg": "/assets/cubes_oll/OLL23.webp",
     "endSec": 138,
     "duration": 16
   },
@@ -224,7 +224,7 @@ export const OLL_CASES = [
     "name": "DT Case",
     "algorithm": "r' R U R U R' U' r R2 F R F'",
     "moves": 12,
-    "cubeImg": "/assets/cubes_oll/OLL19.png",
+    "cubeImg": "/assets/cubes_oll/OLL19.webp",
     "endSec": 159,
     "duration": 21
   },
@@ -239,7 +239,7 @@ export const OLL_CASES = [
     "name": "DU Case",
     "algorithm": "y R U2 R2 F R F' U2 M' U R U' r'",
     "moves": 12,
-    "cubeImg": "/assets/cubes_oll/OLL18.png",
+    "cubeImg": "/assets/cubes_oll/OLL18.webp",
     "endSec": 181,
     "duration": 22
   },
@@ -254,7 +254,7 @@ export const OLL_CASES = [
     "name": "DL Case",
     "algorithm": "R U R' U R' F R F' U2 R' F R F'",
     "moves": 13,
-    "cubeImg": "/assets/cubes_oll/OLL17.png",
+    "cubeImg": "/assets/cubes_oll/OLL17.webp",
     "endSec": 201,
     "duration": 20
   },
@@ -269,7 +269,7 @@ export const OLL_CASES = [
     "name": "X Case",
     "algorithm": "r U R' U' M2 U R U' R' U' M'",
     "moves": 11,
-    "cubeImg": "/assets/cubes_oll/OLL20.png",
+    "cubeImg": "/assets/cubes_oll/OLL20.webp",
     "endSec": 222,
     "duration": 21
   },
@@ -284,7 +284,7 @@ export const OLL_CASES = [
     "name": "DH Case",
     "algorithm": "y R U' R2 D' r U' r' D R2 U R",
     "moves": 11,
-    "cubeImg": "/assets/cubes_oll/OLL01.png",
+    "cubeImg": "/assets/cubes_oll/OLL01.webp",
     "endSec": 244,
     "duration": 22
   },
@@ -299,7 +299,7 @@ export const OLL_CASES = [
     "name": "DPi Case",
     "algorithm": "y2 R U' R2 D' r U r' D R2 U R'",
     "moves": 11,
-    "cubeImg": "/assets/cubes_oll/OLL02.png",
+    "cubeImg": "/assets/cubes_oll/OLL02.webp",
     "endSec": 267,
     "duration": 23
   },
@@ -314,7 +314,7 @@ export const OLL_CASES = [
     "name": "DS+ Case",
     "algorithm": "y' f R U R' U' f' U' F R U R' U' F",
     "moves": 13,
-    "cubeImg": "/assets/cubes_oll/OLL03.png",
+    "cubeImg": "/assets/cubes_oll/OLL03.webp",
     "endSec": 284,
     "duration": 17
   },
@@ -329,7 +329,7 @@ export const OLL_CASES = [
     "name": "DS- Case",
     "algorithm": "y' f R U R' U' f' U F R U R' U' F",
     "moves": 13,
-    "cubeImg": "/assets/cubes_oll/OLL04.png",
+    "cubeImg": "/assets/cubes_oll/OLL04.webp",
     "endSec": 301,
     "duration": 17
   },
@@ -344,7 +344,7 @@ export const OLL_CASES = [
     "name": "Shape K2 Case",
     "algorithm": "F R U' R' U' R U R' F'",
     "moves": 9,
-    "cubeImg": "/assets/cubes_oll/OLL37.png",
+    "cubeImg": "/assets/cubes_oll/OLL37.webp",
     "endSec": 319,
     "duration": 18
   },
@@ -359,7 +359,7 @@ export const OLL_CASES = [
     "name": "Shape K1 Case",
     "algorithm": "R U2 R2 F R F' R U2 R'",
     "moves": 9,
-    "cubeImg": "/assets/cubes_oll/OLL35.png",
+    "cubeImg": "/assets/cubes_oll/OLL35.webp",
     "endSec": 337,
     "duration": 18
   },
@@ -374,7 +374,7 @@ export const OLL_CASES = [
     "name": "Shape(狙击枪) G+ Case",
     "algorithm": "y2 R U R' U R U2 R' F R U R' U' F'",
     "moves": 13,
-    "cubeImg": "/assets/cubes_oll/OLL41.png",
+    "cubeImg": "/assets/cubes_oll/OLL41.webp",
     "endSec": 359,
     "duration": 22
   },
@@ -389,7 +389,7 @@ export const OLL_CASES = [
     "name": "Shape(狙击枪) F+ Case",
     "algorithm": "y' r' D' r U' r' D r2 U' r' U r U r'",
     "moves": 13,
-    "cubeImg": "/assets/cubes_oll/OLL30.png",
+    "cubeImg": "/assets/cubes_oll/OLL30.webp",
     "endSec": 383,
     "duration": 24
   },
@@ -404,7 +404,7 @@ export const OLL_CASES = [
     "name": "Shape(狙击枪) G- Case",
     "algorithm": "R' U' R U' R' U2 R F R U R' U' F'",
     "moves": 13,
-    "cubeImg": "/assets/cubes_oll/OLL42.png",
+    "cubeImg": "/assets/cubes_oll/OLL42.webp",
     "endSec": 403,
     "duration": 20
   },
@@ -419,7 +419,7 @@ export const OLL_CASES = [
     "name": "Shape(狙击枪) F- Case",
     "algorithm": "y R U R' U' R U' R' F' U' F R U R'",
     "moves": 13,
-    "cubeImg": "/assets/cubes_oll/OLL29.png",
+    "cubeImg": "/assets/cubes_oll/OLL29.webp",
     "endSec": 427,
     "duration": 24
   },
@@ -434,7 +434,7 @@ export const OLL_CASES = [
     "name": "Shape O+ Case",
     "algorithm": "y2 R' F2 r U r' F R",
     "moves": 7,
-    "cubeImg": "/assets/cubes_oll/OLL05.png",
+    "cubeImg": "/assets/cubes_oll/OLL05.webp",
     "endSec": 442,
     "duration": 15
   },
@@ -449,7 +449,7 @@ export const OLL_CASES = [
     "name": "Shape O- Case",
     "algorithm": "r U2 R' U' R U' r'",
     "moves": 7,
-    "cubeImg": "/assets/cubes_oll/OLL06.png",
+    "cubeImg": "/assets/cubes_oll/OLL06.webp",
     "endSec": 460,
     "duration": 18
   },
@@ -464,7 +464,7 @@ export const OLL_CASES = [
     "name": "Shape(小闪电) N+ Case",
     "algorithm": "r U R' U R U2 r'",
     "moves": 7,
-    "cubeImg": "/assets/cubes_oll/OLL07.png",
+    "cubeImg": "/assets/cubes_oll/OLL07.webp",
     "endSec": 476,
     "duration": 16
   },
@@ -479,7 +479,7 @@ export const OLL_CASES = [
     "name": "Shape(小闪电) N- Case",
     "algorithm": "R' F' r U' r' F2 R",
     "moves": 7,
-    "cubeImg": "/assets/cubes_oll/OLL08.png",
+    "cubeImg": "/assets/cubes_oll/OLL08.webp",
     "endSec": 492,
     "duration": 16
   },
@@ -494,7 +494,7 @@ export const OLL_CASES = [
     "name": "Shape(小L) E+ Case",
     "algorithm": "r U R' U R U' R' U R U2 r'",
     "moves": 11,
-    "cubeImg": "/assets/cubes_oll/OLL54.png",
+    "cubeImg": "/assets/cubes_oll/OLL54.webp",
     "endSec": 513,
     "duration": 21
   },
@@ -509,7 +509,7 @@ export const OLL_CASES = [
     "name": "Shape(小L) E- Case",
     "algorithm": "y r' U2 R U R' U' R U R' U r",
     "moves": 11,
-    "cubeImg": "/assets/cubes_oll/OLL53.png",
+    "cubeImg": "/assets/cubes_oll/OLL53.webp",
     "endSec": 533,
     "duration": 20
   },
@@ -524,7 +524,7 @@ export const OLL_CASES = [
     "name": "Shape(小L) R+ Case",
     "algorithm": "y2 r U' r2 U r2 U r2 U' r",
     "moves": 9,
-    "cubeImg": "/assets/cubes_oll/OLL49.png",
+    "cubeImg": "/assets/cubes_oll/OLL49.webp",
     "endSec": 552,
     "duration": 19
   },
@@ -539,7 +539,7 @@ export const OLL_CASES = [
     "name": "Shape(小L) R- Case",
     "algorithm": "r' U r2 U' r2 U' r2 U r'",
     "moves": 9,
-    "cubeImg": "/assets/cubes_oll/OLL50.png",
+    "cubeImg": "/assets/cubes_oll/OLL50.webp",
     "endSec": 573,
     "duration": 21
   },
@@ -554,7 +554,7 @@ export const OLL_CASES = [
     "name": "Shape(小L) V+ Case",
     "algorithm": "F R U R' U' 2 F'",
     "moves": 10,
-    "cubeImg": "/assets/cubes_oll/OLL48.png",
+    "cubeImg": "/assets/cubes_oll/OLL48.webp",
     "endSec": 590,
     "duration": 17
   },
@@ -569,7 +569,7 @@ export const OLL_CASES = [
     "name": "Shape(小L) V- Case",
     "algorithm": "R' U' l' U R U' R' U R U' x' U R",
     "moves": 12,
-    "cubeImg": "/assets/cubes_oll/OLL47.png",
+    "cubeImg": "/assets/cubes_oll/OLL47.webp",
     "endSec": 612,
     "duration": 22
   },
@@ -584,7 +584,7 @@ export const OLL_CASES = [
     "name": "Shape Y+ Case",
     "algorithm": "R U R' U R' F R F' R U2 R'",
     "moves": 11,
-    "cubeImg": "/assets/cubes_oll/OLL10.png",
+    "cubeImg": "/assets/cubes_oll/OLL10.webp",
     "endSec": 631,
     "duration": 19
   },
@@ -599,7 +599,7 @@ export const OLL_CASES = [
     "name": "Shape Y- Case",
     "algorithm": "R U R' U' R' F R2 U R' U' F'",
     "moves": 11,
-    "cubeImg": "/assets/cubes_oll/OLL09.png",
+    "cubeImg": "/assets/cubes_oll/OLL09.webp",
     "endSec": 651,
     "duration": 20
   },
@@ -614,7 +614,7 @@ export const OLL_CASES = [
     "name": "Shape(菜刀) Q+ Case",
     "algorithm": "R U B' U' R' U R B R'",
     "moves": 9,
-    "cubeImg": "/assets/cubes_oll/OLL32.png",
+    "cubeImg": "/assets/cubes_oll/OLL32.webp",
     "endSec": 667,
     "duration": 16
   },
@@ -629,7 +629,7 @@ export const OLL_CASES = [
     "name": "Shape(菜刀) Q- Case",
     "algorithm": "R' U' F U R U' R' F' R",
     "moves": 9,
-    "cubeImg": "/assets/cubes_oll/OLL31.png",
+    "cubeImg": "/assets/cubes_oll/OLL31.webp",
     "endSec": 683,
     "duration": 16
   },
@@ -644,7 +644,7 @@ export const OLL_CASES = [
     "name": "Shape(菜刀) P+ Case",
     "algorithm": "f R U R' U' f'",
     "moves": 6,
-    "cubeImg": "/assets/cubes_oll/OLL44.png",
+    "cubeImg": "/assets/cubes_oll/OLL44.webp",
     "endSec": 697,
     "duration": 14
   },
@@ -659,7 +659,7 @@ export const OLL_CASES = [
     "name": "Shape(菜刀) P- Case",
     "algorithm": "y R' U' F' U F R",
     "moves": 6,
-    "cubeImg": "/assets/cubes_oll/OLL43.png",
+    "cubeImg": "/assets/cubes_oll/OLL43.webp",
     "endSec": 711,
     "duration": 14
   },
@@ -674,7 +674,7 @@ export const OLL_CASES = [
     "name": "Shape(小闪电) M- Case",
     "algorithm": "y' R' M' U' R U' R' U2 R U' R r'",
     "moves": 11,
-    "cubeImg": "/assets/cubes_oll/OLL12.png",
+    "cubeImg": "/assets/cubes_oll/OLL12.webp",
     "endSec": 734,
     "duration": 23
   },
@@ -689,7 +689,7 @@ export const OLL_CASES = [
     "name": "Shape(小闪电) M+ Case",
     "algorithm": "r' R2 U R' U R U2 R' U M'",
     "moves": 10,
-    "cubeImg": "/assets/cubes_oll/OLL11.png",
+    "cubeImg": "/assets/cubes_oll/OLL11.webp",
     "endSec": 754,
     "duration": 20
   },
@@ -704,7 +704,7 @@ export const OLL_CASES = [
     "name": "Shape W+ Case",
     "algorithm": "R U R' U R U' R' U' R' F R F'",
     "moves": 12,
-    "cubeImg": "/assets/cubes_oll/OLL38.png",
+    "cubeImg": "/assets/cubes_oll/OLL38.webp",
     "endSec": 777,
     "duration": 23
   },
@@ -719,7 +719,7 @@ export const OLL_CASES = [
     "name": "Shape W- Case",
     "algorithm": "y2 L' U' L U' r' F r U r U' r' F",
     "moves": 12,
-    "cubeImg": "/assets/cubes_oll/OLL36.png",
+    "cubeImg": "/assets/cubes_oll/OLL36.webp",
     "endSec": 799,
     "duration": 22
   },
@@ -734,7 +734,7 @@ export const OLL_CASES = [
     "name": "A Case",
     "algorithm": "r U R' U' r' R U R U' R'",
     "moves": 10,
-    "cubeImg": "/assets/cubes_oll/OLL28.png",
+    "cubeImg": "/assets/cubes_oll/OLL28.webp",
     "endSec": 816,
     "duration": 17
   },
@@ -749,7 +749,7 @@ export const OLL_CASES = [
     "name": "B Case",
     "algorithm": "R U R' U' M' U R U' r'",
     "moves": 10,
-    "cubeImg": "/assets/cubes_oll/OLL57.png",
+    "cubeImg": "/assets/cubes_oll/OLL57.webp",
     "endSec": 833,
     "duration": 17
   },
@@ -764,7 +764,7 @@ export const OLL_CASES = [
     "name": "Shape T2 Case",
     "algorithm": "R U R' U' R' F R F'",
     "moves": 8,
-    "cubeImg": "/assets/cubes_oll/OLL33.png",
+    "cubeImg": "/assets/cubes_oll/OLL33.webp",
     "endSec": 850,
     "duration": 17
   },
@@ -779,7 +779,7 @@ export const OLL_CASES = [
     "name": "Shape T1 Case",
     "algorithm": "F R U R' U' F'",
     "moves": 6,
-    "cubeImg": "/assets/cubes_oll/OLL45.png",
+    "cubeImg": "/assets/cubes_oll/OLL45.webp",
     "endSec": 866,
     "duration": 16
   },
@@ -794,7 +794,7 @@ export const OLL_CASES = [
     "name": "Shape(大闪电) Z+ Case",
     "algorithm": "R' F R U R' U' F' U R",
     "moves": 9,
-    "cubeImg": "/assets/cubes_oll/OLL40.png",
+    "cubeImg": "/assets/cubes_oll/OLL40.webp",
     "endSec": 887,
     "duration": 21
   },
@@ -809,7 +809,7 @@ export const OLL_CASES = [
     "name": "Shape(大闪电) Z- Case",
     "algorithm": "y' R U R' F' U' F U R U2 R'",
     "moves": 10,
-    "cubeImg": "/assets/cubes_oll/OLL39.png",
+    "cubeImg": "/assets/cubes_oll/OLL39.webp",
     "endSec": 904,
     "duration": 17
   },
@@ -824,7 +824,7 @@ export const OLL_CASES = [
     "name": "Shape L+ Case",
     "algorithm": "r' U' r R' U' R U r' U r",
     "moves": 10,
-    "cubeImg": "/assets/cubes_oll/OLL15.png",
+    "cubeImg": "/assets/cubes_oll/OLL15.webp",
     "endSec": 924,
     "duration": 20
   },
@@ -839,7 +839,7 @@ export const OLL_CASES = [
     "name": "Shape J+ Case",
     "algorithm": "F U R U' R2 F' R U R U' R'",
     "moves": 11,
-    "cubeImg": "/assets/cubes_oll/OLL13.png",
+    "cubeImg": "/assets/cubes_oll/OLL13.webp",
     "endSec": 940,
     "duration": 16
   },
@@ -854,7 +854,7 @@ export const OLL_CASES = [
     "name": "Shape L- Case",
     "algorithm": "r U r' R U R' U' r U' r'",
     "moves": 10,
-    "cubeImg": "/assets/cubes_oll/OLL16.png",
+    "cubeImg": "/assets/cubes_oll/OLL16.webp",
     "endSec": 958,
     "duration": 18
   },
@@ -869,7 +869,7 @@ export const OLL_CASES = [
     "name": "Shape J- Case",
     "algorithm": "R' F R U R' F' R y' R U' R'",
     "moves": 10,
-    "cubeImg": "/assets/cubes_oll/OLL14.png",
+    "cubeImg": "/assets/cubes_oll/OLL14.webp",
     "endSec": 978,
     "duration": 20
   },
@@ -884,7 +884,7 @@ export const OLL_CASES = [
     "name": "Shape CU Case",
     "algorithm": "R' U' R' F R F' U R",
     "moves": 8,
-    "cubeImg": "/assets/cubes_oll/OLL46.png",
+    "cubeImg": "/assets/cubes_oll/OLL46.webp",
     "endSec": 997,
     "duration": 19
   },
@@ -899,7 +899,7 @@ export const OLL_CASES = [
     "name": "Shape CT Case",
     "algorithm": "y2 R U R2 U' R' F R U R U' F'",
     "moves": 11,
-    "cubeImg": "/assets/cubes_oll/OLL34.png",
+    "cubeImg": "/assets/cubes_oll/OLL34.webp",
     "endSec": 1018,
     "duration": 21
   },
@@ -914,7 +914,7 @@ export const OLL_CASES = [
     "name": "Shape Ant(I2) Case",
     "algorithm": "y2 F U R U' R' 2 F'",
     "moves": 10,
-    "cubeImg": "/assets/cubes_oll/OLL51.png",
+    "cubeImg": "/assets/cubes_oll/OLL51.webp",
     "endSec": 1036,
     "duration": 18
   },
@@ -929,7 +929,7 @@ export const OLL_CASES = [
     "name": "Shape I4 Case",
     "algorithm": "y R' F R U R U' R2 F' R2 U' R' U R U R'",
     "moves": 15,
-    "cubeImg": "/assets/cubes_oll/OLL55.png",
+    "cubeImg": "/assets/cubes_oll/OLL55.webp",
     "endSec": 1062,
     "duration": 26
   },
@@ -944,7 +944,7 @@ export const OLL_CASES = [
     "name": "Shape",
     "algorithm": "Shirt I3 Case y2 R' F' U' F U' R U R' U R",
     "moves": 10,
-    "cubeImg": "/assets/cubes_oll/OLL52.png",
+    "cubeImg": "/assets/cubes_oll/OLL52.webp",
     "endSec": 1080,
     "duration": 18
   },
@@ -959,7 +959,7 @@ export const OLL_CASES = [
     "name": "Shape I1 Case",
     "algorithm": "r U r' U R U' R' 2 r U' r'",
     "moves": 14,
-    "cubeImg": "/assets/cubes_oll/OLL56.png",
+    "cubeImg": "/assets/cubes_oll/OLL56.webp",
     "endSec": 1100,
     "duration": 20
   }

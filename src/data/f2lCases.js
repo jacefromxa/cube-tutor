@@ -13,7 +13,7 @@ export const F2L_GROUPS = {
     "desc": "标准3步入槽或天然已成对，无复杂遮挡的基础还原",
     "color": "emerald",
     "accent": "#10b981",
-    "iconImg": "/assets/cubes/Easy-01.png"
+    "iconImg": "/assets/cubes/Easy-01.webp"
   },
   "RE": {
     "code": "RE",
@@ -24,7 +24,7 @@ export const F2L_GROUPS = {
     "desc": "角块白朝侧面且顶色相异，藏角转动顶层重置棱块，配对入槽",
     "color": "blue",
     "accent": "#3b82f6",
-    "iconImg": "/assets/cubes/RE-05.png"
+    "iconImg": "/assets/cubes/RE-05.webp"
   },
   "REFC": {
     "code": "REFC",
@@ -35,7 +35,7 @@ export const F2L_GROUPS = {
     "desc": "角块白朝侧面，棱角错位或假连接，翻转角向或调整棱位后结合入槽",
     "color": "amber",
     "accent": "#f59e0b",
-    "iconImg": "/assets/cubes/REFC-10.png"
+    "iconImg": "/assets/cubes/REFC-10.webp"
   },
   "SPGO": {
     "code": "SPGO",
@@ -46,7 +46,7 @@ export const F2L_GROUPS = {
     "desc": "顶层棱角顶面同色（或白顶相邻），通过拆分再结合，顺畅入槽",
     "color": "cyan",
     "accent": "#06b6d4",
-    "iconImg": "/assets/cubes/SPGO-15.png"
+    "iconImg": "/assets/cubes/SPGO-15.webp"
   },
   "PMS": {
     "code": "PMS",
@@ -57,7 +57,7 @@ export const F2L_GROUPS = {
     "desc": "角块白面朝上(白朝天)，棱角错位分离，藏棱翻转顶层配对成组入槽",
     "color": "purple",
     "accent": "#a855f7",
-    "iconImg": "/assets/cubes/PMS-19.png"
+    "iconImg": "/assets/cubes/PMS-19.webp"
   },
   "Weird": {
     "code": "Weird",
@@ -68,7 +68,7 @@ export const F2L_GROUPS = {
     "desc": "角块白朝天且与棱块呈特殊连接/远距排列，需多次复合指法或转体解出",
     "color": "rose",
     "accent": "#f43f5e",
-    "iconImg": "/assets/cubes/Weird-23.png"
+    "iconImg": "/assets/cubes/Weird-23.webp"
   },
   "CPEU": {
     "code": "CPEU",
@@ -79,7 +79,7 @@ export const F2L_GROUPS = {
     "desc": "角块已在底层槽位中，棱块仍在顶层，借出底角或原地配对入槽",
     "color": "indigo",
     "accent": "#6366f1",
-    "iconImg": "/assets/cubes/CPEU-25.png"
+    "iconImg": "/assets/cubes/CPEU-25.webp"
   },
   "EPCU": {
     "code": "EPCU",
@@ -90,7 +90,7 @@ export const F2L_GROUPS = {
     "desc": "棱块已在底层槽位中，角块仍在顶层，提棱或利用空槽旋转角块入槽",
     "color": "orange",
     "accent": "#f97316",
-    "iconImg": "/assets/cubes/EPCU-31.png"
+    "iconImg": "/assets/cubes/EPCU-31.webp"
   },
   "ECP": {
     "code": "ECP",
@@ -101,7 +101,7 @@ export const F2L_GROUPS = {
     "desc": "角块与棱块均已在底槽中但色向颠倒或未对齐，提至顶层重整入槽",
     "color": "teal",
     "accent": "#14b8a6",
-    "iconImg": "/assets/cubes/ECP-39.png"
+    "iconImg": "/assets/cubes/ECP-39.webp"
   }
 };
 
@@ -144,7 +144,7 @@ export const F2L_CASES = [
     "algorithm": "U R U' R'",
     "grip": "中起手",
     "description": "基础入槽·角块白朝前，顶面同色",
-    "cubeImg": "/assets/cubes/Easy-01.png",
+    "cubeImg": "/assets/cubes/Easy-01.webp",
     "cardImg": "/assets/cards/Easy-01.png",
     "frameImg": "/assets/frames/Easy-01.jpg"
   },
@@ -161,7 +161,7 @@ export const F2L_CASES = [
     "algorithm": "y' U' R' U R",
     "grip": "上起手",
     "description": "基础入槽·白朝右，顶面同色入左槽/转体入槽",
-    "cubeImg": "/assets/cubes/Easy-02.png",
+    "cubeImg": "/assets/cubes/Easy-02.webp",
     "cardImg": "/assets/cards/Easy-02.png",
     "frameImg": "/assets/frames/Easy-02.jpg"
   },
@@ -178,7 +178,7 @@ export const F2L_CASES = [
     "algorithm": "F' U' F",
     "grip": "下起手",
     "description": "基础入槽·角块白朝前，顶面异色，前层插入",
-    "cubeImg": "/assets/cubes/Easy-03.png",
+    "cubeImg": "/assets/cubes/Easy-03.webp",
     "cardImg": "/assets/cards/Easy-03.png",
     "frameImg": "/assets/frames/Easy-03.jpg"
   },
@@ -195,7 +195,7 @@ export const F2L_CASES = [
     "algorithm": "(U) R U' R'",
     "grip": "下起手",
     "description": "基础入槽·角块白朝右，顶面异色，标配三步入槽",
-    "cubeImg": "/assets/cubes/Easy-04.png",
+    "cubeImg": "/assets/cubes/Easy-04.webp",
     "cardImg": "/assets/cards/Easy-04.png",
     "frameImg": "/assets/frames/Easy-04.jpg"
   },
@@ -212,7 +212,7 @@ export const F2L_CASES = [
     "algorithm": "U' R U R' U2 R U' R'",
     "grip": "中起手",
     "description": "顶层棱块·角块白朝右，顶面同色，藏角配对",
-    "cubeImg": "/assets/cubes/RE-05.png",
+    "cubeImg": "/assets/cubes/RE-05.webp",
     "cardImg": "/assets/cards/RE-05.png",
     "frameImg": "/assets/frames/RE-05.jpg"
   },
@@ -229,7 +229,7 @@ export const F2L_CASES = [
     "algorithm": "d R' U' R U R' U2 R",
     "grip": "中起手",
     "description": "顶层棱块·角块白朝前，顶面同色，转体后槽做",
-    "cubeImg": "/assets/cubes/RE-06.png",
+    "cubeImg": "/assets/cubes/RE-06.webp",
     "cardImg": "/assets/cards/RE-06.png",
     "frameImg": "/assets/frames/RE-06.jpg"
   },
@@ -246,7 +246,7 @@ export const F2L_CASES = [
     "algorithm": "U' R U2 R' U2 R U' R'",
     "grip": "中起手",
     "description": "顶层棱块·角块白朝右，顶面异色，藏角错位",
-    "cubeImg": "/assets/cubes/RE-07.png",
+    "cubeImg": "/assets/cubes/RE-07.webp",
     "cardImg": "/assets/cards/RE-07.png",
     "frameImg": "/assets/frames/RE-07.jpg"
   },
@@ -263,7 +263,7 @@ export const F2L_CASES = [
     "algorithm": "d R' U2 R U R' U2 R",
     "grip": "中起手",
     "description": "顶层棱块·角块白朝前，顶面异色，转体配对",
-    "cubeImg": "/assets/cubes/RE-08.png",
+    "cubeImg": "/assets/cubes/RE-08.webp",
     "cardImg": "/assets/cards/RE-08.png",
     "frameImg": "/assets/frames/RE-08.jpg"
   },
@@ -280,7 +280,7 @@ export const F2L_CASES = [
     "algorithm": "U' R U' R' d R' U' R",
     "grip": "中起手",
     "description": "侧白错配·角白朝右，UF前侧假对，借空槽翻转配对入槽",
-    "cubeImg": "/assets/cubes/REFC-09.png",
+    "cubeImg": "/assets/cubes/REFC-09.webp",
     "cardImg": "/assets/cards/REFC-09.png",
     "frameImg": "/assets/frames/REFC-09.jpg"
   },
@@ -297,7 +297,7 @@ export const F2L_CASES = [
     "algorithm": "U' R U R' U R U R'",
     "grip": "中起手",
     "description": "侧白错配·角白朝前，UL左侧远端，连续抬角顺手入槽",
-    "cubeImg": "/assets/cubes/REFC-10.png",
+    "cubeImg": "/assets/cubes/REFC-10.webp",
     "cardImg": "/assets/cards/REFC-10.png",
     "frameImg": "/assets/frames/REFC-10.jpg"
   },
@@ -314,7 +314,7 @@ export const F2L_CASES = [
     "algorithm": "U' R U2 R' d R' U' R",
     "grip": "中起手",
     "description": "侧白错配·角白朝右，UR右侧相连假对，藏角分拆再对齐",
-    "cubeImg": "/assets/cubes/REFC-11.png",
+    "cubeImg": "/assets/cubes/REFC-11.webp",
     "cardImg": "/assets/cards/REFC-11.png",
     "frameImg": "/assets/frames/REFC-11.jpg"
   },
@@ -331,7 +331,7 @@ export const F2L_CASES = [
     "algorithm": "R U' R' U R U' R' U2 R U' R'",
     "grip": "中起手",
     "description": "侧白错配·角白朝前，UB对角远端分离，拆分再配对",
-    "cubeImg": "/assets/cubes/REFC-12.png",
+    "cubeImg": "/assets/cubes/REFC-12.webp",
     "cardImg": "/assets/cards/REFC-12.png",
     "frameImg": "/assets/frames/REFC-12.jpg"
   },
@@ -348,7 +348,7 @@ export const F2L_CASES = [
     "algorithm": "d R' U R U' R' U' R",
     "grip": "上起手",
     "description": "侧白错配·角白朝右，UB对角远端分离，转体提角配对",
-    "cubeImg": "/assets/cubes/REFC-13.png",
+    "cubeImg": "/assets/cubes/REFC-13.webp",
     "cardImg": "/assets/cards/REFC-13.png",
     "frameImg": "/assets/frames/REFC-13.jpg"
   },
@@ -365,7 +365,7 @@ export const F2L_CASES = [
     "algorithm": "U' R U' R' U R U R'",
     "grip": "中起手",
     "description": "侧白错配·角白朝前，UR右侧相连假对，三步连招化解",
-    "cubeImg": "/assets/cubes/REFC-14.png",
+    "cubeImg": "/assets/cubes/REFC-14.webp",
     "cardImg": "/assets/cards/REFC-14.png",
     "frameImg": "/assets/frames/REFC-14.jpg"
   },
@@ -382,7 +382,7 @@ export const F2L_CASES = [
     "algorithm": "U R U2 R' U R U' R'",
     "grip": "中起手",
     "description": "白顶分离·角白朝天，UF前侧分离错位，藏棱翻转配对入槽",
-    "cubeImg": "/assets/cubes/PMS-19.png",
+    "cubeImg": "/assets/cubes/PMS-19.webp",
     "cardImg": "/assets/cards/PMS-19.png",
     "frameImg": "/assets/frames/PMS-19.jpg"
   },
@@ -399,7 +399,7 @@ export const F2L_CASES = [
     "algorithm": "y' U' R' U2 R U' R' U R",
     "grip": "上起手",
     "description": "白顶分离·角白朝天，UL左侧远端分离，转体藏棱配对",
-    "cubeImg": "/assets/cubes/PMS-20.png",
+    "cubeImg": "/assets/cubes/PMS-20.webp",
     "cardImg": "/assets/cards/PMS-20.png",
     "frameImg": "/assets/frames/PMS-20.jpg"
   },
@@ -416,7 +416,7 @@ export const F2L_CASES = [
     "algorithm": "(U2) R U R' U R U' R'",
     "grip": "中起手",
     "description": "白顶分离·角白朝天，UL左侧同色分离，对准顶色顺势入槽",
-    "cubeImg": "/assets/cubes/PMS-21.png",
+    "cubeImg": "/assets/cubes/PMS-21.webp",
     "cardImg": "/assets/cards/PMS-21.png",
     "frameImg": "/assets/frames/PMS-21.jpg"
   },
@@ -433,7 +433,7 @@ export const F2L_CASES = [
     "algorithm": "y' U2 R' U' R U' R' U R",
     "grip": "中起手",
     "description": "白顶分离·角白朝天，UF前侧同色分离，转体顺手入槽",
-    "cubeImg": "/assets/cubes/PMS-22.png",
+    "cubeImg": "/assets/cubes/PMS-22.webp",
     "cardImg": "/assets/cards/PMS-22.png",
     "frameImg": "/assets/frames/PMS-22.jpg"
   },
@@ -450,7 +450,7 @@ export const F2L_CASES = [
     "algorithm": "R' D' R U' R' D R U R U' R'",
     "grip": "中起手",
     "description": "顶色同向·角白朝右，UB对角分离，杜宇生底层Keyhole绝活",
-    "cubeImg": "/assets/cubes/SPGO-15.png",
+    "cubeImg": "/assets/cubes/SPGO-15.webp",
     "cardImg": "/assets/cards/SPGO-15.png",
     "frameImg": "/assets/frames/SPGO-15.jpg"
   },
@@ -467,7 +467,7 @@ export const F2L_CASES = [
     "algorithm": "R U' R' U d R' U' R",
     "grip": "中起手",
     "description": "顶色同向·角白朝前，UR右侧紧贴相连，分离并转体入槽",
-    "cubeImg": "/assets/cubes/SPGO-16.png",
+    "cubeImg": "/assets/cubes/SPGO-16.webp",
     "cardImg": "/assets/cards/SPGO-16.png",
     "frameImg": "/assets/frames/SPGO-16.jpg"
   },
@@ -484,7 +484,7 @@ export const F2L_CASES = [
     "algorithm": "R U2 R' U' R U R'",
     "grip": "下起手",
     "description": "白顶相连·角白朝天，UR右侧相连假对，借空槽拆分配对入槽",
-    "cubeImg": "/assets/cubes/SPGO-17.png",
+    "cubeImg": "/assets/cubes/SPGO-17.webp",
     "cardImg": "/assets/cards/SPGO-17.png",
     "frameImg": "/assets/frames/SPGO-17.jpg"
   },
@@ -501,7 +501,7 @@ export const F2L_CASES = [
     "algorithm": "y' R' U2 R U R' U' R",
     "grip": "中起手",
     "description": "白顶对角·角白朝天，UB对角远端分离，转体拆分入槽",
-    "cubeImg": "/assets/cubes/SPGO-18.png",
+    "cubeImg": "/assets/cubes/SPGO-18.webp",
     "cardImg": "/assets/cards/SPGO-18.png",
     "frameImg": "/assets/frames/SPGO-18.jpg"
   },
@@ -518,7 +518,7 @@ export const F2L_CASES = [
     "algorithm": "U R U' R' U' R U' R' U R U' R'",
     "grip": "中起手",
     "description": "别扭情况·顶面白色紧贴相连，三次开拆入槽",
-    "cubeImg": "/assets/cubes/Weird-23.png",
+    "cubeImg": "/assets/cubes/Weird-23.webp",
     "cardImg": "/assets/cards/Weird-23.png",
     "frameImg": "/assets/frames/Weird-23.jpg"
   },
@@ -535,7 +535,7 @@ export const F2L_CASES = [
     "algorithm": "R U R' d R' U R U' R' U R",
     "grip": "中起手",
     "description": "别扭情况·顶面白色紧贴相连且反向，转体分离",
-    "cubeImg": "/assets/cubes/Weird-24.png",
+    "cubeImg": "/assets/cubes/Weird-24.webp",
     "cardImg": "/assets/cards/Weird-24.png",
     "frameImg": "/assets/frames/Weird-24.jpg"
   },
@@ -552,7 +552,7 @@ export const F2L_CASES = [
     "algorithm": "U' F' R U R' U' R' F R",
     "grip": "下起手",
     "description": "角块在底·角位置正确但色向不对，F面手法秒解",
-    "cubeImg": "/assets/cubes/CPEU-25.png",
+    "cubeImg": "/assets/cubes/CPEU-25.webp",
     "cardImg": "/assets/cards/CPEU-25.png",
     "frameImg": "/assets/frames/CPEU-25.jpg"
   },
@@ -569,7 +569,7 @@ export const F2L_CASES = [
     "algorithm": "U R U' R' d' L' U L",
     "grip": "中起手",
     "description": "角块在底·棱块在上，三步弹出换后槽",
-    "cubeImg": "/assets/cubes/CPEU-26.png",
+    "cubeImg": "/assets/cubes/CPEU-26.webp",
     "cardImg": "/assets/cards/CPEU-26.png",
     "frameImg": "/assets/frames/CPEU-26.jpg"
   },
@@ -586,7 +586,7 @@ export const F2L_CASES = [
     "algorithm": "R U' R' U R U' R'",
     "grip": "中起手",
     "description": "角块在底·色向翻转，直接提角配对",
-    "cubeImg": "/assets/cubes/CPEU-27.png",
+    "cubeImg": "/assets/cubes/CPEU-27.webp",
     "cardImg": "/assets/cards/CPEU-27.png",
     "frameImg": "/assets/frames/CPEU-27.jpg"
   },
@@ -603,7 +603,7 @@ export const F2L_CASES = [
     "algorithm": "y' R' U R U' R' U R",
     "grip": "中起手",
     "description": "角块在底·转体镜像提角配对",
-    "cubeImg": "/assets/cubes/CPEU-28.png",
+    "cubeImg": "/assets/cubes/CPEU-28.webp",
     "cardImg": "/assets/cards/CPEU-28.png",
     "frameImg": "/assets/frames/CPEU-28.jpg"
   },
@@ -620,7 +620,7 @@ export const F2L_CASES = [
     "algorithm": "y' R' U' R U R' U' R",
     "grip": "中起手",
     "description": "角块在底·转体做反向拆分配对",
-    "cubeImg": "/assets/cubes/CPEU-29.png",
+    "cubeImg": "/assets/cubes/CPEU-29.webp",
     "cardImg": "/assets/cards/CPEU-29.png",
     "frameImg": "/assets/frames/CPEU-29.jpg"
   },
@@ -637,7 +637,7 @@ export const F2L_CASES = [
     "algorithm": "R U R' U' R U R'",
     "grip": "中起手",
     "description": "角块在底·提角对棱秒解入槽",
-    "cubeImg": "/assets/cubes/CPEU-30.png",
+    "cubeImg": "/assets/cubes/CPEU-30.webp",
     "cardImg": "/assets/cards/CPEU-30.png",
     "frameImg": "/assets/frames/CPEU-30.jpg"
   },
@@ -654,7 +654,7 @@ export const F2L_CASES = [
     "algorithm": "R U' R' d R' U R",
     "grip": "中起手",
     "description": "棱块在槽·棱块方向正确，角块白朝右，提棱配对",
-    "cubeImg": "/assets/cubes/EPCU-31.png",
+    "cubeImg": "/assets/cubes/EPCU-31.webp",
     "cardImg": "/assets/cards/EPCU-31.png",
     "frameImg": "/assets/frames/EPCU-31.jpg"
   },
@@ -671,7 +671,7 @@ export const F2L_CASES = [
     "algorithm": "U R U' R' U R U' R' U R U' R'",
     "grip": "中起手",
     "description": "棱块在槽·棱块方向正确，角块白朝上，三连性感",
-    "cubeImg": "/assets/cubes/EPCU-32.png",
+    "cubeImg": "/assets/cubes/EPCU-32.webp",
     "cardImg": "/assets/cards/EPCU-32.png",
     "frameImg": "/assets/frames/EPCU-32.jpg"
   },
@@ -688,7 +688,7 @@ export const F2L_CASES = [
     "algorithm": "U' R U' R' U2 R U' R'",
     "grip": "中起手",
     "description": "棱在底槽·棱方向正确，角块白朝右，提棱拆分配对",
-    "cubeImg": "/assets/cubes/EPCU-33.png",
+    "cubeImg": "/assets/cubes/EPCU-33.webp",
     "cardImg": "/assets/cards/EPCU-33.png",
     "frameImg": "/assets/frames/EPCU-33.jpg"
   },
@@ -705,7 +705,7 @@ export const F2L_CASES = [
     "algorithm": "U' R' D' R U R' D R",
     "grip": "下起手",
     "description": "棱在底槽·棱方向正确，角块白朝前，D层钥匙孔妙解",
-    "cubeImg": "/assets/cubes/EPCU-34.png",
+    "cubeImg": "/assets/cubes/EPCU-34.webp",
     "cardImg": "/assets/cards/EPCU-34.png",
     "frameImg": "/assets/frames/EPCU-34.jpg"
   },
@@ -722,7 +722,7 @@ export const F2L_CASES = [
     "algorithm": "U' R U R' d R' U' R",
     "grip": "中起手",
     "description": "棱在底槽·棱块翻转，角块白朝右，提棱转体入槽",
-    "cubeImg": "/assets/cubes/EPCU-35.png",
+    "cubeImg": "/assets/cubes/EPCU-35.webp",
     "cardImg": "/assets/cards/EPCU-35.png",
     "frameImg": "/assets/frames/EPCU-35.jpg"
   },
@@ -739,7 +739,7 @@ export const F2L_CASES = [
     "algorithm": "U F' U' F U' R U R'",
     "grip": "中起手",
     "description": "棱在底槽·棱块翻转，角块白朝前，前层配对入槽",
-    "cubeImg": "/assets/cubes/EPCU-36.png",
+    "cubeImg": "/assets/cubes/EPCU-36.webp",
     "cardImg": "/assets/cards/EPCU-36.png",
     "frameImg": "/assets/frames/EPCU-36.jpg"
   },
@@ -756,7 +756,7 @@ export const F2L_CASES = [
     "algorithm": "R' F R F' R U' R' U R U' R' U2 R U' R'",
     "grip": "上起手",
     "description": "均在底槽·角块色向正确棱翻转，F层开门解法",
-    "cubeImg": "/assets/cubes/ECP-37.png",
+    "cubeImg": "/assets/cubes/ECP-37.webp",
     "cardImg": "/assets/cards/ECP-37.png",
     "frameImg": "/assets/frames/ECP-37.jpg"
   },
@@ -773,7 +773,7 @@ export const F2L_CASES = [
     "algorithm": "R U' R' U' R U R' U2 R U' R'",
     "grip": "下起手",
     "description": "均在底槽·角正确棱倒装，提棱重置",
-    "cubeImg": "/assets/cubes/ECP-38.png",
+    "cubeImg": "/assets/cubes/ECP-38.webp",
     "cardImg": "/assets/cards/ECP-38.png",
     "frameImg": "/assets/frames/ECP-38.jpg"
   },
@@ -790,7 +790,7 @@ export const F2L_CASES = [
     "algorithm": "R U' R' U R U2 R' U R U' R'",
     "grip": "中起手",
     "description": "均在底槽·角反转棱正确，提角重置入槽",
-    "cubeImg": "/assets/cubes/ECP-39.png",
+    "cubeImg": "/assets/cubes/ECP-39.webp",
     "cardImg": "/assets/cards/ECP-39.png",
     "frameImg": "/assets/frames/ECP-39.jpg"
   },
@@ -807,7 +807,7 @@ export const F2L_CASES = [
     "algorithm": "R U' R' d R' U' R U' R' U' R",
     "grip": "中起手",
     "description": "均在底槽·角棱均反向，提角转体做后槽",
-    "cubeImg": "/assets/cubes/ECP-40.png",
+    "cubeImg": "/assets/cubes/ECP-40.webp",
     "cardImg": "/assets/cards/ECP-40.png",
     "frameImg": "/assets/frames/ECP-40.jpg"
   },
@@ -824,7 +824,7 @@ export const F2L_CASES = [
     "algorithm": "R U' R' d U R' U' R U' R' U R",
     "grip": "中起手",
     "description": "均在底槽·完全反向错配，彻底拆分配对",
-    "cubeImg": "/assets/cubes/ECP-41.png",
+    "cubeImg": "/assets/cubes/ECP-41.webp",
     "cardImg": "/assets/cards/ECP-41.png",
     "frameImg": "/assets/frames/ECP-41.jpg"
   }
