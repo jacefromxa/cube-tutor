@@ -2,12 +2,6 @@ import React from 'react';
 import { Check, Hand } from 'lucide-react';
 import { resolveAssetUrl } from '../utils/assetUrl';
 
-const GRIP_COLOR_MAP = {
-  '中起手': 'bg-slate-700/40 text-slate-300 border-slate-600/50',
-  '上起手': 'bg-amber-500/20 text-amber-400 border-amber-500/40',
-  '下起手': 'bg-blue-500/20 text-blue-400 border-blue-500/40'
-};
-
 export default function CaseCard({
   caseItem,
   isActive,
@@ -17,114 +11,93 @@ export default function CaseCard({
   theme = 'dark'
 }) {
   const isDark = theme === 'dark';
-  const gripBadgeClass = GRIP_COLOR_MAP[caseItem.grip] || 'bg-slate-700/30 text-slate-400';
-
-  // Card container theme and mastered style calculation
-  let containerStyle = '';
-  if (isMastered) {
-    if (isActive) {
-      containerStyle = isDark
-        ? 'bg-emerald-950/90 border-emerald-400 ring-2 ring-emerald-400/80 shadow-lg shadow-emerald-500/25 text-white'
-        : 'bg-emerald-100 border-emerald-600 ring-2 ring-emerald-500/80 shadow-md shadow-emerald-500/20 text-emerald-950';
-    } else {
-      containerStyle = isDark
-        ? 'bg-emerald-950/50 hover:bg-emerald-900/60 border-emerald-600/60 hover:border-emerald-500 text-emerald-100'
-        : 'bg-emerald-50/95 hover:bg-emerald-100/90 border-emerald-400 hover:border-emerald-500 text-emerald-950 shadow-sm';
-    }
-  } else {
-    if (isActive) {
-      containerStyle = isDark
-        ? 'bg-blue-950/70 border-blue-500 ring-2 ring-blue-500/50 shadow-lg shadow-blue-500/20 text-white'
-        : 'bg-blue-50 border-blue-500 ring-2 ring-blue-500/50 shadow-md shadow-blue-500/20 text-blue-950';
-    } else {
-      containerStyle = isDark
-        ? 'bg-slate-900/90 hover:bg-slate-850 border-slate-800/90 hover:border-slate-700 text-slate-200'
-        : 'bg-white hover:bg-slate-50 border-slate-200 hover:border-slate-300 text-slate-800 shadow-sm';
-    }
-  }
 
   return (
     <div
       onClick={() => onSelect(caseItem)}
-      className={`relative group rounded-md p-1.5 sm:p-2 transition-all duration-150 cursor-pointer flex flex-col justify-between border ${containerStyle}`}
+      className={`relative p-2 transition-all duration-100 cursor-pointer flex flex-col justify-between border-2 select-none ${
+        isActive
+          ? 'border-[#ff5b00] ring-1 ring-[#ff5b00] ' + (isDark ? 'bg-zinc-900/90 text-white' : 'bg-orange-50/50 text-black')
+          : isMastered
+            ? (isDark 
+                ? 'bg-zinc-950 border-zinc-800 hover:border-zinc-600 text-zinc-200' 
+                : 'bg-white border-zinc-300 hover:border-black text-black')
+            : (isDark 
+                ? 'bg-[#0a0a0a] border-zinc-800 hover:border-zinc-600 text-zinc-300' 
+                : 'bg-white border-zinc-300 hover:border-black text-black')
+      }`}
     >
-      {/* Top Header: Code, Grip Badge & Master Toggle (High space efficiency) */}
-      <div className="flex items-center justify-between gap-1 mb-1">
+      {/* Top Header: Code, Grip Badge & Square Master Check */}
+      <div className="flex items-center justify-between gap-1 mb-1.5">
         <div className="flex items-center gap-1.5 min-w-0">
-          <span className={`font-black text-xs sm:text-sm tracking-tight font-mono truncate ${
-            isMastered 
-              ? (isDark ? 'text-emerald-200' : 'text-emerald-900') 
-              : (isDark ? 'text-white' : 'text-slate-900')
+          <span className={`font-mono font-black text-xs sm:text-sm tracking-tight truncate flex items-center gap-1 ${
+            isActive ? 'text-[#ff5b00]' : isDark ? 'text-white' : 'text-black'
           }`}>
-            {caseItem.code}
+            {isActive && <span className="w-1.5 h-1.5 bg-[#ff5b00] inline-block shrink-0" />}
+            <span>{caseItem.code}</span>
           </span>
+
           {caseItem.grip && (
-            <span className={`text-[9px] px-1 py-0.2 rounded border font-medium flex items-center gap-0.5 shrink-0 ${gripBadgeClass}`}>
+            <span className={`font-mono text-[9px] px-1 py-0.2 border font-bold flex items-center gap-0.5 shrink-0 ${
+              isDark ? 'bg-zinc-900 border-zinc-700 text-zinc-300' : 'bg-zinc-100 border-zinc-300 text-zinc-700'
+            }`}>
               <Hand className="w-2 h-2" />
-              {caseItem.grip}
+              <span>{caseItem.grip}</span>
             </span>
           )}
         </div>
 
-        {/* Mastered checkbox button */}
+        {/* Mastered Square Toggle */}
         <button
           onClick={(e) => {
             e.stopPropagation();
             onToggleMastered(caseItem.id);
           }}
           title={isMastered ? "已掌握 (点击取消)" : "标记为已掌握"}
-          className={`w-5 h-5 rounded flex items-center justify-center transition border shrink-0 ${
+          className={`w-5 h-5 flex items-center justify-center border transition-colors shrink-0 ${
             isMastered
-              ? 'bg-emerald-500 text-slate-950 border-emerald-400 font-bold shadow-sm'
+              ? 'bg-[#ff5b00] text-black border-black font-black'
               : isDark
-                ? 'bg-slate-800 text-slate-500 border-slate-700 hover:text-slate-300 hover:border-slate-600'
-                : 'bg-slate-100 text-slate-400 border-slate-300 hover:text-slate-700 hover:border-slate-400'
+                ? 'bg-zinc-900 border-zinc-700 text-zinc-500 hover:border-zinc-500'
+                : 'bg-zinc-100 border-zinc-300 text-zinc-400 hover:border-black'
           }`}
         >
-          <Check className="w-3 h-3" />
+          {isMastered ? <Check className="w-3.5 h-3.5 stroke-[3]" /> : <span className="w-1.5 h-1.5 bg-zinc-400/40" />}
         </button>
       </div>
 
-      {/* Middle: Prominent 3D Cube Graphic (Unobstructed, Never blurred or blocked) */}
-      <div className={`relative w-20 h-20 sm:w-24 sm:h-24 mx-auto rounded bg-white p-1 my-0.5 overflow-hidden flex items-center justify-center shadow-inner group/cube shrink-0 border transition-all ${
-        isActive
-          ? (isMastered ? 'ring-2 ring-emerald-500 border-emerald-400' : 'ring-2 ring-blue-500 border-blue-400')
-          : (isMastered 
-              ? (isDark ? 'border-emerald-600/40' : 'border-emerald-300') 
-              : (isDark ? 'border-slate-700/60' : 'border-slate-200'))
+      {/* Middle: Crisp 3D Cube Graphic Specimen */}
+      <div className={`relative w-20 h-20 sm:w-24 sm:h-24 mx-auto bg-white p-1 my-1 overflow-hidden flex items-center justify-center shrink-0 border-2 transition-transform duration-150 ${
+        isActive 
+          ? 'border-[#ff5b00]' 
+          : 'border-black dark:border-zinc-700'
       }`}>
         <img
           src={resolveAssetUrl(caseItem.cubeImg)}
           alt={caseItem.code}
           decoding="async"
-          className="w-full h-full object-contain filter contrast-105 transition-transform duration-200 group-hover/cube:scale-105"
+          className="w-full h-full object-contain filter contrast-105"
         />
 
-        {/* Non-intrusive playing badge (Pinned to top-left corner, zero obstruction of cube facets) */}
+        {/* Technical Playing Badge */}
         {isActive && (
-          <div className="absolute top-1 left-1 px-1.5 py-0.2 rounded bg-blue-600/90 text-white text-[9px] font-bold flex items-center gap-1 shadow-sm pointer-events-none">
-            <span className="w-1.5 h-1.5 rounded-full bg-emerald-400 animate-pulse" />
-            <span>播放中</span>
+          <div className="absolute top-1 left-1 px-1.5 py-0.2 bg-black text-[#ff5b00] border border-[#ff5b00] text-[9px] font-mono font-bold flex items-center gap-1 shadow-sm pointer-events-none">
+            <span className="w-1.5 h-1.5 bg-[#ff5b00] animate-pulse" />
+            <span>PLAY</span>
           </div>
         )}
       </div>
 
-      {/* Bottom Info: Clean, Full-Width Algorithm Box (Timestamp row eliminated to save height) */}
-      <div className={`mt-1 pt-1 border-t flex flex-col ${
-        isMastered 
-          ? (isDark ? 'border-emerald-800/40' : 'border-emerald-200') 
-          : (isDark ? 'border-slate-800/80' : 'border-slate-200')
-      }`}>
+      {/* Bottom: Technical Monospace Formula Box */}
+      <div className="mt-1 pt-1.5 border-t border-black/10 dark:border-zinc-800 flex flex-col">
         <div 
-          className={`rounded px-1.5 py-0.5 font-mono text-[11px] sm:text-xs font-semibold text-center truncate border ${
-            isMastered 
-              ? isDark 
-                ? 'bg-emerald-950/90 text-emerald-300 border-emerald-800/60' 
-                : 'bg-emerald-100 text-emerald-900 border-emerald-300'
+          className={`px-1.5 py-1 font-mono text-[11px] sm:text-xs font-bold text-center truncate border ${
+            isActive
+              ? 'bg-[#ff5b00] text-black border-black'
               : isDark
-                ? 'bg-slate-950/90 text-amber-300/90 border-slate-800/60'
-                : 'bg-slate-50 text-amber-800 border-slate-200'
-          }`} 
+                ? 'bg-zinc-900 text-zinc-200 border-zinc-800'
+                : 'bg-zinc-100 text-black border-zinc-300'
+          }`}
           title={caseItem.algorithm}
         >
           {caseItem.algorithm}

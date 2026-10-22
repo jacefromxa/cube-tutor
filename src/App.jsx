@@ -22,7 +22,7 @@ const MODULE_CONFIGS = {
     storageKey: 'f2l_mastered_cases_v1',
     filterTitle: 'F2L情况分类',
     filterSubtitle: '(9大类)',
-    allTitle: 'All 41 F2L Cases',
+    allTitle: 'ALL 41 F2L CASES',
     allDesc: '涵盖基础入槽、旋转棱块、顶白翻角、连体错配、钥匙孔分离与底槽情况等 41 种指法',
     allLiteral: '全部形态（41 种常规情况）'
   },
@@ -34,26 +34,25 @@ const MODULE_CONFIGS = {
     storageKey: 'cube_tutor_mastered_oll_v1',
     filterTitle: 'OLL形态分类',
     filterSubtitle: '(9大类)',
-    allTitle: 'All 57 OLL Cases',
+    allTitle: 'ALL 57 OLL CASES',
     allDesc: '涵盖十字O、点O、小鱼、狙击枪、闪电、L字、菜刀、一字及特殊组合形态等 57 种保稳手法',
     allLiteral: '全部形态（57 种顶面色向情况）'
   },
   pll: {
     name: 'PLL',
     cases: PLL_CASES,
-    groups: null, // PLL has no category bar as requested
+    groups: null,
     videoPath: PLL_VIDEO_PATH,
     storageKey: 'cube_tutor_mastered_pll_v1',
     filterTitle: null,
     filterSubtitle: null,
-    allTitle: 'All 21 PLL Cases',
+    allTitle: 'ALL 21 PLL CASES',
     allDesc: '涵盖三棱换、四棱换、三角换、四角换、邻角邻棱、G排列及对角置换等 21 种 SUB1 极速指法',
     allLiteral: '全部形态（21 种顶层置换情况）'
   }
 };
 
 export default function App() {
-  // Active module: 'f2l' | 'oll' | 'pll'
   const [activeModule, setActiveModule] = useState(() => {
     try {
       const saved = localStorage.getItem(MODULE_STORAGE_KEY);
@@ -66,13 +65,11 @@ export default function App() {
   const activeConfig = MODULE_CONFIGS[activeModule];
   const activeCasesList = activeConfig.cases;
 
-  // Selected case & group filter
   const [currentCase, setCurrentCase] = useState(() => activeCasesList[0]);
   const [selectedGroup, setSelectedGroup] = useState('all');
   const [masteredFilter, setMasteredFilter] = useState('all');
   const [showShortcuts, setShowShortcuts] = useState(false);
   
-  // Theme state: light | dark (default: light)
   const [theme, setTheme] = useState(() => {
     try {
       const saved = localStorage.getItem(THEME_STORAGE_KEY);
@@ -106,7 +103,6 @@ export default function App() {
   const playerRef = useRef(null);
   const caseListScrollRef = useRef(null);
 
-  // Mastered cases per module
   const [masteredMap, setMasteredMap] = useState(() => {
     const loadSaved = (key) => {
       try {
@@ -126,7 +122,6 @@ export default function App() {
   const currentMasteredIds = masteredMap[activeModule] || [];
   const masteredSet = useMemo(() => new Set(currentMasteredIds), [currentMasteredIds]);
 
-  // Handle module switching
   const handleSelectModule = useCallback((mod) => {
     if (!MODULE_CONFIGS[mod] || mod === activeModule) return;
     setActiveModule(mod);
@@ -141,7 +136,6 @@ export default function App() {
     }
   }, [activeModule]);
 
-  // Toggle mastered for a case
   const toggleMastered = useCallback((caseId) => {
     setMasteredMap(prev => {
       const curList = prev[activeModule] || [];
@@ -154,7 +148,7 @@ export default function App() {
             particleCount: 40,
             spread: 60,
             origin: { y: 0.8 },
-            colors: ['#10b981', '#3b82f6', '#f59e0b']
+            colors: ['#ff5b00', '#0a0a0a', '#ffffff']
           });
         } catch {}
       } else {
@@ -171,7 +165,6 @@ export default function App() {
     });
   }, [activeModule, activeConfig.storageKey]);
 
-  // Reset progress for current module
   const resetProgress = useCallback(() => {
     if (window.confirm(`确定要清空 ${activeConfig.name} 的已掌握学习进度吗？`)) {
       setMasteredMap(prev => {
@@ -186,7 +179,6 @@ export default function App() {
     }
   }, [activeConfig.name, activeConfig.storageKey, activeModule]);
 
-  // Group counts calculation (for F2L and OLL)
   const groupCounts = useMemo(() => {
     const counts = { all: activeCasesList.length };
     if (activeConfig.groups) {
@@ -199,16 +191,13 @@ export default function App() {
     return counts;
   }, [activeCasesList, activeConfig.groups]);
 
-  // Filter Cases
   const filteredCases = useMemo(() => {
     let list = [...activeCasesList];
 
-    // Group filter (if module has groups)
     if (activeConfig.groups && selectedGroup !== 'all') {
       list = list.filter(c => c.group === selectedGroup);
     }
 
-    // Mastered filter
     if (masteredFilter === 'mastered') {
       list = list.filter(c => masteredSet.has(c.id));
     } else if (masteredFilter === 'unmastered') {
@@ -222,20 +211,16 @@ export default function App() {
     setCurrentCase(item);
   }, []);
 
-  // Global Keyboard Shortcuts
   useEffect(() => {
     const handleKeyDown = (e) => {
       if (['INPUT', 'TEXTAREA', 'SELECT'].includes(document.activeElement?.tagName)) {
         return;
       }
 
-      // Space: Toggle Play/Pause
       if (e.code === 'Space') {
         e.preventDefault();
         playerRef.current?.togglePlay();
-      } 
-      // Arrow Left/Right controls 2-second rapid jump
-      else if (e.code === 'ArrowLeft') {
+      } else if (e.code === 'ArrowLeft') {
         e.preventDefault();
         if (e.shiftKey) {
           const activeList = filteredCases.length > 0 ? filteredCases : activeCasesList;
@@ -253,9 +238,7 @@ export default function App() {
         } else {
           playerRef.current?.handleStep(2);
         }
-      } 
-      // [ / ] or P / N for Case switching
-      else if (e.code === 'BracketLeft' || e.code === 'KeyP') {
+      } else if (e.code === 'BracketLeft' || e.code === 'KeyP') {
         e.preventDefault();
         const activeList = filteredCases.length > 0 ? filteredCases : activeCasesList;
         const idx = activeList.findIndex(c => c.id === currentCase?.id);
@@ -265,38 +248,26 @@ export default function App() {
         const activeList = filteredCases.length > 0 ? filteredCases : activeCasesList;
         const idx = activeList.findIndex(c => c.id === currentCase?.id);
         if (idx !== -1 && idx < activeList.length - 1) handleSelectCase(activeList[idx + 1]);
-      } 
-      // J / K for 2s step
-      else if (e.code === 'KeyJ') {
+      } else if (e.code === 'KeyJ') {
         e.preventDefault();
         playerRef.current?.handleStep(-2);
       } else if (e.code === 'KeyK') {
         e.preventDefault();
         playerRef.current?.handleStep(2);
-      }
-      // R: Replay current case
-      else if (e.code === 'KeyR') {
+      } else if (e.code === 'KeyR') {
         e.preventDefault();
         playerRef.current?.handleReplay();
-      }
-      // L: Toggle Loop
-      else if (e.code === 'KeyL') {
+      } else if (e.code === 'KeyL') {
         e.preventDefault();
         playerRef.current?.toggleLooping();
-      }
-      // F: Fullscreen
-      else if (e.code === 'KeyF') {
+      } else if (e.code === 'KeyF') {
         e.preventDefault();
         playerRef.current?.requestFullscreen();
-      }
-      // 1-4: Speed change
-      else if (['Digit1', 'Digit2', 'Digit3', 'Digit4'].includes(e.code) && !e.shiftKey) {
+      } else if (['Digit1', 'Digit2', 'Digit3', 'Digit4'].includes(e.code) && !e.shiftKey) {
         e.preventDefault();
         const speedMap = { Digit1: 0.5, Digit2: 0.75, Digit3: 1.0, Digit4: 1.25 };
         playerRef.current?.changeSpeed(speedMap[e.code]);
-      }
-      // Shift + 1/2/3: Quick switch module (F2L / OLL / PLL)
-      else if (e.shiftKey && e.code === 'Digit1') {
+      } else if (e.shiftKey && e.code === 'Digit1') {
         e.preventDefault();
         handleSelectModule('f2l');
       } else if (e.shiftKey && e.code === 'Digit2') {
@@ -316,9 +287,9 @@ export default function App() {
 
   return (
     <div className={`min-h-screen lg:h-screen flex flex-col font-sans select-none overflow-visible lg:overflow-hidden transition-colors duration-150 ${
-      isDark ? 'bg-slate-950 text-slate-100' : 'bg-slate-100 text-slate-800'
+      isDark ? 'bg-[#0a0a0a] text-zinc-100' : 'bg-[#f4f4f5] text-black'
     }`}>
-      {/* Header: Product Title Cube-Tutor + 3-Segment Switcher (F2L / OLL / PLL) + Controls */}
+      {/* Header: LineLore Swiss Style Header */}
       <Header
         activeModule={activeModule}
         onSelectModule={handleSelectModule}
@@ -337,16 +308,16 @@ export default function App() {
         onOpenShortcuts={() => setShowShortcuts(true)}
       />
 
-      {/* Main Responsive Layout:
+      {/* Main Dual-Column Viewport:
           - Desktop (lg:): Fixed Dual-Column Viewport with pixel-perfect bottom alignment
-          - Mobile (< lg): Sticky Video Player at top (never scrolls away), scrollable categories and cases below
+          - Mobile (< lg): Sticky Video Player at top, natural scroll below
       */}
-      <main className="flex-1 min-h-0 max-w-[1920px] w-full mx-auto px-2 sm:px-3 lg:px-5 py-2 sm:py-2.5 flex flex-col lg:flex-row gap-2.5 sm:gap-3 lg:gap-4 items-stretch lg:overflow-hidden">
+      <main className="flex-1 min-h-0 max-w-[1920px] w-full mx-auto px-2.5 sm:px-4 lg:px-6 py-2.5 sm:py-3 flex flex-col lg:flex-row gap-3 sm:gap-4 items-stretch lg:overflow-hidden">
         
-        {/* LEFT COLUMN: Video Player & Action Bar (Mobile: Sticky top-0 to ensure video stays always visible!) */}
+        {/* LEFT COLUMN: Video Player & Control Spec Area */}
         <div className={`w-full lg:w-[57%] xl:w-[61%] 2xl:w-[64%] shrink-0 h-auto lg:h-full flex flex-col justify-start sticky lg:static top-0 z-30 transition-colors ${
-          isDark ? 'bg-slate-950/95' : 'bg-slate-100/95'
-        } backdrop-blur-sm -mx-2 px-2 pt-1 pb-1 lg:mx-0 lg:px-0 lg:py-0 lg:bg-transparent lg:backdrop-blur-none`}>
+          isDark ? 'bg-[#0a0a0a]/95' : 'bg-[#f4f4f5]/95'
+        } backdrop-blur-xs -mx-2 px-2 pt-1 pb-1 lg:mx-0 lg:px-0 lg:py-0 lg:bg-transparent lg:backdrop-blur-none`}>
           <VideoPlayer
             ref={playerRef}
             currentCase={currentCase}
@@ -361,9 +332,9 @@ export default function App() {
           />
         </div>
 
-        {/* RIGHT COLUMN: Selection Menu & Independent Scrollable Case Grid */}
-        <div className="flex-1 min-w-0 h-auto lg:h-full flex flex-col gap-2">
-          {/* Category Filter Bar (Only shown for F2L and OLL; PLL cases are shown directly) */}
+        {/* RIGHT COLUMN: Filter Grid & Case Selection List */}
+        <div className="flex-1 min-w-0 h-auto lg:h-full flex flex-col gap-2.5">
+          {/* Category Filter Bar */}
           {activeConfig.groups && (
             <FilterBar
               groups={activeConfig.groups}
@@ -377,34 +348,28 @@ export default function App() {
             />
           )}
 
-          {/* Unified Case Area: Header Fused Directly with Case Scroll Grid */}
-          <div className={`flex-1 min-h-0 flex flex-col border rounded-md overflow-hidden transition-colors ${
-            isDark ? 'bg-slate-900/60 border-slate-800' : 'bg-white border-slate-200 shadow-sm'
+          {/* Unified Case Area */}
+          <div className={`flex-1 min-h-0 flex flex-col border-2 overflow-hidden transition-colors ${
+            isDark ? 'bg-[#0a0a0a] border-zinc-800' : 'bg-white border-black'
           }`}>
-            {/* Category Explanation Banner as Integrated Section Header */}
-            <div className={`px-3 py-2 border-b flex flex-col gap-0.5 shrink-0 transition-colors ${
-              isDark ? 'bg-slate-900 border-slate-800' : 'bg-slate-50/95 border-slate-200'
+            {/* Category Explanation Banner */}
+            <div className={`px-3 py-2 border-b-2 flex flex-col gap-0.5 shrink-0 transition-colors ${
+              isDark ? 'bg-zinc-950 border-zinc-800' : 'bg-zinc-100 border-black'
             }`}>
-              <div className="flex items-center gap-2 flex-wrap">
-                <span className={`px-2 py-0.5 rounded text-xs font-black uppercase border font-mono shrink-0 ${
-                  activeModule === 'f2l'
-                    ? 'bg-blue-500/15 text-blue-600 dark:text-blue-400 border-blue-500/30'
-                    : activeModule === 'oll'
-                      ? 'bg-amber-500/15 text-amber-600 dark:text-amber-400 border-amber-500/30'
-                      : 'bg-emerald-500/15 text-emerald-600 dark:text-emerald-400 border-emerald-500/30'
-                }`}>
+              <div className="flex items-center gap-2 flex-wrap font-mono">
+                <span className="px-1.5 py-0.5 border text-xs font-black uppercase bg-[#ff5b00] border-black text-black">
                   {selectedGroup === 'all' ? (activeModule.toUpperCase()) : activeGroupInfo?.code}
                 </span>
-                <span className="font-mono text-sm sm:text-base font-black text-amber-600 dark:text-amber-400 shrink-0">
+                <span className="text-xs sm:text-sm font-black uppercase tracking-tight text-black dark:text-white">
                   {selectedGroup === 'all' ? activeConfig.allTitle : activeGroupInfo?.fullEn}
                 </span>
-                <span className={`text-xs sm:text-sm font-bold px-1.5 py-0.5 rounded ${
-                  isDark ? 'bg-slate-800 text-slate-100' : 'bg-white text-slate-800 border border-slate-200 shadow-xs'
+                <span className={`text-[11px] sm:text-xs font-bold px-1.5 py-0.5 border ${
+                  isDark ? 'bg-zinc-900 border-zinc-700 text-zinc-300' : 'bg-white border-zinc-300 text-black'
                 }`}>
                   {selectedGroup === 'all' ? activeConfig.allLiteral : activeGroupInfo?.literalZh}
                 </span>
               </div>
-              <p className={`text-xs leading-tight truncate ${isDark ? 'text-slate-400' : 'text-slate-600'}`}>
+              <p className={`text-xs leading-relaxed truncate font-sans mt-0.5 ${isDark ? 'text-zinc-400' : 'text-zinc-600'}`}>
                 {selectedGroup === 'all' 
                   ? activeConfig.allDesc
                   : activeGroupInfo?.desc
@@ -412,10 +377,10 @@ export default function App() {
               </p>
             </div>
 
-            {/* CASE CONTAINER (Naturally scrolls on mobile, independently scrolls inside container on desktop) */}
+            {/* Case Grid Scroll Area */}
             <div 
               ref={caseListScrollRef}
-              className="flex-1 min-h-0 lg:overflow-y-auto p-2 overscroll-contain scrollbar-thin"
+              className="flex-1 min-h-0 lg:overflow-y-auto p-2 overscroll-contain"
             >
               {filteredCases.length > 0 ? (
                 <div className="grid grid-cols-2 sm:grid-cols-3 gap-2">
@@ -432,19 +397,19 @@ export default function App() {
                   ))}
                 </div>
               ) : (
-                <div className="p-8 text-center flex flex-col items-center justify-center gap-2 my-auto">
-                  <AlertCircle className="w-6 h-6 text-slate-400" />
-                  <p className={`text-xs font-semibold ${isDark ? 'text-slate-300' : 'text-slate-700'}`}>
-                    暂无匹配的 Case
+                <div className="p-8 text-center flex flex-col items-center justify-center gap-2 my-auto font-mono">
+                  <AlertCircle className="w-6 h-6 text-zinc-400" />
+                  <p className={`text-xs font-bold ${isDark ? 'text-zinc-300' : 'text-zinc-700'}`}>
+                    [ NO MATCHING CASES FOUND ]
                   </p>
                   <button
                     onClick={() => {
                       setSelectedGroup('all');
                       setMasteredFilter('all');
                     }}
-                    className="mt-1 px-3 py-1 rounded bg-blue-600 text-white text-xs font-semibold hover:bg-blue-500 transition"
+                    className="mt-1 px-4 py-1.5 border border-black bg-[#ff5b00] text-black text-xs font-black uppercase hover:bg-[#e05000] transition-colors"
                   >
-                    重置为全部
+                    RESET TO ALL // 重置
                   </button>
                 </div>
               )}

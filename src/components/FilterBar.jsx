@@ -3,61 +3,6 @@ import { Layers } from 'lucide-react';
 import { F2L_GROUPS } from '../data/f2lCases';
 import { resolveAssetUrl } from '../utils/assetUrl';
 
-const COLOR_THEMES = {
-  emerald: {
-    activeBgDark: 'bg-emerald-950/90 border-emerald-400 text-emerald-300',
-    activeBgLight: 'bg-emerald-100 border-emerald-500 text-emerald-900',
-    textColor: 'text-emerald-500'
-  },
-  blue: {
-    activeBgDark: 'bg-blue-950/90 border-blue-400 text-blue-300',
-    activeBgLight: 'bg-blue-100 border-blue-500 text-blue-900',
-    textColor: 'text-blue-500'
-  },
-  amber: {
-    activeBgDark: 'bg-amber-950/90 border-amber-400 text-amber-300',
-    activeBgLight: 'bg-amber-100 border-amber-500 text-amber-900',
-    textColor: 'text-amber-500'
-  },
-  purple: {
-    activeBgDark: 'bg-purple-950/90 border-purple-400 text-purple-300',
-    activeBgLight: 'bg-purple-100 border-purple-500 text-purple-900',
-    textColor: 'text-purple-500'
-  },
-  cyan: {
-    activeBgDark: 'bg-cyan-950/90 border-cyan-400 text-cyan-300',
-    activeBgLight: 'bg-cyan-100 border-cyan-500 text-cyan-900',
-    textColor: 'text-cyan-500'
-  },
-  rose: {
-    activeBgDark: 'bg-rose-950/90 border-rose-400 text-rose-300',
-    activeBgLight: 'bg-rose-100 border-rose-500 text-rose-900',
-    textColor: 'text-rose-500'
-  },
-  indigo: {
-    activeBgDark: 'bg-indigo-950/90 border-indigo-400 text-indigo-300',
-    activeBgLight: 'bg-indigo-100 border-indigo-500 text-indigo-900',
-    textColor: 'text-indigo-500'
-  },
-  orange: {
-    activeBgDark: 'bg-orange-950/90 border-orange-400 text-orange-300',
-    activeBgLight: 'bg-orange-100 border-orange-500 text-orange-900',
-    textColor: 'text-orange-500'
-  },
-  teal: {
-    activeBgDark: 'bg-teal-950/90 border-teal-400 text-teal-300',
-    activeBgLight: 'bg-teal-100 border-teal-500 text-teal-900',
-    textColor: 'text-teal-500'
-  }
-};
-
-const DEFAULT_THEME = {
-  border: 'border-slate-700',
-  activeBgDark: 'bg-blue-600 border-blue-500 shadow-blue-500/25 text-white',
-  activeBgLight: 'bg-blue-600 border-blue-500 shadow-blue-500/25 text-white',
-  textColor: 'text-blue-400'
-};
-
 export default function FilterBar({
   groups = F2L_GROUPS,
   selectedGroup,
@@ -70,7 +15,6 @@ export default function FilterBar({
 }) {
   const isDark = theme === 'dark';
 
-  // Categories in grid (without 'all', which is placed separately in the top-right header)
   const categoryGroups = Object.entries(groups).map(([key, info]) => ({
     key,
     en: info.code || key,
@@ -82,70 +26,71 @@ export default function FilterBar({
   }));
 
   return (
-    <div className={`border rounded-md p-2 sm:p-2.5 flex flex-col gap-2 shrink-0 transition-colors ${
+    <div className={`border-2 p-2 sm:p-2.5 flex flex-col gap-2 shrink-0 transition-colors ${
       isDark 
-        ? 'bg-slate-900/95 border-slate-800 shadow-md' 
-        : 'bg-white border-slate-200 shadow-sm'
+        ? 'bg-[#0a0a0a] border-zinc-800 text-zinc-100' 
+        : 'bg-[#ffffff] border-black text-black'
     }`}>
-      {/* Category Header: Section Title on Left + Dedicated "全部" Button on Right */}
+      {/* Category Header: Technical Title & Dedicated "全部" Button */}
       <div className="flex items-center justify-between px-0.5">
-        <div className="flex items-center gap-1.5">
-          <Layers className="w-4 h-4 text-blue-500" />
-          <span className={`text-xs sm:text-sm font-bold tracking-tight ${isDark ? 'text-slate-200' : 'text-slate-800'}`}>
+        <div className="flex items-center gap-2">
+          <span className="w-2 h-2 bg-[#ff5b00] inline-block" />
+          <span className="font-mono text-xs sm:text-sm font-black tracking-tight uppercase">
             {title}
           </span>
-          <span className={`text-[11px] font-medium ${isDark ? 'text-slate-500' : 'text-slate-400'}`}>
+          <span className="font-mono text-[10px] sm:text-[11px] opacity-60">
             {subtitle}
           </span>
         </div>
 
-        {/* Dedicated "全部" (All) button in the top-right corner */}
+        {/* Dedicated "全部" (All) button */}
         <button
           onClick={() => onSelectGroup('all')}
           title={`显示全部 ${totalCount} 种手法`}
-          className={`flex items-center gap-1.5 px-2.5 py-0.5 sm:py-1 rounded text-xs font-bold transition-all duration-150 border ${
+          className={`flex items-center gap-1.5 px-3 py-1 font-mono text-xs font-black transition-colors border ${
             selectedGroup === 'all'
-              ? 'bg-blue-600 border-blue-500 text-white shadow-xs'
+              ? 'bg-[#ff5b00] text-black border-black'
               : isDark
-                ? 'bg-slate-800/90 hover:bg-slate-750 text-slate-300 hover:text-white border-slate-700'
-                : 'bg-slate-100 hover:bg-slate-200 text-slate-700 hover:text-slate-900 border-slate-300'
+                ? 'bg-zinc-900 border-zinc-700 text-zinc-300 hover:bg-white hover:text-black hover:border-white'
+                : 'bg-zinc-100 border-black text-black hover:bg-black hover:text-white'
           }`}
         >
-          <span>全部</span>
-          <span className={`text-[10px] font-mono px-1 rounded font-semibold ${
-            selectedGroup === 'all'
-              ? 'bg-white/20 text-white'
-              : isDark ? 'bg-slate-900 text-slate-400' : 'bg-white text-slate-600'
+          <span>ALL // 全部</span>
+          <span className={`text-[10px] px-1 font-bold ${
+            selectedGroup === 'all' 
+              ? 'bg-black text-white' 
+              : isDark ? 'bg-zinc-800 text-zinc-400' : 'bg-zinc-200 text-zinc-700'
           }`}>
             {groupCounts.all || totalCount}
           </span>
         </button>
       </div>
 
-      {/* 9 Categories in 3 Columns x 3 Rows: Spacious, clear 3D thumbnails, and readable text */}
+      {/* 9 Categories in 3 Columns x 3 Rows: Swiss Grid Layout */}
       <div className="grid grid-cols-3 gap-1.5 sm:gap-2">
-        {categoryGroups.map(g => {
+        {categoryGroups.map((g, idx) => {
           const isSelected = selectedGroup === g.key;
-          const themeConfig = COLOR_THEMES[g.color] || DEFAULT_THEME;
-          const activeClass = isDark ? themeConfig.activeBgDark : themeConfig.activeBgLight;
 
           return (
             <button
               key={g.key}
               onClick={() => onSelectGroup(g.key)}
               title={`${g.en} · ${g.zh} (${g.count}个) - ${g.desc}`}
-              className={`group relative rounded p-1 sm:p-1.5 text-left transition-all duration-150 flex items-center gap-1.5 sm:gap-2 border overflow-hidden ${
+              className={`group relative p-1 sm:p-1.5 text-left transition-colors flex items-center gap-1.5 sm:gap-2 border overflow-hidden ${
                 isSelected
-                  ? `${activeClass} ring-1.5 ring-blue-500/40 shadow-sm scale-[1.01]`
+                  ? 'border-2 border-[#ff5b00] bg-[#ff5b00]/10 text-black dark:text-white'
                   : isDark
-                    ? 'bg-slate-950/70 hover:bg-slate-850 border-slate-800/80 hover:border-slate-700'
-                    : 'bg-slate-50 hover:bg-slate-100 border-slate-200 hover:border-slate-300'
+                    ? 'bg-zinc-900/60 border-zinc-800 hover:border-zinc-600 hover:bg-zinc-900'
+                    : 'bg-zinc-50 border-zinc-300 hover:border-black hover:bg-zinc-100'
               }`}
             >
+              {/* Active Indicator Strip */}
+              {isSelected && (
+                <div className="absolute left-0 top-0 bottom-0 w-1 bg-[#ff5b00]" />
+              )}
+
               {/* 3D Cube Graphic Thumbnail */}
-              <div className={`w-7 h-7 sm:w-8 sm:h-8 md:w-9 md:h-9 rounded bg-white p-0.5 shrink-0 overflow-hidden flex items-center justify-center border shadow-xs ${
-                isDark ? 'border-slate-700/60' : 'border-slate-200'
-              }`}>
+              <div className="w-7 h-7 sm:w-8 sm:h-8 md:w-9 md:h-9 bg-white p-0.5 shrink-0 overflow-hidden flex items-center justify-center border border-zinc-300 dark:border-zinc-700">
                 <img
                   src={resolveAssetUrl(g.img)}
                   alt={g.en}
@@ -153,28 +98,26 @@ export default function FilterBar({
                 />
               </div>
 
-              {/* Text info: Category Code & Count on top, Chinese description on bottom */}
-              <div className="flex flex-col min-w-0 flex-1 leading-tight overflow-hidden">
+              {/* Information */}
+              <div className="flex flex-col min-w-0 flex-1 leading-tight overflow-hidden pl-0.5">
                 <div className="flex items-center justify-between gap-0.5">
-                  <span className={`text-[10px] sm:text-xs md:text-sm font-black tracking-tight uppercase truncate ${
-                    isSelected 
-                      ? (isDark ? 'text-white' : 'text-blue-900 font-bold') 
-                      : (themeConfig.textColor || (isDark ? 'text-slate-200' : 'text-slate-700'))
+                  <span className={`font-mono text-[10px] sm:text-xs font-black tracking-tight uppercase truncate ${
+                    isSelected ? 'text-[#ff5b00]' : isDark ? 'text-zinc-200' : 'text-zinc-900'
                   }`}>
                     {g.en}
                   </span>
-                  <span className={`text-[9px] sm:text-[10px] font-mono px-0.5 sm:px-1 rounded font-semibold shrink-0 ${
+                  <span className={`font-mono text-[9px] sm:text-[10px] px-1 font-bold shrink-0 ${
                     isSelected
-                      ? (isDark ? 'bg-white/20 text-white' : 'bg-blue-600 text-white')
-                      : (isDark ? 'bg-slate-800 text-slate-400' : 'bg-slate-200 text-slate-600')
+                      ? 'bg-[#ff5b00] text-black'
+                      : isDark ? 'bg-zinc-800 text-zinc-400' : 'bg-zinc-200 text-zinc-700'
                   }`}>
                     {g.count}
                   </span>
                 </div>
-                <span className={`text-[9px] sm:text-[11px] truncate leading-tight mt-0.5 ${
+                <span className={`text-[9px] sm:text-[11px] truncate leading-tight mt-0.5 font-sans ${
                   isSelected 
-                    ? (isDark ? 'text-slate-200 font-medium' : 'text-blue-800 font-medium')
-                    : (isDark ? 'text-slate-400 group-hover:text-slate-300' : 'text-slate-500 group-hover:text-slate-700')
+                    ? 'font-bold' 
+                    : isDark ? 'text-zinc-400 group-hover:text-zinc-200' : 'text-zinc-600 group-hover:text-black'
                 }`}>
                   {g.zh}
                 </span>
