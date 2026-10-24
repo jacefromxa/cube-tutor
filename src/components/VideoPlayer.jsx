@@ -247,22 +247,6 @@ const VideoPlayer = forwardRef(function VideoPlayer({
             </p>
           </div>
         )}
-
-        {/* Looping / Sequence Toggle at Top-Right */}
-        <div className="absolute top-2 right-2 flex items-center gap-2">
-          <button
-            onClick={toggleLooping}
-            title={isLooping ? "当前: 单 Case 循环 (快捷键 L)" : "当前: 顺序连播 (快捷键 L)"}
-            className={`px-2 py-0.5 font-mono text-[11px] font-bold border transition-colors flex items-center gap-1 ${
-              isLooping 
-                ? 'bg-[#ff5b00] text-black border-black' 
-                : 'bg-black/80 text-zinc-300 border-zinc-700 hover:text-white hover:border-white'
-            }`}
-          >
-            <Repeat className="w-3 h-3" />
-            <span>{isLooping ? 'LOOP // 循环' : 'SEQ // 连播'}</span>
-          </button>
-        </div>
       </div>
 
       {/* 2. LineLore Safety Orange Draggable Scrubber */}
@@ -302,37 +286,37 @@ const VideoPlayer = forwardRef(function VideoPlayer({
         )}
       </div>
 
-      {/* 3. Control Toolbar */}
-      <div className={`px-2 sm:px-3 py-1.5 border-b flex flex-wrap items-center justify-between gap-1.5 sm:gap-2 transition-colors ${
+      {/* 3. Control Toolbar - Strictly single line flex-nowrap on all screens */}
+      <div className={`px-1.5 sm:px-3 py-1 sm:py-1.5 border-b flex flex-nowrap items-center justify-between gap-1 sm:gap-2 transition-colors overflow-hidden ${
         isDark ? 'bg-[#0a0a0a] border-zinc-800' : 'bg-zinc-50 border-black'
       }`}>
         {/* Playback Controls */}
-        <div className="flex items-center gap-1">
+        <div className="flex items-center gap-0.5 sm:gap-1 flex-nowrap shrink-0">
           {/* Previous Case */}
           <button
             onClick={handlePrev}
             disabled={!hasPrev}
             title="上一个 Case ([)"
-            className={`w-7 h-7 sm:w-8 sm:h-8 flex items-center justify-center border transition-colors disabled:opacity-30 ${
+            className={`w-6 h-6 sm:w-8 sm:h-8 flex items-center justify-center border transition-colors disabled:opacity-30 ${
               isDark 
                 ? 'bg-zinc-900 border-zinc-700 text-zinc-200 hover:bg-white hover:text-black' 
                 : 'bg-white border-black text-black hover:bg-black hover:text-white'
             }`}
           >
-            <ChevronLeft className="w-4 h-4" />
+            <ChevronLeft className="w-3.5 h-3.5 sm:w-4 sm:h-4" />
           </button>
 
           {/* Rewind 2s */}
           <button
             onClick={() => handleStep(-2)}
             title="快退 2 秒 (← / J)"
-            className={`px-1.5 sm:px-2 h-7 sm:h-8 flex items-center gap-0.5 border font-mono text-xs font-bold transition-colors ${
+            className={`px-1 sm:px-2 h-6 sm:h-8 flex items-center gap-0.5 border font-mono text-[10px] sm:text-xs font-bold transition-colors ${
               isDark 
                 ? 'bg-zinc-900 border-zinc-700 text-zinc-300 hover:bg-white hover:text-black' 
                 : 'bg-white border-black text-black hover:bg-black hover:text-white'
             }`}
           >
-            <Rewind className="w-3 h-3" />
+            <Rewind className="w-2.5 h-2.5 sm:w-3 sm:h-3" />
             <span>-2s</span>
           </button>
 
@@ -340,17 +324,17 @@ const VideoPlayer = forwardRef(function VideoPlayer({
           <button
             onClick={togglePlay}
             title={isPlaying ? "暂停 (空格键)" : "播放 (空格键)"}
-            className="px-2.5 sm:px-4 h-7 sm:h-8 bg-[#ff5b00] hover:bg-[#e05000] text-black font-mono font-black text-xs uppercase flex items-center gap-1.5 border border-black transition-colors"
+            className="px-2 sm:px-3.5 h-6 sm:h-8 bg-[#ff5b00] hover:bg-[#e05000] text-black font-mono font-black text-[11px] sm:text-xs uppercase flex items-center gap-1 border border-black transition-colors"
           >
             {isPlaying ? (
               <>
-                <Pause className="w-3.5 h-3.5 fill-black" />
-                <span>PAUSE</span>
+                <Pause className="w-3 h-3 sm:w-3.5 sm:h-3.5 fill-black" />
+                <span className="hidden sm:inline">PAUSE</span>
               </>
             ) : (
               <>
-                <Play className="w-3.5 h-3.5 fill-black" />
-                <span>PLAY</span>
+                <Play className="w-3 h-3 sm:w-3.5 sm:h-3.5 fill-black" />
+                <span className="hidden sm:inline">PLAY</span>
               </>
             )}
           </button>
@@ -359,27 +343,27 @@ const VideoPlayer = forwardRef(function VideoPlayer({
           <button
             onClick={handleReplay}
             title="重播当前手法 (R)"
-            className={`w-7 h-7 sm:w-8 sm:h-8 flex items-center justify-center border transition-colors ${
+            className={`w-6 h-6 sm:w-8 sm:h-8 flex items-center justify-center border transition-colors ${
               isDark 
                 ? 'bg-zinc-900 border-zinc-700 text-zinc-200 hover:bg-white hover:text-black' 
                 : 'bg-white border-black text-black hover:bg-black hover:text-white'
             }`}
           >
-            <RotateCcw className="w-3.5 h-3.5" />
+            <RotateCcw className="w-3 h-3 sm:w-3.5 sm:h-3.5" />
           </button>
 
           {/* Forward 2s */}
           <button
             onClick={() => handleStep(2)}
             title="快进 2 秒 (→ / K)"
-            className={`px-1.5 sm:px-2 h-7 sm:h-8 flex items-center gap-0.5 border font-mono text-xs font-bold transition-colors ${
+            className={`px-1 sm:px-2 h-6 sm:h-8 flex items-center gap-0.5 border font-mono text-[10px] sm:text-xs font-bold transition-colors ${
               isDark 
                 ? 'bg-zinc-900 border-zinc-700 text-zinc-300 hover:bg-white hover:text-black' 
                 : 'bg-white border-black text-black hover:bg-black hover:text-white'
             }`}
           >
             <span>+2s</span>
-            <FastForward className="w-3 h-3" />
+            <FastForward className="w-2.5 h-2.5 sm:w-3 sm:h-3" />
           </button>
 
           {/* Next Case */}
@@ -387,17 +371,17 @@ const VideoPlayer = forwardRef(function VideoPlayer({
             onClick={handleNext}
             disabled={!hasNext}
             title="下一个 Case (])"
-            className={`w-7 h-7 sm:w-8 sm:h-8 flex items-center justify-center border transition-colors disabled:opacity-30 ${
+            className={`w-6 h-6 sm:w-8 sm:h-8 flex items-center justify-center border transition-colors disabled:opacity-30 ${
               isDark 
                 ? 'bg-zinc-900 border-zinc-700 text-zinc-200 hover:bg-white hover:text-black' 
                 : 'bg-white border-black text-black hover:bg-black hover:text-white'
             }`}
           >
-            <ChevronRight className="w-4 h-4" />
+            <ChevronRight className="w-3.5 h-3.5 sm:w-4 sm:h-4" />
           </button>
 
           {/* Precision Time Counter */}
-          <div className={`ml-1 text-[11px] font-mono px-1.5 sm:px-2 h-7 sm:h-8 border hidden sm:flex items-center gap-1 ${
+          <div className={`ml-1 text-[11px] font-mono px-1.5 sm:px-2 h-6 sm:h-8 border hidden sm:flex items-center gap-1 ${
             isDark ? 'bg-zinc-900 border-zinc-700 text-zinc-300' : 'bg-white border-black text-black'
           }`}>
             <span className="text-[#ff5b00] font-black">{formatTime(currentOffset)}</span>
@@ -406,8 +390,24 @@ const VideoPlayer = forwardRef(function VideoPlayer({
           </div>
         </div>
 
-        {/* Speed Controls & Fullscreen */}
-        <div className="flex items-center gap-1 sm:gap-1.5">
+        {/* Speed Controls, Loop Toggle & Fullscreen */}
+        <div className="flex items-center gap-1 sm:gap-1.5 flex-nowrap shrink-0">
+          {/* Loop Toggle */}
+          <button
+            onClick={toggleLooping}
+            title={isLooping ? "当前: 单 Case 循环 (快捷键 L)" : "当前: 顺序连播 (快捷键 L)"}
+            className={`w-6 h-6 sm:w-auto sm:px-2 sm:h-8 flex items-center justify-center gap-1 border font-mono text-[10px] sm:text-xs font-bold transition-colors ${
+              isLooping 
+                ? 'bg-[#ff5b00] text-black border-black font-black' 
+                : isDark 
+                  ? 'bg-zinc-900 border-zinc-700 text-zinc-400 hover:text-white' 
+                  : 'bg-white border-zinc-300 text-zinc-600 hover:text-black'
+            }`}
+          >
+            <Repeat className="w-3 h-3 sm:w-3.5 sm:h-3.5" />
+            <span className="hidden sm:inline">{isLooping ? '循环' : '顺序'}</span>
+          </button>
+
           {/* Speed Selection */}
           <div className={`flex items-center p-0.5 border font-mono text-xs ${
             isDark ? 'bg-zinc-900 border-zinc-700' : 'bg-white border-black'
@@ -420,7 +420,7 @@ const VideoPlayer = forwardRef(function VideoPlayer({
                 changeSpeed(rates[nextIndex]);
               }}
               title="切换播放倍速"
-              className="sm:hidden px-1.5 py-0.5 font-bold text-[#ff5b00]"
+              className="sm:hidden px-1.5 py-0.5 font-bold text-[#ff5b00] text-[10px]"
             >
               [{playbackRate}x]
             </button>
@@ -451,13 +451,13 @@ const VideoPlayer = forwardRef(function VideoPlayer({
           <button
             onClick={requestFullscreen}
             title="全屏播放 (F)"
-            className={`w-7 h-7 sm:w-8 sm:h-8 flex items-center justify-center border transition-colors ${
+            className={`w-6 h-6 sm:w-8 sm:h-8 flex items-center justify-center border transition-colors ${
               isDark 
                 ? 'bg-zinc-900 border-zinc-700 text-zinc-300 hover:bg-white hover:text-black' 
                 : 'bg-white border-black text-black hover:bg-black hover:text-white'
             }`}
           >
-            <Maximize2 className="w-3.5 h-3.5" />
+            <Maximize2 className="w-3 h-3 sm:w-3.5 sm:h-3.5" />
           </button>
         </div>
       </div>
