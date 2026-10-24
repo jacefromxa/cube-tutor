@@ -98,7 +98,15 @@ location /cfop/assets/ {
     access_log off;
 }
 
-# 静态切图与页面（不缓存 HTML 以确保每次发版秒级生效）
+# 514 张 Case 形态切图与图标：30 天不可变强缓存 (0流量秒开)
+location /cfop/images/ {
+    alias /var/www/cfop/images/;
+    expires 30d;
+    add_header Cache-Control "public, max-age=2592000, immutable";
+    access_log off;
+}
+
+# 静态页面（不缓存 HTML 以确保每次发版秒级生效）
 location /cfop/ {
     alias /var/www/cfop/;
     index index.html;
@@ -133,3 +141,4 @@ VITE_COS_URL=https://media.deck.ltd
    - 检查 COS 防盗链 Referer 是否包含了 `deck.ltd` 与 `https://deck.ltd`。
 3. **切图缺失或卡片白屏？**
    - 检查 `/var/www/cfop/images/` 目录是否存在且具有读权限（权限应为 `755`，所属 `www-data`）。
+
