@@ -35,3 +35,4 @@ ssh -t "${SERVER_USER}@${SERVER_IP}" "
 
 rm -f "$ARCHIVE_PATH"
 echo "🎉 全部完成！"
+

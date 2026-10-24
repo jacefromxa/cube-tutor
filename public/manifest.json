@@ -1,0 +1,23 @@
+{
+  "name": "Cube-Tutor 三阶速拧全谱速查",
+  "short_name": "Cube:Tutor",
+  "description": "专为三阶魔方进阶与竞速选手打造的交互式手法精讲与速查系统 (CFOP · ZBLL 472 · Roux CMLL 42)",
+  "start_url": "/cfop/",
+  "scope": "/cfop/",
+  "display": "standalone",
+  "background_color": "#0a0a0a",
+  "theme_color": "#0a0a0a",
+  "orientation": "portrait-primary",
+  "icons": [
+    {
+      "src": "/cfop/assets/cubes/Easy-01.webp",
+      "sizes": "192x192",
+      "type": "image/webp"
+    },
+    {
+      "src": "/cfop/assets/cubes/Easy-01.webp",
+      "sizes": "512x512",
+      "type": "image/webp"
+    }
+  ]
+}

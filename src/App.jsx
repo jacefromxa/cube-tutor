@@ -352,12 +352,12 @@ export default function App() {
           - Desktop (lg:): Fixed Dual-Column Viewport with pixel-perfect bottom alignment
           - Mobile (< lg): Sticky Video Player at top (locked at header bottom), natural scroll below
       */}
-      <main className="flex-1 min-h-0 max-w-[1920px] w-full mx-auto px-2.5 sm:px-4 lg:px-6 py-2 sm:py-3 flex flex-col lg:flex-row gap-2.5 sm:gap-4 items-stretch lg:overflow-hidden">
+      <main className="flex-1 min-h-0 max-w-[1920px] w-full mx-auto px-2.5 sm:px-4 lg:px-6 pt-0 lg:pt-2 pb-2 sm:pb-3 flex flex-col lg:flex-row gap-2.5 sm:gap-4 items-stretch lg:overflow-hidden">
         
         {/* LEFT COLUMN: Video Player & Control Spec Area (Position-locked directly below header on mobile) */}
         <div 
           style={{ top: 'var(--header-height, 74px)' }}
-          className={`w-full lg:w-[57%] xl:w-[61%] 2xl:w-[64%] shrink-0 h-auto lg:h-full flex flex-col justify-start sticky lg:static z-30 transition-colors pb-2 lg:pb-0 ${
+          className={`w-full lg:w-[57%] xl:w-[61%] 2xl:w-[64%] shrink-0 h-auto lg:h-full flex flex-col justify-start sticky lg:static z-30 transition-colors -mx-2.5 px-2.5 lg:mx-0 lg:px-0 pt-1 lg:pt-0 pb-1.5 lg:pb-0 border-b-2 lg:border-b-0 border-black dark:border-zinc-800 shadow-sm lg:shadow-none ${
             isDark ? 'bg-[#0a0a0a]' : 'bg-[#f4f4f5]'
           }`}
         >
@@ -408,32 +408,60 @@ export default function App() {
             <div className={`px-3 py-2 border-b-2 flex flex-col gap-0.5 shrink-0 transition-colors ${
               isDark ? 'bg-zinc-950 border-zinc-800' : 'bg-zinc-100 border-black'
             }`}>
-              <div className="flex items-center gap-2 flex-wrap font-mono">
-                <span className={`px-1.5 py-0.5 border text-xs font-black uppercase ${
-                  activeModule === 'cmll'
-                    ? 'bg-emerald-400 border-emerald-500 text-black'
-                    : activeModule === 'zbll'
-                    ? 'bg-cyan-500 border-cyan-400 text-black'
-                    : 'bg-[#ff5b00] border-black text-black'
-                }`}>
-                  {selectedGroup === 'all' 
-                    ? (activeModule === 'zbll' 
-                        ? `ZBLL · ${activeZbllSet.toUpperCase()}` 
-                        : activeModule === 'cmll'
-                        ? 'ROUX · CMLL'
-                        : activeModule.toUpperCase()) 
-                    : activeGroupInfo?.code}
-                </span>
-                <span className="text-xs sm:text-sm font-black uppercase tracking-tight text-black dark:text-white">
-                  {selectedGroup === 'all' ? activeConfig.allTitle : activeGroupInfo?.fullEn}
-                </span>
-                {((selectedGroup === 'all' && activeConfig.allLiteral) || (selectedGroup !== 'all' && activeGroupInfo?.literalZh)) ? (
-                  <span className={`text-[11px] sm:text-xs font-bold px-1.5 py-0.5 border ${
-                    isDark ? 'bg-zinc-900 border-zinc-700 text-zinc-300' : 'bg-white border-zinc-300 text-black'
+              <div className="flex items-center justify-between gap-2 flex-wrap font-mono">
+                <div className="flex items-center gap-2 flex-wrap">
+                  <span className={`px-1.5 py-0.5 border text-xs font-black uppercase ${
+                    activeModule === 'cmll'
+                      ? 'bg-emerald-400 border-emerald-500 text-black'
+                      : activeModule === 'zbll'
+                      ? 'bg-cyan-500 border-cyan-400 text-black'
+                      : 'bg-[#ff5b00] border-black text-black'
                   }`}>
-                    {selectedGroup === 'all' ? activeConfig.allLiteral : activeGroupInfo?.literalZh}
+                    {selectedGroup === 'all' 
+                      ? (activeModule === 'zbll' 
+                          ? `ZBLL · ${activeZbllSet.toUpperCase()}` 
+                          : activeModule === 'cmll'
+                          ? 'ROUX · CMLL'
+                          : activeModule.toUpperCase()) 
+                      : activeGroupInfo?.code}
                   </span>
-                ) : null}
+                  <span className="text-xs sm:text-sm font-black uppercase tracking-tight text-black dark:text-white">
+                    {selectedGroup === 'all' ? activeConfig.allTitle : activeGroupInfo?.fullEn}
+                  </span>
+                  {((selectedGroup === 'all' && activeConfig.allLiteral) || (selectedGroup !== 'all' && activeGroupInfo?.literalZh)) ? (
+                    <span className={`text-[11px] sm:text-xs font-bold px-1.5 py-0.5 border ${
+                      isDark ? 'bg-zinc-900 border-zinc-700 text-zinc-300' : 'bg-white border-zinc-300 text-black'
+                    }`}>
+                      {selectedGroup === 'all' ? activeConfig.allLiteral : activeGroupInfo?.literalZh}
+                    </span>
+                  ) : null}
+                </div>
+
+                {/* Mobile Filter Tabs in Case Area Header */}
+                <div className={`flex sm:hidden items-center p-0.5 border text-[11px] font-mono shrink-0 ${
+                  isDark ? 'bg-zinc-900 border-zinc-800' : 'bg-white border-zinc-300'
+                }`}>
+                  {[
+                    { id: 'all', label: '全部' },
+                    { id: 'unmastered', label: '待练' },
+                    { id: 'mastered', label: '已过' }
+                  ].map(f => {
+                    const active = masteredFilter === f.id;
+                    return (
+                      <button
+                        key={f.id}
+                        onClick={() => setMasteredFilter(f.id)}
+                        className={`px-1.5 py-0.5 font-bold transition-colors ${
+                          active
+                            ? isDark ? 'bg-white text-black' : 'bg-black text-white'
+                            : isDark ? 'text-zinc-400' : 'text-zinc-600'
+                        }`}
+                      >
+                        {f.label}
+                      </button>
+                    );
+                  })}
+                </div>
               </div>
               {((selectedGroup === 'all' && activeConfig.allDesc) || (selectedGroup !== 'all' && activeGroupInfo?.desc)) ? (
                 <p className={`text-xs leading-relaxed truncate font-sans mt-0.5 ${isDark ? 'text-zinc-400' : 'text-zinc-600'}`}>

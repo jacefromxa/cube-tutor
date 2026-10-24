@@ -11,3 +11,12 @@ if (rootElement) {
     </React.StrictMode>
   );
 }
+
+// Register PWA service worker in production
+if ('serviceWorker' in navigator && import.meta.env.PROD) {
+  window.addEventListener('load', () => {
+    navigator.serviceWorker.register('/cfop/sw.js').catch(() => {
+      // Ignore registration errors
+    });
+  });
+}

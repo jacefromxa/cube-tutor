@@ -28,8 +28,16 @@ export default function Header({
       }
     };
     updateHeaderHeight();
+    let ro = null;
+    if (typeof ResizeObserver !== 'undefined' && headerRef.current) {
+      ro = new ResizeObserver(updateHeaderHeight);
+      ro.observe(headerRef.current);
+    }
     window.addEventListener('resize', updateHeaderHeight);
-    return () => window.removeEventListener('resize', updateHeaderHeight);
+    return () => {
+      if (ro) ro.disconnect();
+      window.removeEventListener('resize', updateHeaderHeight);
+    };
   }, []);
 
   return (
@@ -75,14 +83,25 @@ export default function Header({
 
           {/* Quick utility controls on mobile (Right aligned on Row 1) */}
           <div className="flex sm:hidden items-center gap-1.5">
-            {/* Mobile Progress Pill */}
-            <div className={`flex items-center gap-1 px-1.5 py-0.5 border font-mono text-[11px] font-bold ${
-              isDark ? 'bg-zinc-900 border-zinc-800 text-zinc-200' : 'bg-zinc-100 border-black text-black'
-            }`}>
-              <span className="w-1.5 h-1.5 bg-[#ff5b00] inline-block" />
+            {/* Mobile Progress Pill (Tappable filter toggle) */}
+            <button
+              onClick={() => {
+                const nextFilter = masteredFilter === 'all' ? 'unmastered' : masteredFilter === 'unmastered' ? 'mastered' : 'all';
+                onMasteredFilterChange(nextFilter);
+              }}
+              title={`当前筛选: ${masteredFilter === 'all' ? '全部' : masteredFilter === 'unmastered' ? '待练' : '已过'} (点击切换)`}
+              className={`flex items-center gap-1 px-1.5 py-0.5 border font-mono text-[11px] font-bold transition-all active:scale-95 ${
+                masteredFilter !== 'all'
+                  ? isDark ? 'bg-[#ff5b00] text-black border-[#ff5b00]' : 'bg-black text-white border-black'
+                  : isDark ? 'bg-zinc-900 border-zinc-800 text-zinc-200' : 'bg-zinc-100 border-black text-black'
+              }`}
+            >
+              <span className={`w-1.5 h-1.5 inline-block ${masteredFilter !== 'all' ? (isDark ? 'bg-black' : 'bg-[#ff5b00]') : 'bg-[#ff5b00]'}`} />
               <span>{masteredCount}/{totalCases}</span>
-              <span className="text-[#ff5b00]">({percent}%)</span>
-            </div>
+              <span className={masteredFilter !== 'all' ? (isDark ? 'text-black font-black' : 'text-[#ff5b00]') : 'text-[#ff5b00]'}>({percent}%)</span>
+              {masteredFilter === 'unmastered' && <span className="text-[10px] ml-0.5 font-bold">[待]</span>}
+              {masteredFilter === 'mastered' && <span className="text-[10px] ml-0.5 font-bold">[过]</span>}
+            </button>
 
             {/* Dark mode switch */}
             <button
@@ -113,9 +132,9 @@ export default function Header({
         </div>
 
         {/* Center: Industrial Module Switcher (CFOP: F2L|OLL|PLL vs ZBLL separated) */}
-        <div className="flex items-center justify-between sm:justify-center gap-1 sm:gap-2">
+        <div className="w-full sm:w-auto flex items-center justify-center gap-1 sm:gap-2 overflow-x-auto scrollbar-none py-0.5">
           {/* 1. CFOP Core Modules Group */}
-          <div className={`flex items-center p-0.5 border ${
+          <div className={`flex items-center p-0.5 border shrink-0 ${
             isDark ? 'bg-zinc-900 border-zinc-800' : 'bg-zinc-100 border-black'
           }`}>
             {[
@@ -150,10 +169,10 @@ export default function Header({
           </div>
 
           {/* Visual Divider between CFOP and ZBLL */}
-          <div className={`w-px h-5 mx-0.5 hidden xs:block ${isDark ? 'bg-zinc-800' : 'bg-zinc-300'}`} />
+          <div className={`w-px h-5 mx-0.5 shrink-0 hidden xs:block ${isDark ? 'bg-zinc-800' : 'bg-zinc-300'}`} />
 
           {/* 2. Advanced 1LL System: ZBLL (Differentiated styling and cyan color palette) */}
-          <div className={`flex items-center p-0.5 border transition-colors ${
+          <div className={`flex items-center p-0.5 border transition-colors shrink-0 ${
             activeModule === 'zbll'
               ? isDark ? 'border-cyan-500/80 bg-cyan-950/40' : 'border-cyan-600 bg-cyan-50'
               : isDark ? 'bg-zinc-900 border-zinc-800' : 'bg-zinc-100 border-black'
@@ -190,10 +209,10 @@ export default function Header({
           </div>
 
           {/* Visual Divider between ZBLL and CMLL */}
-          <div className={`w-px h-5 mx-0.5 hidden xs:block ${isDark ? 'bg-zinc-800' : 'bg-zinc-300'}`} />
+          <div className={`w-px h-5 mx-0.5 shrink-0 hidden xs:block ${isDark ? 'bg-zinc-800' : 'bg-zinc-300'}`} />
 
           {/* 3. Roux Method: CMLL (Differentiated styling and Emerald green palette) */}
-          <div className={`flex items-center p-0.5 border transition-colors ${
+          <div className={`flex items-center p-0.5 border transition-colors shrink-0 ${
             activeModule === 'cmll'
               ? isDark ? 'border-emerald-500/80 bg-emerald-950/40' : 'border-emerald-600 bg-emerald-50'
               : isDark ? 'bg-zinc-900 border-zinc-800' : 'bg-zinc-100 border-black'
@@ -227,32 +246,6 @@ export default function Header({
                 [{moduleCounts.cmll || 42}]
               </span>
             </button>
-          </div>
-
-          {/* Filter tabs on mobile (Row 2 right) */}
-          <div className={`flex sm:hidden items-center p-0.5 border text-[11px] font-mono shrink-0 ${
-            isDark ? 'bg-zinc-900 border-zinc-800' : 'bg-zinc-100 border-black'
-          }`}>
-            {[
-              { id: 'all', label: '全部' },
-              { id: 'unmastered', label: '待练' },
-              { id: 'mastered', label: '已过' }
-            ].map(f => {
-              const active = masteredFilter === f.id;
-              return (
-                <button
-                  key={f.id}
-                  onClick={() => onMasteredFilterChange(f.id)}
-                  className={`px-1.5 py-0.5 font-bold transition-colors ${
-                    active
-                      ? isDark ? 'bg-white text-black' : 'bg-black text-white'
-                      : isDark ? 'text-zinc-400' : 'text-zinc-600'
-                  }`}
-                >
-                  {f.label}
-                </button>
-              );
-            })}
           </div>
         </div>
 
