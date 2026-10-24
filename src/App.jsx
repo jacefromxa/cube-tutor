@@ -4,10 +4,13 @@ import Header from './components/Header';
 import VideoPlayer from './components/VideoPlayer';
 import FilterBar from './components/FilterBar';
 import CaseCard from './components/CaseCard';
+import ZbllSetBar from './components/ZbllSetBar';
 import KeyboardShortcutsModal from './components/KeyboardShortcutsModal';
 import { F2L_CASES, F2L_GROUPS } from './data/f2lCases';
 import { OLL_CASES, OLL_GROUPS, OLL_VIDEO_PATH } from './data/ollCases';
 import { PLL_CASES, PLL_VIDEO_PATH } from './data/pllCases';
+import { ZBLL_SETS } from './data/zbllCases';
+import { CMLL_CASES, CMLL_GROUPS, CMLL_VIDEO_PATH } from './data/cmllCases';
 import { AlertCircle } from 'lucide-react';
 
 const THEME_STORAGE_KEY = 'cube_tutor_theme_mode_v1';
@@ -49,23 +52,52 @@ const MODULE_CONFIGS = {
     allTitle: 'ALL 21 PLL CASES',
     allDesc: '涵盖三棱换、四棱换、三角换、四角换、邻角邻棱、G排列及对角置换等 21 种 SUB1 极速指法',
     allLiteral: '全部形态（21 种顶层置换情况）'
+  },
+  cmll: {
+    name: 'CMLL',
+    cases: CMLL_CASES,
+    groups: CMLL_GROUPS,
+    videoPath: CMLL_VIDEO_PATH,
+    storageKey: 'cube_tutor_mastered_cmll_v1',
+    filterTitle: 'CMLL形态分类',
+    filterSubtitle: '(8大类 · 42种情况)',
+    allTitle: 'ALL 42 CMLL CASES (ROUX)',
+    allDesc: '涵盖顶角全归位、纯角换、双头灯、变色龙、小鱼与领结等 42 种 Roux 桥式顶角极速手法',
+    allLiteral: '全部形态（42 种顶角全排列情况）'
   }
 };
+
+export { ZBLL_SETS };
 
 export default function App() {
   const [activeModule, setActiveModule] = useState(() => {
     try {
       const saved = localStorage.getItem(MODULE_STORAGE_KEY);
-      return saved && MODULE_CONFIGS[saved] ? saved : 'f2l';
+      return saved && (MODULE_CONFIGS[saved] || saved === 'zbll') ? saved : 'f2l';
     } catch {
       return 'f2l';
     }
   });
 
-  const activeConfig = MODULE_CONFIGS[activeModule];
+  const [activeZbllSet, setActiveZbllSet] = useState(() => {
+    try {
+      const saved = localStorage.getItem('cube_tutor_active_zbll_set_v1');
+      return saved && ZBLL_SETS[saved] ? saved : 't';
+    } catch {
+      return 't';
+    }
+  });
+
+  const activeConfig = useMemo(() => {
+    if (activeModule === 'zbll') {
+      return ZBLL_SETS[activeZbllSet] || ZBLL_SETS.t;
+    }
+    return MODULE_CONFIGS[activeModule] || MODULE_CONFIGS.f2l;
+  }, [activeModule, activeZbllSet]);
+
   const activeCasesList = activeConfig.cases;
 
-  const [currentCase, setCurrentCase] = useState(() => activeCasesList[0]);
+  const [currentCase, setCurrentCase] = useState(() => activeCasesList[0] || ZBLL_SETS.t.cases[0]);
   const [selectedGroup, setSelectedGroup] = useState('all');
   const [masteredFilter, setMasteredFilter] = useState('all');
   const [showShortcuts, setShowShortcuts] = useState(false);
@@ -115,7 +147,9 @@ export default function App() {
     return {
       f2l: loadSaved(MODULE_CONFIGS.f2l.storageKey),
       oll: loadSaved(MODULE_CONFIGS.oll.storageKey),
-      pll: loadSaved(MODULE_CONFIGS.pll.storageKey)
+      pll: loadSaved(MODULE_CONFIGS.pll.storageKey),
+      zbll: loadSaved('cube_tutor_mastered_zbll_v1'),
+      cmll: loadSaved(MODULE_CONFIGS.cmll.storageKey)
     };
   });
 
@@ -123,18 +157,41 @@ export default function App() {
   const masteredSet = useMemo(() => new Set(currentMasteredIds), [currentMasteredIds]);
 
   const handleSelectModule = useCallback((mod) => {
-    if (!MODULE_CONFIGS[mod] || mod === activeModule) return;
+    if (mod === activeModule) return;
+    if (mod !== 'zbll' && !MODULE_CONFIGS[mod]) return;
     setActiveModule(mod);
     setSelectedGroup('all');
     setMasteredFilter('all');
-    setCurrentCase(MODULE_CONFIGS[mod].cases[0]);
+    if (mod === 'zbll') {
+      const targetSet = ZBLL_SETS[activeZbllSet] || ZBLL_SETS.t;
+      setCurrentCase(targetSet.cases[0]);
+    } else {
+      setCurrentCase(MODULE_CONFIGS[mod].cases[0]);
+    }
     try {
       localStorage.setItem(MODULE_STORAGE_KEY, mod);
     } catch {}
     if (caseListScrollRef.current) {
       caseListScrollRef.current.scrollTop = 0;
     }
-  }, [activeModule]);
+  }, [activeModule, activeZbllSet]);
+
+  const handleSelectZbllSet = useCallback((setId) => {
+    if (setId === activeZbllSet) return;
+    const targetSet = ZBLL_SETS[setId];
+    if (!targetSet || !targetSet.cases || targetSet.cases.length === 0) {
+      return;
+    }
+    setActiveZbllSet(setId);
+    setSelectedGroup('all');
+    setCurrentCase(targetSet.cases[0]);
+    try {
+      localStorage.setItem('cube_tutor_active_zbll_set_v1', setId);
+    } catch {}
+    if (caseListScrollRef.current) {
+      caseListScrollRef.current.scrollTop = 0;
+    }
+  }, [activeZbllSet]);
 
   const toggleMastered = useCallback((caseId) => {
     setMasteredMap(prev => {
@@ -251,6 +308,12 @@ export default function App() {
       } else if (e.shiftKey && e.code === 'Digit3') {
         e.preventDefault();
         handleSelectModule('pll');
+      } else if (e.shiftKey && e.code === 'Digit4') {
+        e.preventDefault();
+        handleSelectModule('zbll');
+      } else if (e.shiftKey && e.code === 'Digit5') {
+        e.preventDefault();
+        handleSelectModule('cmll');
       }
     };
 
@@ -271,7 +334,9 @@ export default function App() {
         moduleCounts={{
           f2l: MODULE_CONFIGS.f2l.cases.length,
           oll: MODULE_CONFIGS.oll.cases.length,
-          pll: MODULE_CONFIGS.pll.cases.length
+          pll: MODULE_CONFIGS.pll.cases.length,
+          zbll: 472,
+          cmll: MODULE_CONFIGS.cmll.cases.length
         }}
         totalCases={activeCasesList.length}
         masteredCount={currentMasteredIds.length}
@@ -311,8 +376,17 @@ export default function App() {
         </div>
 
         {/* RIGHT COLUMN: Filter Grid & Case Selection List */}
-        <div className="flex-1 min-w-0 h-auto lg:h-full flex flex-col gap-2.5">
-          {/* Category Filter Bar */}
+        <div className="flex-1 min-w-0 h-auto lg:h-full flex flex-col gap-2 sm:gap-2.5">
+          {/* Level 1 Category: 7 Big Letter Sets (Pure text buttons, low height, no graphics) */}
+          {activeModule === 'zbll' && (
+            <ZbllSetBar
+              activeSet={activeZbllSet}
+              onSelectSet={handleSelectZbllSet}
+              theme={theme}
+            />
+          )}
+
+          {/* Level 2 Category: Existing FilterBar drawer with diagrams & counts */}
           {activeConfig.groups && (
             <FilterBar
               groups={activeConfig.groups}
@@ -335,24 +409,40 @@ export default function App() {
               isDark ? 'bg-zinc-950 border-zinc-800' : 'bg-zinc-100 border-black'
             }`}>
               <div className="flex items-center gap-2 flex-wrap font-mono">
-                <span className="px-1.5 py-0.5 border text-xs font-black uppercase bg-[#ff5b00] border-black text-black">
-                  {selectedGroup === 'all' ? (activeModule.toUpperCase()) : activeGroupInfo?.code}
+                <span className={`px-1.5 py-0.5 border text-xs font-black uppercase ${
+                  activeModule === 'cmll'
+                    ? 'bg-emerald-400 border-emerald-500 text-black'
+                    : activeModule === 'zbll'
+                    ? 'bg-cyan-500 border-cyan-400 text-black'
+                    : 'bg-[#ff5b00] border-black text-black'
+                }`}>
+                  {selectedGroup === 'all' 
+                    ? (activeModule === 'zbll' 
+                        ? `ZBLL · ${activeZbllSet.toUpperCase()}` 
+                        : activeModule === 'cmll'
+                        ? 'ROUX · CMLL'
+                        : activeModule.toUpperCase()) 
+                    : activeGroupInfo?.code}
                 </span>
                 <span className="text-xs sm:text-sm font-black uppercase tracking-tight text-black dark:text-white">
                   {selectedGroup === 'all' ? activeConfig.allTitle : activeGroupInfo?.fullEn}
                 </span>
-                <span className={`text-[11px] sm:text-xs font-bold px-1.5 py-0.5 border ${
-                  isDark ? 'bg-zinc-900 border-zinc-700 text-zinc-300' : 'bg-white border-zinc-300 text-black'
-                }`}>
-                  {selectedGroup === 'all' ? activeConfig.allLiteral : activeGroupInfo?.literalZh}
-                </span>
+                {((selectedGroup === 'all' && activeConfig.allLiteral) || (selectedGroup !== 'all' && activeGroupInfo?.literalZh)) ? (
+                  <span className={`text-[11px] sm:text-xs font-bold px-1.5 py-0.5 border ${
+                    isDark ? 'bg-zinc-900 border-zinc-700 text-zinc-300' : 'bg-white border-zinc-300 text-black'
+                  }`}>
+                    {selectedGroup === 'all' ? activeConfig.allLiteral : activeGroupInfo?.literalZh}
+                  </span>
+                ) : null}
               </div>
-              <p className={`text-xs leading-relaxed truncate font-sans mt-0.5 ${isDark ? 'text-zinc-400' : 'text-zinc-600'}`}>
-                {selectedGroup === 'all' 
-                  ? activeConfig.allDesc
-                  : activeGroupInfo?.desc
-                }
-              </p>
+              {((selectedGroup === 'all' && activeConfig.allDesc) || (selectedGroup !== 'all' && activeGroupInfo?.desc)) ? (
+                <p className={`text-xs leading-relaxed truncate font-sans mt-0.5 ${isDark ? 'text-zinc-400' : 'text-zinc-600'}`}>
+                  {selectedGroup === 'all' 
+                    ? activeConfig.allDesc
+                    : activeGroupInfo?.desc
+                  }
+                </p>
+              ) : null}
             </div>
 
             {/* Case Grid Scroll Area */}

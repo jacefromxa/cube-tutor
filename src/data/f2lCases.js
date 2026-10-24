@@ -831,4 +831,4 @@ export const F2L_CASES = [
 ];
 
 export const TOTAL_CASES = 41;
-export const VIDEO_PATH = '/video.mp4';
+export const VIDEO_PATH = '/videos/f2l.mp4';

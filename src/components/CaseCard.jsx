@@ -14,6 +14,8 @@ export default function CaseCard({
 
   return (
     <div
+      data-case-card="true"
+      data-case-id={caseItem.id}
       onClick={() => onSelect(caseItem)}
       className={`relative p-2 transition-all duration-100 cursor-pointer flex flex-col justify-between border-2 select-none ${
         isActive

@@ -11,7 +11,7 @@ export default function KeyboardShortcutsModal({ onClose, theme = 'dark' }) {
     { key: 'R', action: '重新播放当前 Case' },
     { key: 'L', action: '开启 / 关闭单段循环模式' },
     { key: '1 ~ 4', action: '切换播放倍速 (0.5x, 0.75x, 1x, 1.25x)' },
-    { key: 'Shift + 1/2/3', action: '极速切换模块 (F2L / OLL / PLL)' }
+    { key: 'Shift + 1 ~ 5', action: '极速切换模块 (F2L / OLL / PLL / ZBLL / CMLL)' }
   ];
 
   return (

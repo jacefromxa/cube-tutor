@@ -114,9 +114,9 @@ export default function FilterBar({
         </div>
       </div>
 
-      {/* 9 Categories in 3 Columns x 3 Rows: Swiss Grid Layout (Collapsible!) */}
+      {/* Categories Grid (Collapsible): 3 cols for 9 categories, 4 cols for 8 categories */}
       {!isCollapsed && (
-        <div className="grid grid-cols-3 gap-1.5 sm:gap-2 animate-in fade-in duration-100">
+        <div className={`grid ${categoryGroups.length === 8 ? 'grid-cols-2 sm:grid-cols-4' : 'grid-cols-3'} gap-1.5 sm:gap-2 animate-in fade-in duration-100`}>
           {categoryGroups.map((g) => {
             const isSelected = selectedGroup === g.key;
 

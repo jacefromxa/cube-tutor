@@ -4,7 +4,7 @@ import { HelpCircle, Sun, Moon, RotateCcw } from 'lucide-react';
 export default function Header({ 
   activeModule = 'f2l',
   onSelectModule,
-  moduleCounts = { f2l: 41, oll: 57, pll: 21 },
+  moduleCounts = { f2l: 41, oll: 57, pll: 21, zbll: 472, cmll: 42 },
   totalCases = 41, 
   masteredCount = 0, 
   masteredFilter = 'all',
@@ -62,9 +62,13 @@ export default function Header({
                 <span className="w-2 h-2 bg-[#ff5b00] inline-block shrink-0" title="LineLore System" />
               </span>
               <span className={`hidden md:inline-block font-mono text-[10px] tracking-widest uppercase px-1.5 py-0.5 border ${
-                isDark ? 'bg-zinc-900 text-zinc-400 border-zinc-800' : 'bg-zinc-100 text-zinc-700 border-zinc-300'
+                activeModule === 'cmll'
+                  ? isDark ? 'bg-emerald-950/60 text-emerald-400 border-emerald-800/80' : 'bg-emerald-50 text-emerald-800 border-emerald-300'
+                  : activeModule === 'zbll'
+                  ? isDark ? 'bg-cyan-950/60 text-cyan-400 border-cyan-800/80' : 'bg-cyan-50 text-cyan-800 border-cyan-300'
+                  : isDark ? 'bg-zinc-900 text-zinc-400 border-zinc-800' : 'bg-zinc-100 text-zinc-700 border-zinc-300'
               }`}>
-                [CFOP // SPEC]
+                {activeModule === 'cmll' ? '[ROUX // SPEC]' : activeModule === 'zbll' ? '[1LL // SPEC]' : '[CFOP // SPEC]'}
               </span>
             </div>
           </div>
@@ -108,9 +112,9 @@ export default function Header({
           </div>
         </div>
 
-        {/* Center: Industrial 3-Module Switcher (F2L | OLL | PLL) + Mobile Mastered Filter */}
-        <div className="flex items-center justify-between sm:justify-center gap-1.5 sm:gap-2">
-          {/* Module Switcher Tabs */}
+        {/* Center: Industrial Module Switcher (CFOP: F2L|OLL|PLL vs ZBLL separated) */}
+        <div className="flex items-center justify-between sm:justify-center gap-1 sm:gap-2">
+          {/* 1. CFOP Core Modules Group */}
           <div className={`flex items-center p-0.5 border ${
             isDark ? 'bg-zinc-900 border-zinc-800' : 'bg-zinc-100 border-black'
           }`}>
@@ -124,7 +128,7 @@ export default function Header({
                 <button
                   key={mod.id}
                   onClick={() => onSelectModule && onSelectModule(mod.id)}
-                  className={`px-2.5 sm:px-3 py-0.5 sm:py-1 font-mono text-xs sm:text-sm font-black transition-all flex items-center gap-1 border-r last:border-r-0 ${
+                  className={`px-2 sm:px-2.5 py-0.5 sm:py-1 font-mono text-xs sm:text-sm font-black transition-all flex items-center gap-0.5 sm:gap-1 border-r last:border-r-0 ${
                     isDark ? 'border-zinc-800' : 'border-zinc-300'
                   } ${
                     isActive
@@ -143,6 +147,86 @@ export default function Header({
                 </button>
               );
             })}
+          </div>
+
+          {/* Visual Divider between CFOP and ZBLL */}
+          <div className={`w-px h-5 mx-0.5 hidden xs:block ${isDark ? 'bg-zinc-800' : 'bg-zinc-300'}`} />
+
+          {/* 2. Advanced 1LL System: ZBLL (Differentiated styling and cyan color palette) */}
+          <div className={`flex items-center p-0.5 border transition-colors ${
+            activeModule === 'zbll'
+              ? isDark ? 'border-cyan-500/80 bg-cyan-950/40' : 'border-cyan-600 bg-cyan-50'
+              : isDark ? 'bg-zinc-900 border-zinc-800' : 'bg-zinc-100 border-black'
+          }`}>
+            <button
+              onClick={() => onSelectModule && onSelectModule('zbll')}
+              title="ZBLL (Zborowski-Bruchem Last Layer) 472 种顶层一步全还原"
+              className={`px-2 sm:px-2.5 py-0.5 sm:py-1 font-mono text-xs sm:text-sm font-black transition-all flex items-center gap-1 sm:gap-1.5 ${
+                activeModule === 'zbll'
+                  ? isDark
+                    ? 'bg-cyan-500 text-black font-black shadow-xs'
+                    : 'bg-cyan-600 text-white font-black shadow-xs'
+                  : isDark
+                    ? 'text-cyan-400 hover:text-white hover:bg-cyan-950/60'
+                    : 'text-cyan-800 hover:text-black hover:bg-cyan-100/60'
+              }`}
+            >
+              <span className="flex items-center gap-1">
+                <span className={`w-1.5 h-1.5 rounded-full inline-block ${
+                  activeModule === 'zbll'
+                    ? isDark ? 'bg-black' : 'bg-white'
+                    : 'bg-cyan-400 animate-pulse'
+                }`} />
+                <span>ZBLL</span>
+              </span>
+              <span className={`text-[10px] font-normal font-mono ${
+                activeModule === 'zbll'
+                  ? isDark ? 'text-black/80 font-bold' : 'text-white/90 font-bold'
+                  : isDark ? 'text-cyan-400/70' : 'text-cyan-700/70'
+              }`}>
+                [{moduleCounts.zbll || 472}]
+              </span>
+            </button>
+          </div>
+
+          {/* Visual Divider between ZBLL and CMLL */}
+          <div className={`w-px h-5 mx-0.5 hidden xs:block ${isDark ? 'bg-zinc-800' : 'bg-zinc-300'}`} />
+
+          {/* 3. Roux Method: CMLL (Differentiated styling and Emerald green palette) */}
+          <div className={`flex items-center p-0.5 border transition-colors ${
+            activeModule === 'cmll'
+              ? isDark ? 'border-emerald-500/80 bg-emerald-950/40' : 'border-emerald-600 bg-emerald-50'
+              : isDark ? 'bg-zinc-900 border-zinc-800' : 'bg-zinc-100 border-black'
+          }`}>
+            <button
+              onClick={() => onSelectModule && onSelectModule('cmll')}
+              title="CMLL (Corners of Last Layer) 42 种 Roux 桥式顶角一步还原"
+              className={`px-2 sm:px-2.5 py-0.5 sm:py-1 font-mono text-xs sm:text-sm font-black transition-all flex items-center gap-1 sm:gap-1.5 ${
+                activeModule === 'cmll'
+                  ? isDark
+                    ? 'bg-emerald-500 text-black font-black shadow-xs'
+                    : 'bg-emerald-600 text-white font-black shadow-xs'
+                  : isDark
+                    ? 'text-emerald-400 hover:text-white hover:bg-emerald-950/60'
+                    : 'text-emerald-800 hover:text-black hover:bg-emerald-100/60'
+              }`}
+            >
+              <span className="flex items-center gap-1">
+                <span className={`w-1.5 h-1.5 rounded-full inline-block ${
+                  activeModule === 'cmll'
+                    ? isDark ? 'bg-black' : 'bg-white'
+                    : 'bg-emerald-400 animate-pulse'
+                }`} />
+                <span>CMLL</span>
+              </span>
+              <span className={`text-[10px] font-normal font-mono ${
+                activeModule === 'cmll'
+                  ? isDark ? 'text-black/80 font-bold' : 'text-white/90 font-bold'
+                  : isDark ? 'text-emerald-400/70' : 'text-emerald-700/70'
+              }`}>
+                [{moduleCounts.cmll || 42}]
+              </span>
+            </button>
           </div>
 
           {/* Filter tabs on mobile (Row 2 right) */}
