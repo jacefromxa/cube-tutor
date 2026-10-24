@@ -8,12 +8,10 @@ export default function KeyboardShortcutsModal({ onClose, theme = 'dark' }) {
     { key: '空格 (Space)', action: '播放 / 暂停视频' },
     { key: '← / → (方向键)', action: '快退 2 秒 / 快进 2 秒 (精准微调手法)' },
     { key: 'J / K', action: '快退 2 秒 / 快进 2 秒 (双手速拧备用键)' },
-    { key: '[ / ] 或 P / N', action: '切换上一个 / 下一个 Case' },
     { key: 'R', action: '重新播放当前 Case' },
     { key: 'L', action: '开启 / 关闭单段循环模式' },
     { key: '1 ~ 4', action: '切换播放倍速 (0.5x, 0.75x, 1x, 1.25x)' },
-    { key: 'Shift + 1/2/3', action: '极速切换模块 (F2L / OLL / PLL)' },
-    { key: 'F', action: '全屏模式切换' }
+    { key: 'Shift + 1/2/3', action: '极速切换模块 (F2L / OLL / PLL)' }
   ];
 
   return (

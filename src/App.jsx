@@ -222,32 +222,10 @@ export default function App() {
         playerRef.current?.togglePlay();
       } else if (e.code === 'ArrowLeft') {
         e.preventDefault();
-        if (e.shiftKey) {
-          const activeList = filteredCases.length > 0 ? filteredCases : activeCasesList;
-          const idx = activeList.findIndex(c => c.id === currentCase?.id);
-          if (idx > 0) handleSelectCase(activeList[idx - 1]);
-        } else {
-          playerRef.current?.handleStep(-2);
-        }
+        playerRef.current?.handleStep(-2);
       } else if (e.code === 'ArrowRight') {
         e.preventDefault();
-        if (e.shiftKey) {
-          const activeList = filteredCases.length > 0 ? filteredCases : activeCasesList;
-          const idx = activeList.findIndex(c => c.id === currentCase?.id);
-          if (idx !== -1 && idx < activeList.length - 1) handleSelectCase(activeList[idx + 1]);
-        } else {
-          playerRef.current?.handleStep(2);
-        }
-      } else if (e.code === 'BracketLeft' || e.code === 'KeyP') {
-        e.preventDefault();
-        const activeList = filteredCases.length > 0 ? filteredCases : activeCasesList;
-        const idx = activeList.findIndex(c => c.id === currentCase?.id);
-        if (idx > 0) handleSelectCase(activeList[idx - 1]);
-      } else if (e.code === 'BracketRight' || e.code === 'KeyN') {
-        e.preventDefault();
-        const activeList = filteredCases.length > 0 ? filteredCases : activeCasesList;
-        const idx = activeList.findIndex(c => c.id === currentCase?.id);
-        if (idx !== -1 && idx < activeList.length - 1) handleSelectCase(activeList[idx + 1]);
+        playerRef.current?.handleStep(2);
       } else if (e.code === 'KeyJ') {
         e.preventDefault();
         playerRef.current?.handleStep(-2);
@@ -260,9 +238,6 @@ export default function App() {
       } else if (e.code === 'KeyL') {
         e.preventDefault();
         playerRef.current?.toggleLooping();
-      } else if (e.code === 'KeyF') {
-        e.preventDefault();
-        playerRef.current?.requestFullscreen();
       } else if (['Digit1', 'Digit2', 'Digit3', 'Digit4'].includes(e.code) && !e.shiftKey) {
         e.preventDefault();
         const speedMap = { Digit1: 0.5, Digit2: 0.75, Digit3: 1.0, Digit4: 1.25 };

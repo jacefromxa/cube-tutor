@@ -1,7 +1,7 @@
 import React, { useRef, useEffect, useState, useCallback, useImperativeHandle, forwardRef } from 'react';
 import { 
-  Play, Pause, RotateCcw, Repeat, ChevronLeft, ChevronRight, 
-  Maximize2, Copy, Check, FastForward, Rewind,
+  Play, Pause, RotateCcw, Repeat, 
+  Copy, Check, FastForward, Rewind,
   Hand, ChevronDown, ChevronUp
 } from 'lucide-react';
 import { VIDEO_PATH, F2L_GROUPS, invertAlgorithm } from '../data/f2lCases';
@@ -71,16 +71,11 @@ const VideoPlayer = forwardRef(function VideoPlayer({
         v.currentTime = currentCase.startSec;
         v.play().catch(() => {});
       } else {
-        const currentIndex = casesList.findIndex(c => c.id === currentCase.id);
-        if (currentIndex !== -1 && currentIndex + 1 < casesList.length) {
-          onSelectCase(casesList[currentIndex + 1]);
-        } else {
-          v.pause();
-          setIsPlaying(false);
-        }
+        v.pause();
+        setIsPlaying(false);
       }
     }
-  }, [currentCase, isLooping, casesList, onSelectCase, isDragging]);
+  }, [currentCase, isLooping, isDragging]);
 
   const togglePlay = useCallback(() => {
     if (!videoRef.current) return;
@@ -120,18 +115,13 @@ const VideoPlayer = forwardRef(function VideoPlayer({
     setIsLooping(prev => !prev);
   }, []);
 
-  const requestFullscreen = useCallback(() => {
-    videoRef.current?.requestFullscreen();
-  }, []);
-
   useImperativeHandle(ref, () => ({
     togglePlay,
     handleReplay,
     handleStep,
     changeSpeed,
-    toggleLooping,
-    requestFullscreen
-  }), [togglePlay, handleReplay, handleStep, changeSpeed, toggleLooping, requestFullscreen]);
+    toggleLooping
+  }), [togglePlay, handleReplay, handleStep, changeSpeed, toggleLooping]);
 
   // Drag / Click to seek
   const seekToPosition = useCallback((clientX) => {
@@ -183,18 +173,6 @@ const VideoPlayer = forwardRef(function VideoPlayer({
     setCopiedSolution(true);
     setTimeout(() => setCopiedSolution(false), 2000);
   };
-
-  const currentIndex = casesList.findIndex(c => c.id === currentCase?.id);
-  const hasPrev = currentIndex > 0;
-  const hasNext = currentIndex < casesList.length - 1;
-
-  const handlePrev = useCallback(() => {
-    if (hasPrev) onSelectCase(casesList[currentIndex - 1]);
-  }, [hasPrev, casesList, currentIndex, onSelectCase]);
-
-  const handleNext = useCallback(() => {
-    if (hasNext) onSelectCase(casesList[currentIndex + 1]);
-  }, [hasNext, casesList, currentIndex, onSelectCase]);
 
   const groupInfo = currentCase && groups ? groups[currentCase.group] : null;
 
@@ -291,21 +269,7 @@ const VideoPlayer = forwardRef(function VideoPlayer({
         isDark ? 'bg-[#0a0a0a] border-zinc-800' : 'bg-zinc-50 border-black'
       }`}>
         {/* Playback Controls */}
-        <div className="flex items-center gap-0.5 sm:gap-1 flex-nowrap shrink-0">
-          {/* Previous Case */}
-          <button
-            onClick={handlePrev}
-            disabled={!hasPrev}
-            title="上一个 Case ([)"
-            className={`w-6 h-6 sm:w-8 sm:h-8 flex items-center justify-center border transition-colors disabled:opacity-30 ${
-              isDark 
-                ? 'bg-zinc-900 border-zinc-700 text-zinc-200 hover:bg-white hover:text-black' 
-                : 'bg-white border-black text-black hover:bg-black hover:text-white'
-            }`}
-          >
-            <ChevronLeft className="w-3.5 h-3.5 sm:w-4 sm:h-4" />
-          </button>
-
+        <div className="flex items-center gap-1 sm:gap-1.5 flex-nowrap shrink-0">
           {/* Rewind 2s */}
           <button
             onClick={() => handleStep(-2)}
@@ -323,7 +287,7 @@ const VideoPlayer = forwardRef(function VideoPlayer({
           <button
             onClick={togglePlay}
             title={isPlaying ? "暂停 (空格键)" : "播放 (空格键)"}
-            className="px-2 sm:px-3.5 h-6 sm:h-8 bg-[#ff5b00] hover:bg-[#e05000] text-black font-mono font-black text-[11px] sm:text-xs uppercase flex items-center gap-1 border border-black transition-colors"
+            className="px-2.5 sm:px-4 h-6 sm:h-8 bg-[#ff5b00] hover:bg-[#e05000] text-black font-mono font-black text-[11px] sm:text-xs uppercase flex items-center gap-1 border border-black transition-colors"
           >
             {isPlaying ? (
               <>
@@ -364,22 +328,8 @@ const VideoPlayer = forwardRef(function VideoPlayer({
             <FastForward className="w-3 h-3 sm:w-3.5 sm:h-3.5" />
           </button>
 
-          {/* Next Case */}
-          <button
-            onClick={handleNext}
-            disabled={!hasNext}
-            title="下一个 Case (])"
-            className={`w-6 h-6 sm:w-8 sm:h-8 flex items-center justify-center border transition-colors disabled:opacity-30 ${
-              isDark 
-                ? 'bg-zinc-900 border-zinc-700 text-zinc-200 hover:bg-white hover:text-black' 
-                : 'bg-white border-black text-black hover:bg-black hover:text-white'
-            }`}
-          >
-            <ChevronRight className="w-3.5 h-3.5 sm:w-4 sm:h-4" />
-          </button>
-
           {/* Precision Time Counter */}
-          <div className={`ml-1 text-[11px] font-mono px-1.5 sm:px-2 h-6 sm:h-8 border hidden sm:flex items-center gap-1 ${
+          <div className={`ml-1 text-[11px] font-mono px-1.5 sm:px-2 h-6 sm:h-8 border flex items-center gap-1 ${
             isDark ? 'bg-zinc-900 border-zinc-700 text-zinc-300' : 'bg-white border-black text-black'
           }`}>
             <span className="text-[#ff5b00] font-black">{formatTime(currentOffset)}</span>
@@ -388,12 +338,12 @@ const VideoPlayer = forwardRef(function VideoPlayer({
           </div>
         </div>
 
-        {/* Speed Controls, Loop Toggle & Fullscreen */}
+        {/* Speed Controls & Loop Toggle */}
         <div className="flex items-center gap-1 sm:gap-1.5 flex-nowrap shrink-0">
           {/* Loop Toggle */}
           <button
             onClick={toggleLooping}
-            title={isLooping ? "当前: 单 Case 循环 (快捷键 L)" : "当前: 顺序连播 (快捷键 L)"}
+            title={isLooping ? "当前: 单 Case 循环 (快捷键 L)" : "当前: 停止循环 (快捷键 L)"}
             className={`h-6 sm:h-8 px-1.5 sm:px-2.5 flex items-center justify-center gap-1 border font-mono text-[10px] sm:text-xs font-bold transition-colors ${
               isLooping 
                 ? 'bg-[#ff5b00] text-black border-black font-black' 
@@ -444,19 +394,6 @@ const VideoPlayer = forwardRef(function VideoPlayer({
               ))}
             </div>
           </div>
-
-          {/* Fullscreen Button */}
-          <button
-            onClick={requestFullscreen}
-            title="全屏播放 (F)"
-            className={`w-6 h-6 sm:w-8 sm:h-8 flex items-center justify-center border transition-colors ${
-              isDark 
-                ? 'bg-zinc-900 border-zinc-700 text-zinc-300 hover:bg-white hover:text-black' 
-                : 'bg-white border-black text-black hover:bg-black hover:text-white'
-            }`}
-          >
-            <Maximize2 className="w-3 h-3 sm:w-3.5 sm:h-3.5" />
-          </button>
         </div>
       </div>
 
