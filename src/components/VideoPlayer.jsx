@@ -30,6 +30,9 @@ const VideoPlayer = forwardRef(function VideoPlayer({
   const [isDragging, setIsDragging] = useState(false);
   const [hoverRatio, setHoverRatio] = useState(null);
   const [isMobileDetailsExpanded, setIsMobileDetailsExpanded] = useState(true);
+  
+  // Requirement 4: Unified formula tab toggle ('solution' | 'scramble')
+  const [activeFormulaTab, setActiveFormulaTab] = useState('solution');
 
   const isDark = theme === 'dark';
 
@@ -121,7 +124,6 @@ const VideoPlayer = forwardRef(function VideoPlayer({
     videoRef.current?.requestFullscreen();
   }, []);
 
-  // Expose methods to parent ref for global shortcuts
   useImperativeHandle(ref, () => ({
     togglePlay,
     handleReplay,
@@ -209,8 +211,8 @@ const VideoPlayer = forwardRef(function VideoPlayer({
         ? 'bg-[#0a0a0a] border-zinc-800 text-zinc-100' 
         : 'bg-[#ffffff] border-black text-black'
     }`}>
-      {/* 1. Video Container with LineLore stark frame */}
-      <div className="relative aspect-video lg:max-h-[calc(100%-200px)] bg-black w-full overflow-hidden select-none group flex items-center justify-center border-b border-black dark:border-zinc-800">
+      {/* 1. Video Container with LineLore frame */}
+      <div className="relative aspect-video lg:max-h-[calc(100%-180px)] bg-black w-full overflow-hidden select-none group flex items-center justify-center border-b border-black dark:border-zinc-800">
         <video
           ref={videoRef}
           src={resolveAssetUrl(videoPath)}
@@ -225,14 +227,14 @@ const VideoPlayer = forwardRef(function VideoPlayer({
           className="w-full h-full object-contain cursor-pointer"
         />
 
-        {/* Crisp Industrial Pause Indicator */}
+        {/* Industrial Pause Indicator */}
         {!isPlaying && (
           <div 
             onClick={togglePlay}
             title="点击继续播放 (快捷键: 空格)"
-            className="absolute bottom-3 right-3 px-3 py-1.5 bg-black border border-white text-white font-mono text-xs font-bold tracking-wider cursor-pointer hover:bg-[#ff5b00] hover:text-black hover:border-black transition-colors flex items-center gap-1.5"
+            className="absolute bottom-2.5 right-2.5 px-2.5 py-1 bg-black border border-white text-white font-mono text-[11px] font-bold tracking-wider cursor-pointer hover:bg-[#ff5b00] hover:text-black hover:border-black transition-colors flex items-center gap-1.5"
           >
-            <Pause className="w-3.5 h-3.5 fill-current" />
+            <Pause className="w-3 h-3 fill-current" />
             <span>PAUSED // 空格播放</span>
           </div>
         )}
@@ -247,7 +249,7 @@ const VideoPlayer = forwardRef(function VideoPlayer({
         )}
 
         {/* Looping / Sequence Toggle at Top-Right */}
-        <div className="absolute top-2.5 right-2.5 flex items-center gap-2">
+        <div className="absolute top-2 right-2 flex items-center gap-2">
           <button
             onClick={toggleLooping}
             title={isLooping ? "当前: 单 Case 循环 (快捷键 L)" : "当前: 顺序连播 (快捷键 L)"}
@@ -301,7 +303,7 @@ const VideoPlayer = forwardRef(function VideoPlayer({
       </div>
 
       {/* 3. Control Toolbar */}
-      <div className={`px-2.5 sm:px-3 py-1.5 border-b flex flex-wrap items-center justify-between gap-2 transition-colors ${
+      <div className={`px-2 sm:px-3 py-1.5 border-b flex flex-wrap items-center justify-between gap-1.5 sm:gap-2 transition-colors ${
         isDark ? 'bg-[#0a0a0a] border-zinc-800' : 'bg-zinc-50 border-black'
       }`}>
         {/* Playback Controls */}
@@ -324,7 +326,7 @@ const VideoPlayer = forwardRef(function VideoPlayer({
           <button
             onClick={() => handleStep(-2)}
             title="快退 2 秒 (← / J)"
-            className={`px-2 h-7 sm:h-8 flex items-center gap-0.5 border font-mono text-xs font-bold transition-colors ${
+            className={`px-1.5 sm:px-2 h-7 sm:h-8 flex items-center gap-0.5 border font-mono text-xs font-bold transition-colors ${
               isDark 
                 ? 'bg-zinc-900 border-zinc-700 text-zinc-300 hover:bg-white hover:text-black' 
                 : 'bg-white border-black text-black hover:bg-black hover:text-white'
@@ -338,7 +340,7 @@ const VideoPlayer = forwardRef(function VideoPlayer({
           <button
             onClick={togglePlay}
             title={isPlaying ? "暂停 (空格键)" : "播放 (空格键)"}
-            className="px-3 sm:px-4 h-7 sm:h-8 bg-[#ff5b00] hover:bg-[#e05000] text-black font-mono font-black text-xs uppercase flex items-center gap-1.5 border border-black transition-colors"
+            className="px-2.5 sm:px-4 h-7 sm:h-8 bg-[#ff5b00] hover:bg-[#e05000] text-black font-mono font-black text-xs uppercase flex items-center gap-1.5 border border-black transition-colors"
           >
             {isPlaying ? (
               <>
@@ -370,7 +372,7 @@ const VideoPlayer = forwardRef(function VideoPlayer({
           <button
             onClick={() => handleStep(2)}
             title="快进 2 秒 (→ / K)"
-            className={`px-2 h-7 sm:h-8 flex items-center gap-0.5 border font-mono text-xs font-bold transition-colors ${
+            className={`px-1.5 sm:px-2 h-7 sm:h-8 flex items-center gap-0.5 border font-mono text-xs font-bold transition-colors ${
               isDark 
                 ? 'bg-zinc-900 border-zinc-700 text-zinc-300 hover:bg-white hover:text-black' 
                 : 'bg-white border-black text-black hover:bg-black hover:text-white'
@@ -395,7 +397,7 @@ const VideoPlayer = forwardRef(function VideoPlayer({
           </button>
 
           {/* Precision Time Counter */}
-          <div className={`ml-1 text-[11px] font-mono px-2 h-7 sm:h-8 border hidden sm:flex items-center gap-1 ${
+          <div className={`ml-1 text-[11px] font-mono px-1.5 sm:px-2 h-7 sm:h-8 border hidden sm:flex items-center gap-1 ${
             isDark ? 'bg-zinc-900 border-zinc-700 text-zinc-300' : 'bg-white border-black text-black'
           }`}>
             <span className="text-[#ff5b00] font-black">{formatTime(currentOffset)}</span>
@@ -405,7 +407,7 @@ const VideoPlayer = forwardRef(function VideoPlayer({
         </div>
 
         {/* Speed Controls & Fullscreen */}
-        <div className="flex items-center gap-1.5">
+        <div className="flex items-center gap-1 sm:gap-1.5">
           {/* Speed Selection */}
           <div className={`flex items-center p-0.5 border font-mono text-xs ${
             isDark ? 'bg-zinc-900 border-zinc-700' : 'bg-white border-black'
@@ -418,7 +420,7 @@ const VideoPlayer = forwardRef(function VideoPlayer({
                 changeSpeed(rates[nextIndex]);
               }}
               title="切换播放倍速"
-              className="sm:hidden px-2 py-0.5 font-bold text-[#ff5b00]"
+              className="sm:hidden px-1.5 py-0.5 font-bold text-[#ff5b00]"
             >
               [{playbackRate}x]
             </button>
@@ -460,45 +462,50 @@ const VideoPlayer = forwardRef(function VideoPlayer({
         </div>
       </div>
 
-      {/* 4. Case Details & Technical Algorithm Card */}
+      {/* 4. Case Details & Compressed Formula Area */}
       {currentCase && (
         <>
-          {/* Mobile Collapsed State */}
+          {/* Mobile Collapsed Bar */}
           {!isMobileDetailsExpanded && (
             <div className={`lg:hidden px-2.5 py-1.5 border-t flex items-center justify-between gap-2 font-mono transition-colors ${
               isDark ? 'bg-zinc-950 border-zinc-800' : 'bg-zinc-100 border-black'
             }`}>
-              <div className="flex items-center gap-2 min-w-0">
+              <div className="flex items-center gap-1.5 min-w-0 flex-nowrap">
                 <img 
                   src={resolveAssetUrl(currentCase.cubeImg)} 
                   alt={currentCase.code} 
-                  className="w-7 h-7 bg-white p-0.5 object-contain border border-black shrink-0"
+                  className="w-6 h-6 bg-white p-0.5 object-contain border border-black shrink-0"
                 />
-                <span className="font-mono font-black text-sm shrink-0">
+                <span className="font-mono font-black text-xs shrink-0">
                   {currentCase.code}
                 </span>
+                {currentCase.grip && (
+                  <span className="text-[10px] px-1 py-0.2 border border-zinc-500 font-bold shrink-0">
+                    {currentCase.grip}
+                  </span>
+                )}
                 <span className="text-xs text-[#ff5b00] font-bold truncate">
                   {currentCase.algorithm}
                 </span>
               </div>
 
-              <div className="flex items-center gap-1.5 shrink-0">
+              <div className="flex items-center gap-1 shrink-0">
                 <button
                   onClick={() => onToggleMastered(currentCase.id)}
                   title={isMastered ? "已掌握 (点击取消)" : "标记为已掌握"}
-                  className={`px-2 py-0.5 border text-[11px] font-bold transition-colors flex items-center gap-1 ${
+                  className={`px-1.5 py-0.5 border text-[10px] font-bold transition-colors ${
                     isMastered 
                       ? 'bg-[#ff5b00] text-black border-black' 
                       : isDark ? 'bg-zinc-900 text-zinc-300 border-zinc-700' : 'bg-white text-black border-black'
                   }`}
                 >
-                  <span>{isMastered ? '已掌握' : '待练'}</span>
+                  {isMastered ? '已掌握' : '待练'}
                 </button>
 
                 <button
                   onClick={() => setIsMobileDetailsExpanded(true)}
                   title="展开公式详情"
-                  className={`px-2 py-0.5 border text-[11px] font-bold flex items-center gap-0.5 ${
+                  className={`px-1.5 py-0.5 border text-[10px] font-bold flex items-center gap-0.5 ${
                     isDark ? 'bg-white text-black border-white' : 'bg-black text-white border-black'
                   }`}
                 >
@@ -510,52 +517,49 @@ const VideoPlayer = forwardRef(function VideoPlayer({
           )}
 
           {/* Expanded State: Spec-sheet Editorial Style */}
-          <div className={`${!isMobileDetailsExpanded ? 'hidden lg:flex' : 'flex'} flex-1 min-h-0 px-3 sm:px-4 py-2 sm:py-3 flex-col justify-between gap-2 transition-colors ${
+          <div className={`${!isMobileDetailsExpanded ? 'hidden lg:flex' : 'flex'} flex-1 min-h-0 px-2.5 sm:px-4 py-2 sm:py-2.5 flex-col justify-between gap-1.5 sm:gap-2 transition-colors ${
             isDark ? 'bg-[#0a0a0a]' : 'bg-white'
           }`}>
-            {/* Header Row: Thumbnail + Case ID + Tags + Mastered Status */}
-            <div className="flex items-center justify-between gap-3">
-              <div className="flex items-center gap-2.5 sm:gap-3 min-w-0">
+            {/* Requirement 3: Header Row with Grip Tag on the SAME ROW as Title */}
+            <div className="flex items-center justify-between gap-2">
+              <div className="flex items-center gap-2 min-w-0 overflow-hidden">
                 {/* Cube Thumbnail in crisp frame */}
                 <div className="shrink-0">
                   <img 
                     src={resolveAssetUrl(currentCase.cubeImg)} 
                     alt={currentCase.code} 
-                    className="w-10 h-10 sm:w-12 sm:h-12 bg-white p-1 object-contain border-2 border-black dark:border-zinc-700 shrink-0"
+                    className="w-8 h-8 sm:w-10 sm:h-10 md:w-11 md:h-11 bg-white p-0.5 sm:p-1 object-contain border-2 border-black dark:border-zinc-700 shrink-0"
                   />
                 </div>
 
-                {/* Case Code & Metadata */}
-                <div className="flex flex-col justify-center min-w-0">
-                  <div className="flex items-center gap-1.5 sm:gap-2 flex-wrap">
-                    <span className="font-mono text-base sm:text-xl md:text-2xl font-black tracking-tight flex items-center gap-1.5">
-                      <span className="w-2 sm:w-2.5 h-2 sm:h-2.5 bg-[#ff5b00] inline-block" />
-                      <span>{currentCase.code}</span>
+                {/* Case Code & Metadata - STRICTLY SAME LINE flex-nowrap */}
+                <div className="flex items-center gap-1.5 sm:gap-2 min-w-0 flex-nowrap">
+                  <span className="font-mono text-sm sm:text-base md:text-xl font-black tracking-tight flex items-center gap-1 shrink-0">
+                    <span className="w-2 h-2 bg-[#ff5b00] inline-block" />
+                    <span>{currentCase.code}</span>
+                  </span>
+
+                  {/* Requirement 3: Grip Tag placed on the SAME ROW with Title */}
+                  {currentCase.grip && (
+                    <span className={`font-mono text-[10px] sm:text-xs px-1.5 py-0.5 border font-bold flex items-center gap-0.5 shrink-0 ${
+                      isDark ? 'bg-zinc-900 border-zinc-700 text-zinc-300' : 'bg-zinc-100 border-black text-black'
+                    }`}>
+                      <Hand className="w-2.5 h-2.5" />
+                      <span>{currentCase.grip}</span>
                     </span>
+                  )}
 
-                    {groupInfo?.nameZh && (
-                      <span className={`font-mono text-[10px] sm:text-xs px-1.5 py-0.5 border font-bold ${
-                        isDark ? 'bg-zinc-900 border-zinc-700 text-zinc-300' : 'bg-zinc-100 border-black text-black'
-                      }`}>
-                        [{groupInfo.nameZh}]
-                      </span>
-                    )}
-
-                    {currentCase.subName && (
-                      <span className="font-mono text-[10px] sm:text-xs px-1.5 py-0.5 border border-[#ff5b00] text-[#ff5b00] font-bold">
-                        [{currentCase.subName}]
-                      </span>
-                    )}
-
-                    {currentCase.grip && (
-                      <span className={`font-mono text-[10px] sm:text-xs px-1.5 py-0.5 border font-bold flex items-center gap-1 ${
-                        isDark ? 'bg-zinc-900 border-zinc-700 text-zinc-300' : 'bg-zinc-100 border-black text-black'
-                      }`}>
-                        <Hand className="w-2.5 h-2.5" />
-                        <span>{currentCase.grip}</span>
-                      </span>
-                    )}
-                  </div>
+                  {currentCase.subName ? (
+                    <span className="font-mono text-[10px] sm:text-xs px-1.5 py-0.5 border border-[#ff5b00] text-[#ff5b00] font-bold shrink-0 truncate">
+                      [{currentCase.subName}]
+                    </span>
+                  ) : groupInfo?.nameZh ? (
+                    <span className={`hidden xs:inline-block font-mono text-[10px] sm:text-xs px-1.5 py-0.5 border font-bold shrink-0 truncate ${
+                      isDark ? 'bg-zinc-900 border-zinc-700 text-zinc-300' : 'bg-zinc-100 border-black text-black'
+                    }`}>
+                      [{groupInfo.nameZh}]
+                    </span>
+                  ) : null}
                 </div>
               </div>
 
@@ -563,7 +567,7 @@ const VideoPlayer = forwardRef(function VideoPlayer({
               <div className="flex items-center gap-1.5 shrink-0">
                 <button
                   onClick={() => onToggleMastered(currentCase.id)}
-                  className={`px-3 py-1.5 sm:px-4 sm:py-2 border-2 font-mono text-xs sm:text-sm font-black flex items-center gap-1.5 transition-colors ${
+                  className={`px-2.5 py-1 sm:px-3.5 sm:py-1.5 border-2 font-mono text-xs sm:text-sm font-black flex items-center gap-1 transition-colors ${
                     isMastered 
                       ? 'bg-[#ff5b00] text-black border-black shadow-xs' 
                       : isDark 
@@ -571,85 +575,95 @@ const VideoPlayer = forwardRef(function VideoPlayer({
                         : 'bg-white text-black border-black hover:bg-black hover:text-white'
                   }`}
                 >
-                  <Check className={`w-3.5 h-3.5 sm:w-4 sm:h-4 ${isMastered ? 'text-black stroke-[3]' : 'opacity-40'}`} />
+                  <Check className={`w-3.5 h-3.5 ${isMastered ? 'text-black stroke-[3]' : 'opacity-40'}`} />
                   <span>{isMastered ? '已掌握' : '未掌握'}</span>
                 </button>
 
                 {/* Mobile collapse trigger */}
                 <button
                   onClick={() => setIsMobileDetailsExpanded(false)}
-                  title="收起公式详情"
-                  className={`lg:hidden p-1.5 border font-mono text-xs ${
+                  title="收起公式详情以节省空间"
+                  className={`lg:hidden p-1 sm:p-1.5 border font-mono text-xs ${
                     isDark ? 'bg-zinc-900 border-zinc-700 text-zinc-300' : 'bg-zinc-100 border-black text-black'
                   }`}
                 >
-                  <ChevronUp className="w-4 h-4" />
+                  <ChevronUp className="w-3.5 h-3.5" />
                 </button>
               </div>
             </div>
 
-            {/* Two-Line Technical Spec Formula Panels */}
-            <div className="flex flex-col gap-1.5 sm:gap-2">
-              {/* Line 1: 打乱公式 */}
-              <div className={`border px-2.5 py-1.5 sm:px-3 sm:py-2 flex items-center justify-between gap-2 transition-colors ${
-                isDark ? 'bg-zinc-900/90 border-zinc-800' : 'bg-zinc-50 border-black'
+            {/* Requirement 4: Unified Formula Component with Tab Switching & No Ellipsis */}
+            <div className={`border-2 p-1.5 sm:p-2 flex flex-col gap-1 transition-colors ${
+              isDark ? 'bg-zinc-900/90 border-zinc-800' : 'bg-zinc-50 border-black'
+            }`}>
+              {/* Formula Tab Switcher Bar & Copy Button */}
+              <div className={`flex items-center justify-between gap-1.5 border-b pb-1 ${
+                isDark ? 'border-zinc-800' : 'border-zinc-200'
               }`}>
-                <div className="flex items-center gap-2 overflow-hidden">
-                  <span className={`font-mono text-[10px] sm:text-xs font-black uppercase tracking-wider shrink-0 px-1.5 py-0.5 border ${
-                    isDark ? 'bg-zinc-950 border-zinc-700 text-zinc-300' : 'bg-white border-black text-black'
-                  }`}>
-                    SCRAMBLE // 打乱
-                  </span>
-                  <div className={`font-mono text-xs sm:text-sm md:text-base font-black tracking-wider select-all truncate ${
-                    isDark ? 'text-zinc-100' : 'text-black'
-                  }`}>
-                    {scramble}
-                  </div>
+                {/* Switcher: 求解公式 (Default) vs 打乱公式 */}
+                <div className="flex items-center gap-1 font-mono text-[10px] sm:text-xs font-bold">
+                  <button
+                    onClick={() => setActiveFormulaTab('solution')}
+                    className={`px-2 py-0.5 border transition-colors flex items-center gap-1 ${
+                      activeFormulaTab === 'solution'
+                        ? 'bg-[#ff5b00] text-black border-black font-black'
+                        : isDark 
+                          ? 'bg-zinc-950 border-zinc-700 text-zinc-400 hover:text-white' 
+                          : 'bg-white border-zinc-300 text-zinc-600 hover:text-black'
+                    }`}
+                  >
+                    <span>SOLUTION // 求解</span>
+                  </button>
+
+                  <button
+                    onClick={() => setActiveFormulaTab('scramble')}
+                    className={`px-2 py-0.5 border transition-colors flex items-center gap-1 ${
+                      activeFormulaTab === 'scramble'
+                        ? isDark 
+                          ? 'bg-white text-black border-white font-black' 
+                          : 'bg-black text-white border-black font-black'
+                        : isDark 
+                          ? 'bg-zinc-950 border-zinc-700 text-zinc-400 hover:text-white' 
+                          : 'bg-white border-zinc-300 text-zinc-600 hover:text-black'
+                    }`}
+                  >
+                    <span>SCRAMBLE // 打乱</span>
+                  </button>
                 </div>
 
+                {/* Copy Button for currently active tab */}
                 <button
-                  onClick={handleCopyScramble}
-                  title="复制打乱公式"
-                  className={`px-2 py-0.5 sm:px-2.5 sm:py-1 border font-mono text-[11px] sm:text-xs font-bold shrink-0 transition-colors flex items-center gap-1 ${
-                    copiedScramble
+                  onClick={activeFormulaTab === 'solution' ? handleCopySolution : handleCopyScramble}
+                  title={activeFormulaTab === 'solution' ? "复制求解公式" : "复制打乱公式"}
+                  className={`px-2 py-0.5 border font-mono text-[10px] sm:text-xs font-bold shrink-0 transition-colors flex items-center gap-1 ${
+                    (activeFormulaTab === 'solution' ? copiedSolution : copiedScramble)
                       ? 'bg-[#ff5b00] text-black border-black'
                       : isDark 
                         ? 'bg-zinc-950 border-zinc-700 text-zinc-300 hover:bg-white hover:text-black' 
                         : 'bg-white border-black text-black hover:bg-black hover:text-white'
                   }`}
                 >
-                  {copiedScramble ? <Check className="w-3 h-3 text-black stroke-[3]" /> : <Copy className="w-3 h-3" />}
-                  <span className="hidden xs:inline">{copiedScramble ? '已复制' : '复制打乱'}</span>
+                  {(activeFormulaTab === 'solution' ? copiedSolution : copiedScramble) ? (
+                    <>
+                      <Check className="w-3 h-3 text-black stroke-[3]" />
+                      <span>已复制</span>
+                    </>
+                  ) : (
+                    <>
+                      <Copy className="w-3 h-3" />
+                      <span>复制</span>
+                    </>
+                  )}
                 </button>
               </div>
 
-              {/* Line 2: 求解公式 */}
-              <div className={`border px-2.5 py-1.5 sm:px-3 sm:py-2 flex items-center justify-between gap-2 transition-colors ${
-                isDark ? 'bg-zinc-900/90 border-zinc-800' : 'bg-zinc-50 border-black'
+              {/* Requirement 4: Formula Text - Responsive Font & Break-Words (NO Ellipsis Truncation!) */}
+              <div className={`font-mono text-xs sm:text-sm md:text-base font-black tracking-wider leading-relaxed select-all break-words py-0.5 ${
+                activeFormulaTab === 'solution'
+                  ? 'text-[#ff5b00]'
+                  : isDark ? 'text-zinc-100' : 'text-black'
               }`}>
-                <div className="flex items-center gap-2 overflow-hidden">
-                  <span className="font-mono text-[10px] sm:text-xs font-black uppercase tracking-wider shrink-0 px-1.5 py-0.5 border bg-[#ff5b00] border-black text-black">
-                    SOLUTION // 求解
-                  </span>
-                  <div className="font-mono text-xs sm:text-sm md:text-base font-black text-[#ff5b00] tracking-wider select-all truncate">
-                    {currentCase.algorithm}
-                  </div>
-                </div>
-
-                <button
-                  onClick={handleCopySolution}
-                  title="复制求解公式"
-                  className={`px-2 py-0.5 sm:px-2.5 sm:py-1 border font-mono text-[11px] sm:text-xs font-bold shrink-0 transition-colors flex items-center gap-1 ${
-                    copiedSolution
-                      ? 'bg-[#ff5b00] text-black border-black'
-                      : isDark 
-                        ? 'bg-zinc-950 border-zinc-700 text-zinc-300 hover:bg-white hover:text-black' 
-                        : 'bg-white border-black text-black hover:bg-black hover:text-white'
-                  }`}
-                >
-                  {copiedSolution ? <Check className="w-3 h-3 text-black stroke-[3]" /> : <Copy className="w-3 h-3" />}
-                  <span className="hidden xs:inline">{copiedSolution ? '已复制' : '复制公式'}</span>
-                </button>
+                {activeFormulaTab === 'solution' ? currentCase.algorithm : scramble}
               </div>
             </div>
           </div>

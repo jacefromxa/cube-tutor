@@ -310,14 +310,17 @@ export default function App() {
 
       {/* Main Dual-Column Viewport:
           - Desktop (lg:): Fixed Dual-Column Viewport with pixel-perfect bottom alignment
-          - Mobile (< lg): Sticky Video Player at top, natural scroll below
+          - Mobile (< lg): Sticky Video Player at top (locked at header bottom), natural scroll below
       */}
-      <main className="flex-1 min-h-0 max-w-[1920px] w-full mx-auto px-2.5 sm:px-4 lg:px-6 py-2.5 sm:py-3 flex flex-col lg:flex-row gap-3 sm:gap-4 items-stretch lg:overflow-hidden">
+      <main className="flex-1 min-h-0 max-w-[1920px] w-full mx-auto px-2.5 sm:px-4 lg:px-6 py-2 sm:py-3 flex flex-col lg:flex-row gap-2.5 sm:gap-4 items-stretch lg:overflow-hidden">
         
-        {/* LEFT COLUMN: Video Player & Control Spec Area */}
-        <div className={`w-full lg:w-[57%] xl:w-[61%] 2xl:w-[64%] shrink-0 h-auto lg:h-full flex flex-col justify-start sticky lg:static top-0 z-30 transition-colors ${
-          isDark ? 'bg-[#0a0a0a]/95' : 'bg-[#f4f4f5]/95'
-        } backdrop-blur-xs -mx-2 px-2 pt-1 pb-1 lg:mx-0 lg:px-0 lg:py-0 lg:bg-transparent lg:backdrop-blur-none`}>
+        {/* LEFT COLUMN: Video Player & Control Spec Area (Position-locked directly below header on mobile) */}
+        <div 
+          style={{ top: 'var(--header-height, 74px)' }}
+          className={`w-full lg:w-[57%] xl:w-[61%] 2xl:w-[64%] shrink-0 h-auto lg:h-full flex flex-col justify-start sticky lg:static z-30 transition-colors pb-2 lg:pb-0 ${
+            isDark ? 'bg-[#0a0a0a]' : 'bg-[#f4f4f5]'
+          }`}
+        >
           <VideoPlayer
             ref={playerRef}
             currentCase={currentCase}
