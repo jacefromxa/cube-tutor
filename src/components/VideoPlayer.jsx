@@ -310,14 +310,13 @@ const VideoPlayer = forwardRef(function VideoPlayer({
           <button
             onClick={() => handleStep(-2)}
             title="快退 2 秒 (← / J)"
-            className={`px-1 sm:px-2 h-6 sm:h-8 flex items-center gap-0.5 border font-mono text-[10px] sm:text-xs font-bold transition-colors ${
+            className={`w-6 h-6 sm:w-8 sm:h-8 flex items-center justify-center border transition-colors ${
               isDark 
                 ? 'bg-zinc-900 border-zinc-700 text-zinc-300 hover:bg-white hover:text-black' 
                 : 'bg-white border-black text-black hover:bg-black hover:text-white'
             }`}
           >
-            <Rewind className="w-2.5 h-2.5 sm:w-3 sm:h-3" />
-            <span>-2s</span>
+            <Rewind className="w-3 h-3 sm:w-3.5 sm:h-3.5" />
           </button>
 
           {/* Play/Pause Primary Button */}
@@ -356,14 +355,13 @@ const VideoPlayer = forwardRef(function VideoPlayer({
           <button
             onClick={() => handleStep(2)}
             title="快进 2 秒 (→ / K)"
-            className={`px-1 sm:px-2 h-6 sm:h-8 flex items-center gap-0.5 border font-mono text-[10px] sm:text-xs font-bold transition-colors ${
+            className={`w-6 h-6 sm:w-8 sm:h-8 flex items-center justify-center border transition-colors ${
               isDark 
                 ? 'bg-zinc-900 border-zinc-700 text-zinc-300 hover:bg-white hover:text-black' 
                 : 'bg-white border-black text-black hover:bg-black hover:text-white'
             }`}
           >
-            <span>+2s</span>
-            <FastForward className="w-2.5 h-2.5 sm:w-3 sm:h-3" />
+            <FastForward className="w-3 h-3 sm:w-3.5 sm:h-3.5" />
           </button>
 
           {/* Next Case */}
@@ -396,7 +394,7 @@ const VideoPlayer = forwardRef(function VideoPlayer({
           <button
             onClick={toggleLooping}
             title={isLooping ? "当前: 单 Case 循环 (快捷键 L)" : "当前: 顺序连播 (快捷键 L)"}
-            className={`w-6 h-6 sm:w-auto sm:px-2 sm:h-8 flex items-center justify-center gap-1 border font-mono text-[10px] sm:text-xs font-bold transition-colors ${
+            className={`h-6 sm:h-8 px-1.5 sm:px-2.5 flex items-center justify-center gap-1 border font-mono text-[10px] sm:text-xs font-bold transition-colors ${
               isLooping 
                 ? 'bg-[#ff5b00] text-black border-black font-black' 
                 : isDark 
@@ -405,11 +403,11 @@ const VideoPlayer = forwardRef(function VideoPlayer({
             }`}
           >
             <Repeat className="w-3 h-3 sm:w-3.5 sm:h-3.5" />
-            <span className="hidden sm:inline">{isLooping ? '循环' : '顺序'}</span>
+            <span className="font-mono text-[10px] sm:text-xs font-bold">LOOP</span>
           </button>
 
           {/* Speed Selection */}
-          <div className={`flex items-center p-0.5 border font-mono text-xs ${
+          <div className={`h-6 sm:h-8 flex items-center px-1 sm:px-1.5 border font-mono text-xs ${
             isDark ? 'bg-zinc-900 border-zinc-700' : 'bg-white border-black'
           }`}>
             {/* Mobile speed toggle */}
@@ -420,13 +418,13 @@ const VideoPlayer = forwardRef(function VideoPlayer({
                 changeSpeed(rates[nextIndex]);
               }}
               title="切换播放倍速"
-              className="sm:hidden px-1.5 py-0.5 font-bold text-[#ff5b00] text-[10px]"
+              className="sm:hidden font-bold text-[#ff5b00] text-[10px] h-full flex items-center"
             >
               [{playbackRate}x]
             </button>
 
             {/* Desktop speed tabs */}
-            <div className="hidden sm:flex items-center">
+            <div className="hidden sm:flex items-center h-full">
               {[0.5, 0.75, 1.0, 1.25].map(rate => (
                 <button
                   key={rate}
@@ -612,7 +610,7 @@ const VideoPlayer = forwardRef(function VideoPlayer({
                           : 'bg-white border-zinc-300 text-zinc-600 hover:text-black'
                     }`}
                   >
-                    <span>SOLUTION // 求解</span>
+                    <span>SOLUTION</span>
                   </button>
 
                   <button
@@ -627,15 +625,15 @@ const VideoPlayer = forwardRef(function VideoPlayer({
                           : 'bg-white border-zinc-300 text-zinc-600 hover:text-black'
                     }`}
                   >
-                    <span>SCRAMBLE // 打乱</span>
+                    <span>SCRAMBLE</span>
                   </button>
                 </div>
 
                 {/* Copy Button for currently active tab */}
                 <button
                   onClick={activeFormulaTab === 'solution' ? handleCopySolution : handleCopyScramble}
-                  title={activeFormulaTab === 'solution' ? "复制求解公式" : "复制打乱公式"}
-                  className={`px-2 py-0.5 border font-mono text-[10px] sm:text-xs font-bold shrink-0 transition-colors flex items-center gap-1 ${
+                  title={activeFormulaTab === 'solution' ? (copiedSolution ? "已复制求解公式" : "复制求解公式") : (copiedScramble ? "已复制打乱公式" : "复制打乱公式")}
+                  className={`w-6 h-6 sm:w-7 sm:h-7 flex items-center justify-center border font-mono shrink-0 transition-colors ${
                     (activeFormulaTab === 'solution' ? copiedSolution : copiedScramble)
                       ? 'bg-[#ff5b00] text-black border-black'
                       : isDark 
@@ -644,15 +642,9 @@ const VideoPlayer = forwardRef(function VideoPlayer({
                   }`}
                 >
                   {(activeFormulaTab === 'solution' ? copiedSolution : copiedScramble) ? (
-                    <>
-                      <Check className="w-3 h-3 text-black stroke-[3]" />
-                      <span>已复制</span>
-                    </>
+                    <Check className="w-3.5 h-3.5 text-black stroke-[3]" />
                   ) : (
-                    <>
-                      <Copy className="w-3 h-3" />
-                      <span>复制</span>
-                    </>
+                    <Copy className="w-3 h-3 sm:w-3.5 sm:h-3.5" />
                   )}
                 </button>
               </div>

@@ -27,8 +27,8 @@ export default function CaseCard({
                 : 'bg-white border-zinc-300 hover:border-black text-black')
       }`}
     >
-      {/* Top Header: Code, Grip Badge & Square Master Check */}
-      <div className="flex items-center justify-between gap-1 mb-1.5">
+      {/* Top Header: Code, Grip Badge & Mastered Checkbox */}
+      <div className="flex items-center justify-between gap-1 mb-1">
         <div className="flex items-center gap-1.5 min-w-0">
           <span className={`font-mono font-black text-xs sm:text-sm tracking-tight truncate flex items-center gap-1 ${
             isActive ? 'text-[#ff5b00]' : isDark ? 'text-white' : 'text-black'
@@ -66,25 +66,23 @@ export default function CaseCard({
         </button>
       </div>
 
-      {/* Middle: Crisp 3D Cube Graphic Specimen */}
-      <div className={`relative w-20 h-20 sm:w-24 sm:h-24 mx-auto bg-white p-1 my-1 overflow-hidden flex items-center justify-center shrink-0 border-2 transition-transform duration-150 ${
-        isActive 
-          ? 'border-[#ff5b00]' 
-          : 'border-black dark:border-zinc-700'
-      }`}>
+      {/* Middle: Crisp 3D Cube Graphic Specimen (Border removed to avoid duplication) */}
+      <div className="relative w-20 h-20 sm:w-24 sm:h-24 mx-auto bg-white p-1 my-0.5 overflow-hidden flex items-center justify-center shrink-0">
         <img
           src={resolveAssetUrl(caseItem.cubeImg)}
           alt={caseItem.code}
           decoding="async"
           className="w-full h-full object-contain filter contrast-105"
         />
+      </div>
 
-        {/* Technical Playing Badge */}
+      {/* Dedicated Active Playing Indicator Slot (Off-image to avoid obscuring cube) */}
+      <div className="h-4 flex items-center justify-center my-0.5 shrink-0">
         {isActive && (
-          <div className="absolute top-1 left-1 px-1.5 py-0.2 bg-black text-[#ff5b00] border border-[#ff5b00] text-[9px] font-mono font-bold flex items-center gap-1 shadow-sm pointer-events-none">
-            <span className="w-1.5 h-1.5 bg-[#ff5b00] animate-pulse" />
-            <span>PLAY</span>
-          </div>
+          <span className="px-1.5 py-0.2 bg-[#ff5b00] text-black border border-black font-mono font-black text-[9px] flex items-center gap-1 shadow-xs animate-pulse">
+            <span className="w-1 h-1 bg-black inline-block" />
+            <span>PLAYING</span>
+          </span>
         )}
       </div>
 
