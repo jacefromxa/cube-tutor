@@ -1,5 +1,5 @@
 // Cube-Tutor Lightweight PWA Service Worker
-const CACHE_NAME = 'cube-tutor-v1';
+const CACHE_NAME = 'cube-tutor-v2';
 const PRECACHE_ASSETS = [
   '/cfop/',
   '/cfop/index.html',
@@ -36,7 +36,21 @@ self.addEventListener('fetch', (event) => {
     return;
   }
 
-  // Stale-while-revalidate for local assets
+  // Network-first for HTML / navigation requests to guarantee instant updates on new deploys
+  if (event.request.mode === 'navigate' || url.pathname.endsWith('.html') || url.pathname === '/cfop/') {
+    event.respondWith(
+      fetch(event.request).then((networkResponse) => {
+        if (networkResponse && networkResponse.status === 200) {
+          const responseToCache = networkResponse.clone();
+          caches.open(CACHE_NAME).then((cache) => cache.put(event.request, responseToCache));
+        }
+        return networkResponse;
+      }).catch(() => caches.match(event.request))
+    );
+    return;
+  }
+
+  // Stale-while-revalidate for local hashed assets and images
   event.respondWith(
     caches.match(event.request).then((cachedResponse) => {
       const fetchPromise = fetch(event.request).then((networkResponse) => {

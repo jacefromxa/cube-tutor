@@ -132,7 +132,7 @@ export default function Header({
         </div>
 
         {/* Center: Industrial Module Switcher (CFOP: F2L|OLL|PLL vs ZBLL separated) */}
-        <div className="w-full sm:w-auto flex items-center justify-center gap-1 sm:gap-2 overflow-x-auto scrollbar-none py-0.5">
+        <div className="w-full sm:w-auto flex items-center justify-start sm:justify-center gap-1 sm:gap-2 overflow-x-auto scrollbar-none py-0.5 px-0.5">
           {/* 1. CFOP Core Modules Group */}
           <div className={`flex items-center p-0.5 border shrink-0 ${
             isDark ? 'bg-zinc-900 border-zinc-800' : 'bg-zinc-100 border-black'
@@ -147,7 +147,7 @@ export default function Header({
                 <button
                   key={mod.id}
                   onClick={() => onSelectModule && onSelectModule(mod.id)}
-                  className={`px-2 sm:px-2.5 py-0.5 sm:py-1 font-mono text-xs sm:text-sm font-black transition-all flex items-center gap-0.5 sm:gap-1 border-r last:border-r-0 ${
+                  className={`px-1.5 sm:px-2.5 py-0.5 sm:py-1 font-mono text-[11px] sm:text-sm font-black transition-all flex items-center gap-0.5 sm:gap-1 border-r last:border-r-0 ${
                     isDark ? 'border-zinc-800' : 'border-zinc-300'
                   } ${
                     isActive
@@ -160,7 +160,7 @@ export default function Header({
                   }`}
                 >
                   <span>{mod.label}</span>
-                  <span className={`text-[10px] font-normal ${isActive ? (isDark ? 'text-black' : 'text-zinc-300') : 'opacity-60'}`}>
+                  <span className={`text-[9px] sm:text-[10px] font-normal ${isActive ? (isDark ? 'text-black' : 'text-zinc-300') : 'opacity-60'}`}>
                     [{mod.count}]
                   </span>
                 </button>
@@ -169,7 +169,7 @@ export default function Header({
           </div>
 
           {/* Visual Divider between CFOP and ZBLL */}
-          <div className={`w-px h-5 mx-0.5 shrink-0 hidden xs:block ${isDark ? 'bg-zinc-800' : 'bg-zinc-300'}`} />
+          <div className={`w-px h-4 mx-0.5 shrink-0 hidden xs:block ${isDark ? 'bg-zinc-800' : 'bg-zinc-300'}`} />
 
           {/* 2. Advanced 1LL System: ZBLL (Differentiated styling and cyan color palette) */}
           <div className={`flex items-center p-0.5 border transition-colors shrink-0 ${
@@ -180,7 +180,7 @@ export default function Header({
             <button
               onClick={() => onSelectModule && onSelectModule('zbll')}
               title="ZBLL (Zborowski-Bruchem Last Layer) 472 种顶层一步全还原"
-              className={`px-2 sm:px-2.5 py-0.5 sm:py-1 font-mono text-xs sm:text-sm font-black transition-all flex items-center gap-1 sm:gap-1.5 ${
+              className={`px-1.5 sm:px-2.5 py-0.5 sm:py-1 font-mono text-[11px] sm:text-sm font-black transition-all flex items-center gap-1 sm:gap-1.5 ${
                 activeModule === 'zbll'
                   ? isDark
                     ? 'bg-cyan-500 text-black font-black shadow-xs'
@@ -198,7 +198,7 @@ export default function Header({
                 }`} />
                 <span>ZBLL</span>
               </span>
-              <span className={`text-[10px] font-normal font-mono ${
+              <span className={`text-[9px] sm:text-[10px] font-normal font-mono ${
                 activeModule === 'zbll'
                   ? isDark ? 'text-black/80 font-bold' : 'text-white/90 font-bold'
                   : isDark ? 'text-cyan-400/70' : 'text-cyan-700/70'
@@ -209,7 +209,7 @@ export default function Header({
           </div>
 
           {/* Visual Divider between ZBLL and CMLL */}
-          <div className={`w-px h-5 mx-0.5 shrink-0 hidden xs:block ${isDark ? 'bg-zinc-800' : 'bg-zinc-300'}`} />
+          <div className={`w-px h-4 mx-0.5 shrink-0 hidden xs:block ${isDark ? 'bg-zinc-800' : 'bg-zinc-300'}`} />
 
           {/* 3. Roux Method: CMLL (Differentiated styling and Emerald green palette) */}
           <div className={`flex items-center p-0.5 border transition-colors shrink-0 ${
@@ -220,7 +220,7 @@ export default function Header({
             <button
               onClick={() => onSelectModule && onSelectModule('cmll')}
               title="CMLL (Corners of Last Layer) 42 种 Roux 桥式顶角一步还原"
-              className={`px-2 sm:px-2.5 py-0.5 sm:py-1 font-mono text-xs sm:text-sm font-black transition-all flex items-center gap-1 sm:gap-1.5 ${
+              className={`px-1.5 sm:px-2.5 py-0.5 sm:py-1 font-mono text-[11px] sm:text-sm font-black transition-all flex items-center gap-1 sm:gap-1.5 ${
                 activeModule === 'cmll'
                   ? isDark
                     ? 'bg-emerald-500 text-black font-black shadow-xs'
@@ -238,7 +238,7 @@ export default function Header({
                 }`} />
                 <span>CMLL</span>
               </span>
-              <span className={`text-[10px] font-normal font-mono ${
+              <span className={`text-[9px] sm:text-[10px] font-normal font-mono ${
                 activeModule === 'cmll'
                   ? isDark ? 'text-black/80 font-bold' : 'text-white/90 font-bold'
                   : isDark ? 'text-emerald-400/70' : 'text-emerald-700/70'

@@ -352,12 +352,12 @@ export default function App() {
           - Desktop (lg:): Fixed Dual-Column Viewport with pixel-perfect bottom alignment
           - Mobile (< lg): Sticky Video Player at top (locked at header bottom), natural scroll below
       */}
-      <main className="flex-1 min-h-0 max-w-[1920px] w-full mx-auto px-2.5 sm:px-4 lg:px-6 pt-0 lg:pt-2 pb-2 sm:pb-3 flex flex-col lg:flex-row gap-2.5 sm:gap-4 items-stretch lg:overflow-hidden">
+      <main className="flex-1 min-h-0 max-w-[1920px] w-full mx-auto px-0 sm:px-4 lg:px-6 pt-0 lg:pt-2 pb-2 sm:pb-3 flex flex-col lg:flex-row gap-2 sm:gap-4 items-stretch lg:overflow-hidden">
         
         {/* LEFT COLUMN: Video Player & Control Spec Area (Position-locked directly below header on mobile) */}
         <div 
           style={{ top: 'var(--header-height, 74px)' }}
-          className={`w-full lg:w-[57%] xl:w-[61%] 2xl:w-[64%] shrink-0 h-auto lg:h-full flex flex-col justify-start sticky lg:static z-30 transition-colors -mx-2.5 px-2.5 lg:mx-0 lg:px-0 pt-1 lg:pt-0 pb-1.5 lg:pb-0 border-b-2 lg:border-b-0 border-black dark:border-zinc-800 shadow-sm lg:shadow-none ${
+          className={`w-full lg:w-[57%] xl:w-[61%] 2xl:w-[64%] shrink-0 h-auto lg:h-full flex flex-col justify-start sticky lg:static z-30 transition-colors px-2.5 sm:px-0 pt-1 lg:pt-0 pb-1.5 lg:pb-0 border-b-2 lg:border-b-0 border-black dark:border-zinc-800 shadow-sm lg:shadow-none ${
             isDark ? 'bg-[#0a0a0a]' : 'bg-[#f4f4f5]'
           }`}
         >
@@ -376,7 +376,7 @@ export default function App() {
         </div>
 
         {/* RIGHT COLUMN: Filter Grid & Case Selection List */}
-        <div className="flex-1 min-w-0 h-auto lg:h-full flex flex-col gap-2 sm:gap-2.5">
+        <div className="flex-1 min-w-0 h-auto lg:h-full flex flex-col gap-2 sm:gap-2.5 px-2.5 sm:px-0">
           {/* Level 1 Category: 7 Big Letter Sets (Pure text buttons, low height, no graphics) */}
           {activeModule === 'zbll' && (
             <ZbllSetBar
