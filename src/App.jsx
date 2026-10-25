@@ -5,7 +5,7 @@ import VideoPlayer from './components/VideoPlayer';
 import FilterBar from './components/FilterBar';
 import CaseCard from './components/CaseCard';
 import ZbllSetBar from './components/ZbllSetBar';
-import KeyboardShortcutsModal from './components/KeyboardShortcutsModal';
+import { useLanguage } from './context/LanguageContext';
 import { F2L_CASES, F2L_GROUPS } from './data/f2lCases';
 import { OLL_CASES, OLL_GROUPS, OLL_VIDEO_PATH } from './data/ollCases';
 import { PLL_CASES, PLL_VIDEO_PATH } from './data/pllCases';
@@ -13,8 +13,9 @@ import { ZBLL_SETS } from './data/zbllCases';
 import { CMLL_CASES, CMLL_GROUPS, CMLL_VIDEO_PATH } from './data/cmllCases';
 import { AlertCircle } from 'lucide-react';
 
-const THEME_STORAGE_KEY = 'cube_tutor_theme_mode_v1';
-const MODULE_STORAGE_KEY = 'cube_tutor_active_module_v1';
+const THEME_STORAGE_KEY = 'cubedex_theme_mode_v1';
+const MODULE_STORAGE_KEY = 'cubedex_active_module_v1';
+const ZBLL_SET_STORAGE_KEY = 'cubedex_active_zbll_set_v1';
 
 const MODULE_CONFIGS = {
   f2l: {
@@ -22,57 +23,83 @@ const MODULE_CONFIGS = {
     cases: F2L_CASES,
     groups: F2L_GROUPS,
     videoPath: '/videos/f2l.mp4',
-    storageKey: 'f2l_mastered_cases_v1',
-    filterTitle: 'F2L情况分类',
-    filterSubtitle: '(9大类)',
-    allTitle: 'ALL 41 F2L CASES',
-    allDesc: '涵盖基础入槽、旋转棱块、顶白翻角、连体错配、钥匙孔分离与底槽情况等 41 种指法',
-    allLiteral: '全部形态（41 种常规情况）'
+    storageKey: 'cubedex_mastered_f2l_v1',
+    storageKeyOld: 'f2l_mastered_cases_v1',
+    filterTitleZh: 'F2L情况分类',
+    filterTitleEn: 'F2L CATEGORIES',
+    filterSubtitleZh: '(9大类)',
+    filterSubtitleEn: '(9 Groups)',
+    allTitleZh: 'ALL 41 F2L CASES',
+    allTitleEn: 'ALL 41 F2L CASES',
+    allDescZh: '涵盖基础入槽、旋转棱块、顶白翻角、连体错配、钥匙孔分离与底槽情况等 41 种指法',
+    allDescEn: 'Comprehensive coverage of 41 standard F2L cases including basic insertions, rotated edges, white-up corners & split slots',
+    allLiteralZh: '全部形态（41 种常规情况）',
+    allLiteralEn: 'All 41 Standard Cases'
   },
   oll: {
     name: 'OLL',
     cases: OLL_CASES,
     groups: OLL_GROUPS,
     videoPath: OLL_VIDEO_PATH,
-    storageKey: 'cube_tutor_mastered_oll_v1',
-    filterTitle: 'OLL形态分类',
-    filterSubtitle: '(9大类)',
-    allTitle: 'ALL 57 OLL CASES',
-    allDesc: '涵盖十字O、点O、小鱼、狙击枪、闪电、L字、菜刀、一字及特殊组合形态等 57 种保稳手法',
-    allLiteral: '全部形态（57 种顶面色向情况）'
+    storageKey: 'cubedex_mastered_oll_v1',
+    storageKeyOld: 'cube_tutor_mastered_oll_v1',
+    filterTitleZh: 'OLL形态分类',
+    filterTitleEn: 'OLL CATEGORIES',
+    filterSubtitleZh: '(9大类)',
+    filterSubtitleEn: '(9 Groups)',
+    allTitleZh: 'ALL 57 OLL CASES',
+    allTitleEn: 'ALL 57 OLL CASES',
+    allDescZh: '涵盖十字O、点O、小鱼、狙击枪、闪电、L字、菜刀、一字及特殊组合形态等 57 种保稳手法',
+    allDescEn: 'Comprehensive coverage of 57 OLL cases across Cross, Dot, Fish, Gun, Lightning, L-Shape & Line groups',
+    allLiteralZh: '全部形态（57 种顶面色向情况）',
+    allLiteralEn: 'All 57 Orientation Cases'
   },
   pll: {
     name: 'PLL',
     cases: PLL_CASES,
     groups: null,
     videoPath: PLL_VIDEO_PATH,
-    storageKey: 'cube_tutor_mastered_pll_v1',
-    filterTitle: null,
-    filterSubtitle: null,
-    allTitle: 'ALL 21 PLL CASES',
-    allDesc: '涵盖三棱换、四棱换、三角换、四角换、邻角邻棱、G排列及对角置换等 21 种 SUB1 极速指法',
-    allLiteral: '全部形态（21 种顶层置换情况）'
+    storageKey: 'cubedex_mastered_pll_v1',
+    storageKeyOld: 'cube_tutor_mastered_pll_v1',
+    filterTitleZh: null,
+    filterTitleEn: null,
+    filterSubtitleZh: null,
+    filterSubtitleEn: null,
+    allTitleZh: 'ALL 21 PLL CASES',
+    allTitleEn: 'ALL 21 PLL CASES',
+    allDescZh: '涵盖三棱换、四棱换、三角换、四角换、邻角邻棱、G排列及对角置换等 21 种 SUB1 极速指法',
+    allDescEn: 'Comprehensive coverage of 21 fast PLL cases including U/H/Z perms, A/E perms, T/J/R/F perms, G-perms & V/Y/N perms',
+    allLiteralZh: '全部形态（21 种顶层置换情况）',
+    allLiteralEn: 'All 21 Permutation Cases'
   },
   cmll: {
     name: 'CMLL',
     cases: CMLL_CASES,
     groups: CMLL_GROUPS,
     videoPath: CMLL_VIDEO_PATH,
-    storageKey: 'cube_tutor_mastered_cmll_v1',
-    filterTitle: 'CMLL形态分类',
-    filterSubtitle: '(8大类 · 42种情况)',
-    allTitle: 'ALL 42 CMLL CASES (ROUX)',
-    allDesc: '涵盖顶角全归位、纯角换、双头灯、变色龙、小鱼与领结等 42 种 Roux 桥式顶角极速手法',
-    allLiteral: '全部形态（42 种顶角全排列情况）'
+    storageKey: 'cubedex_mastered_cmll_v1',
+    storageKeyOld: 'cube_tutor_mastered_cmll_v1',
+    filterTitleZh: 'CMLL形态分类',
+    filterTitleEn: 'CMLL CATEGORIES',
+    filterSubtitleZh: '(8大类 · 42种情况)',
+    filterSubtitleEn: '(8 Groups · 42 Cases)',
+    allTitleZh: 'ALL 42 CMLL CASES (ROUX)',
+    allTitleEn: 'ALL 42 CMLL CASES (ROUX)',
+    allDescZh: '涵盖顶角全归位、纯角换、双头灯、变色龙、小鱼与领结等 42 种 Roux 桥式顶角极速手法',
+    allDescEn: 'Comprehensive coverage of all 42 Roux CMLL corner cases across U, T, L, H, Pi, Sune, Anti-Sune & O groups',
+    allLiteralZh: '全部形态（42 种顶角全排列情况）',
+    allLiteralEn: 'All 42 Corner Permutations'
   }
 };
 
 export { ZBLL_SETS };
 
 export default function App() {
+  const { lang, t } = useLanguage();
+
   const [activeModule, setActiveModule] = useState(() => {
     try {
-      const saved = localStorage.getItem(MODULE_STORAGE_KEY);
+      const saved = localStorage.getItem(MODULE_STORAGE_KEY) || localStorage.getItem('cube_tutor_active_module_v1');
       return saved && (MODULE_CONFIGS[saved] || saved === 'zbll') ? saved : 'f2l';
     } catch {
       return 'f2l';
@@ -81,7 +108,7 @@ export default function App() {
 
   const [activeZbllSet, setActiveZbllSet] = useState(() => {
     try {
-      const saved = localStorage.getItem('cube_tutor_active_zbll_set_v1');
+      const saved = localStorage.getItem(ZBLL_SET_STORAGE_KEY) || localStorage.getItem('cube_tutor_active_zbll_set_v1');
       return saved && ZBLL_SETS[saved] ? saved : 't';
     } catch {
       return 't';
@@ -100,11 +127,10 @@ export default function App() {
   const [currentCase, setCurrentCase] = useState(() => activeCasesList[0] || ZBLL_SETS.t.cases[0]);
   const [selectedGroup, setSelectedGroup] = useState('all');
   const [masteredFilter, setMasteredFilter] = useState('all');
-  const [showShortcuts, setShowShortcuts] = useState(false);
   
   const [theme, setTheme] = useState(() => {
     try {
-      const saved = localStorage.getItem(THEME_STORAGE_KEY);
+      const saved = localStorage.getItem(THEME_STORAGE_KEY) || localStorage.getItem('cube_tutor_theme_mode_v1');
       return saved || 'light';
     } catch {
       return 'light';
@@ -136,20 +162,20 @@ export default function App() {
   const caseListScrollRef = useRef(null);
 
   const [masteredMap, setMasteredMap] = useState(() => {
-    const loadSaved = (key) => {
+    const loadSaved = (key, oldKey) => {
       try {
-        const s = localStorage.getItem(key);
+        const s = localStorage.getItem(key) || (oldKey ? localStorage.getItem(oldKey) : null);
         return s ? JSON.parse(s) : [];
       } catch {
         return [];
       }
     };
     return {
-      f2l: loadSaved(MODULE_CONFIGS.f2l.storageKey),
-      oll: loadSaved(MODULE_CONFIGS.oll.storageKey),
-      pll: loadSaved(MODULE_CONFIGS.pll.storageKey),
-      zbll: loadSaved('cube_tutor_mastered_zbll_v1'),
-      cmll: loadSaved(MODULE_CONFIGS.cmll.storageKey)
+      f2l: loadSaved(MODULE_CONFIGS.f2l.storageKey, MODULE_CONFIGS.f2l.storageKeyOld),
+      oll: loadSaved(MODULE_CONFIGS.oll.storageKey, MODULE_CONFIGS.oll.storageKeyOld),
+      pll: loadSaved(MODULE_CONFIGS.pll.storageKey, MODULE_CONFIGS.pll.storageKeyOld),
+      zbll: loadSaved('cubedex_mastered_zbll_v1', 'cube_tutor_mastered_zbll_v1'),
+      cmll: loadSaved(MODULE_CONFIGS.cmll.storageKey, MODULE_CONFIGS.cmll.storageKeyOld)
     };
   });
 
@@ -186,7 +212,7 @@ export default function App() {
     setSelectedGroup('all');
     setCurrentCase(targetSet.cases[0]);
     try {
-      localStorage.setItem('cube_tutor_active_zbll_set_v1', setId);
+      localStorage.setItem(ZBLL_SET_STORAGE_KEY, setId);
     } catch {}
     if (caseListScrollRef.current) {
       caseListScrollRef.current.scrollTop = 0;
@@ -223,10 +249,13 @@ export default function App() {
   }, [activeModule, activeConfig.storageKey]);
 
   const resetProgress = useCallback(() => {
-    if (window.confirm(`确定要清空 ${activeConfig.name} 的已掌握学习进度吗？`)) {
+    if (window.confirm(t('resetConfirm', { name: activeConfig.name }))) {
       setMasteredMap(prev => {
         try {
           localStorage.removeItem(activeConfig.storageKey);
+          if (activeConfig.storageKeyOld) {
+            localStorage.removeItem(activeConfig.storageKeyOld);
+          }
         } catch {}
         return {
           ...prev,
@@ -234,7 +263,7 @@ export default function App() {
         };
       });
     }
-  }, [activeConfig.name, activeConfig.storageKey, activeModule]);
+  }, [activeConfig.name, activeConfig.storageKey, activeConfig.storageKeyOld, activeModule, t]);
 
   const groupCounts = useMemo(() => {
     const counts = { all: activeCasesList.length };
@@ -345,7 +374,6 @@ export default function App() {
         theme={theme}
         onToggleTheme={toggleTheme}
         onResetProgress={resetProgress}
-        onOpenShortcuts={() => setShowShortcuts(true)}
       />
 
       {/* Main Dual-Column Viewport:
@@ -394,8 +422,8 @@ export default function App() {
               onSelectGroup={setSelectedGroup}
               groupCounts={groupCounts}
               theme={theme}
-              title={activeConfig.filterTitle}
-              subtitle={activeConfig.filterSubtitle}
+              title={lang === 'en' ? (activeConfig.filterTitleEn || activeConfig.filterTitle) : (activeConfig.filterTitleZh || activeConfig.filterTitle)}
+              subtitle={lang === 'en' ? (activeConfig.filterSubtitleEn || activeConfig.filterSubtitle) : (activeConfig.filterSubtitleZh || activeConfig.filterSubtitle)}
               totalCount={activeCasesList.length}
             />
           )}
@@ -426,13 +454,17 @@ export default function App() {
                       : activeGroupInfo?.code}
                   </span>
                   <span className="text-xs sm:text-sm font-black uppercase tracking-tight text-black dark:text-white">
-                    {selectedGroup === 'all' ? activeConfig.allTitle : activeGroupInfo?.fullEn}
+                    {selectedGroup === 'all' 
+                      ? (lang === 'en' ? (activeConfig.allTitleEn || activeConfig.allTitle) : (activeConfig.allTitleZh || activeConfig.allTitle))
+                      : (lang === 'en' ? (activeGroupInfo?.fullEn || activeGroupInfo?.code) : (activeGroupInfo?.nameZh || activeGroupInfo?.fullEn))}
                   </span>
-                  {((selectedGroup === 'all' && activeConfig.allLiteral) || (selectedGroup !== 'all' && activeGroupInfo?.literalZh)) ? (
+                  {((selectedGroup === 'all' && (activeConfig.allLiteralZh || activeConfig.allLiteral)) || (selectedGroup !== 'all' && (activeGroupInfo?.literalZh || activeGroupInfo?.fullEn))) ? (
                     <span className={`text-[11px] sm:text-xs font-bold px-1.5 py-0.5 border ${
                       isDark ? 'bg-zinc-900 border-zinc-700 text-zinc-300' : 'bg-white border-zinc-300 text-black'
                     }`}>
-                      {selectedGroup === 'all' ? activeConfig.allLiteral : activeGroupInfo?.literalZh}
+                      {selectedGroup === 'all' 
+                        ? (lang === 'en' ? (activeConfig.allLiteralEn || activeConfig.allLiteral) : (activeConfig.allLiteralZh || activeConfig.allLiteral))
+                        : (lang === 'en' ? (activeGroupInfo?.fullEn || activeGroupInfo?.code) : (activeGroupInfo?.literalZh || activeGroupInfo?.nameZh))}
                     </span>
                   ) : null}
                 </div>
@@ -442,9 +474,9 @@ export default function App() {
                   isDark ? 'bg-zinc-900 border-zinc-800' : 'bg-white border-zinc-300'
                 }`}>
                   {[
-                    { id: 'all', label: '全部' },
-                    { id: 'unmastered', label: '待练' },
-                    { id: 'mastered', label: '已过' }
+                    { id: 'all', label: t('progressAll') },
+                    { id: 'unmastered', label: t('progressUnmastered') },
+                    { id: 'mastered', label: t('progressMastered') }
                   ].map(f => {
                     const active = masteredFilter === f.id;
                     return (
@@ -463,11 +495,11 @@ export default function App() {
                   })}
                 </div>
               </div>
-              {((selectedGroup === 'all' && activeConfig.allDesc) || (selectedGroup !== 'all' && activeGroupInfo?.desc)) ? (
+              {((selectedGroup === 'all' && (activeConfig.allDescZh || activeConfig.allDesc)) || (selectedGroup !== 'all' && activeGroupInfo?.desc)) ? (
                 <p className={`text-xs leading-relaxed truncate font-sans mt-0.5 ${isDark ? 'text-zinc-400' : 'text-zinc-600'}`}>
                   {selectedGroup === 'all' 
-                    ? activeConfig.allDesc
-                    : activeGroupInfo?.desc
+                    ? (lang === 'en' ? (activeConfig.allDescEn || activeConfig.allDesc) : (activeConfig.allDescZh || activeConfig.allDesc))
+                    : (lang === 'en' ? (activeGroupInfo?.fullEn || activeGroupInfo?.desc) : activeGroupInfo?.desc)
                   }
                 </p>
               ) : null}
@@ -496,7 +528,7 @@ export default function App() {
                 <div className="p-8 text-center flex flex-col items-center justify-center gap-2 my-auto font-mono">
                   <AlertCircle className="w-6 h-6 text-zinc-400" />
                   <p className={`text-xs font-bold ${isDark ? 'text-zinc-300' : 'text-zinc-700'}`}>
-                    [ NO MATCHING CASES FOUND ]
+                    {t('noCasesFound')}
                   </p>
                   <button
                     onClick={() => {
@@ -505,7 +537,7 @@ export default function App() {
                     }}
                     className="mt-1 px-4 py-1.5 border border-black bg-[#ff5b00] text-black text-xs font-black uppercase hover:bg-[#e05000] transition-colors"
                   >
-                    RESET TO ALL // 重置
+                    {t('resetToAll')}
                   </button>
                 </div>
               )}
@@ -514,14 +546,6 @@ export default function App() {
         </div>
 
       </main>
-
-      {/* Keyboard Shortcuts Modal */}
-      {showShortcuts && (
-        <KeyboardShortcutsModal 
-          onClose={() => setShowShortcuts(false)} 
-          theme={theme}
-        />
-      )}
     </div>
   );
 }

@@ -1,6 +1,7 @@
 import React from 'react';
 import { Check, Hand } from 'lucide-react';
 import { resolveAssetUrl } from '../utils/assetUrl';
+import { useLanguage } from '../context/LanguageContext';
 
 export default function CaseCard({
   caseItem,
@@ -10,6 +11,7 @@ export default function CaseCard({
   onToggleMastered,
   theme = 'dark'
 }) {
+  const { t } = useLanguage();
   const isDark = theme === 'dark';
 
   return (
@@ -55,7 +57,7 @@ export default function CaseCard({
             e.stopPropagation();
             onToggleMastered(caseItem.id);
           }}
-          title={isMastered ? "已掌握 (点击取消)" : "标记为已掌握"}
+          title={isMastered ? t('unmarkMastered') : t('markMastered')}
           className={`w-5 h-5 flex items-center justify-center border transition-colors shrink-0 ${
             isMastered
               ? 'bg-[#ff5b00] text-black border-black font-black'

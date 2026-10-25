@@ -1,6 +1,6 @@
 {
-  "name": "Cube-Tutor 三阶速拧全谱速查",
-  "short_name": "Cube:Tutor",
+  "name": "CubeDex 三阶速拧全谱速查",
+  "short_name": "CubeDex",
   "description": "专为三阶魔方进阶与竞速选手打造的交互式手法精讲与速查系统 (CFOP · ZBLL 472 · Roux CMLL 42)",
   "start_url": "/cfop/",
   "scope": "/cfop/",

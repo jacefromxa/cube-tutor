@@ -1,6 +1,6 @@
-# Cube-Tutor 服务器部署与更新指南
+# CubeDex 服务器部署与更新指南
 
-本文档记录了 **Cube-Tutor** 系统的线上生产架构、资源拓扑及日常一键部署方法，防止配置与步骤遗忘。
+本文档记录了 **CubeDex** 系统的线上生产架构、资源拓扑及日常一键部署方法，防止配置与步骤遗忘。
 
 ---
 
@@ -85,7 +85,7 @@ rm -f /home/ubuntu/cfop_dist.tar.gz
 
 关键配置块如下：
 ```nginx
-# Cube-Tutor CFOP service:
+# CubeDex CFOP service:
 location = /cfop {
     return 301 /cfop/;
 }

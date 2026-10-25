@@ -6,6 +6,7 @@ import {
 } from 'lucide-react';
 import { VIDEO_PATH, F2L_GROUPS, invertAlgorithm } from '../data/f2lCases';
 import { resolveAssetUrl } from '../utils/assetUrl';
+import { useLanguage } from '../context/LanguageContext';
 
 const VideoPlayer = forwardRef(function VideoPlayer({
   currentCase,
@@ -17,6 +18,7 @@ const VideoPlayer = forwardRef(function VideoPlayer({
   videoPath = VIDEO_PATH,
   groups = F2L_GROUPS
 }, ref) {
+  const { lang, t } = useLanguage();
   const videoRef = useRef(null);
   const progressBarRef = useRef(null);
 
@@ -273,7 +275,7 @@ const VideoPlayer = forwardRef(function VideoPlayer({
           {/* Rewind 2s */}
           <button
             onClick={() => handleStep(-2)}
-            title="快退 2 秒 (← / J)"
+            title={t('rewindTip')}
             className={`w-6 h-6 sm:w-8 sm:h-8 flex items-center justify-center border transition-colors ${
               isDark 
                 ? 'bg-zinc-900 border-zinc-700 text-zinc-300 hover:bg-white hover:text-black' 
@@ -286,7 +288,7 @@ const VideoPlayer = forwardRef(function VideoPlayer({
           {/* Play/Pause Primary Button */}
           <button
             onClick={togglePlay}
-            title={isPlaying ? "暂停 (空格键)" : "播放 (空格键)"}
+            title={isPlaying ? t('pauseTip') : t('playTip')}
             className="px-2.5 sm:px-4 h-6 sm:h-8 bg-[#ff5b00] hover:bg-[#e05000] text-black font-mono font-black text-[11px] sm:text-xs uppercase flex items-center gap-1 border border-black transition-colors"
           >
             {isPlaying ? (
@@ -305,7 +307,7 @@ const VideoPlayer = forwardRef(function VideoPlayer({
           {/* Replay */}
           <button
             onClick={handleReplay}
-            title="重播当前手法 (R)"
+            title={t('replayTip')}
             className={`w-6 h-6 sm:w-8 sm:h-8 flex items-center justify-center border transition-colors ${
               isDark 
                 ? 'bg-zinc-900 border-zinc-700 text-zinc-200 hover:bg-white hover:text-black' 
@@ -343,7 +345,7 @@ const VideoPlayer = forwardRef(function VideoPlayer({
           {/* Loop Toggle */}
           <button
             onClick={toggleLooping}
-            title={isLooping ? "当前: 单 Case 循环 (快捷键 L)" : "当前: 停止循环 (快捷键 L)"}
+            title={isLooping ? t('loopTipActive') : t('loopTipInactive')}
             className={`h-6 sm:h-8 px-1.5 sm:px-2.5 flex items-center justify-center gap-1 border font-mono text-[10px] sm:text-xs font-bold transition-colors ${
               isLooping 
                 ? 'bg-[#ff5b00] text-black border-black font-black' 
@@ -367,7 +369,7 @@ const VideoPlayer = forwardRef(function VideoPlayer({
                 const nextIndex = (rates.indexOf(playbackRate) + 1) % rates.length;
                 changeSpeed(rates[nextIndex]);
               }}
-              title="切换播放倍速"
+              title={t('speedTip')}
               className="sm:hidden font-bold text-[#ff5b00] text-[10px] h-full flex items-center"
             >
               [{playbackRate}x]
@@ -488,11 +490,11 @@ const VideoPlayer = forwardRef(function VideoPlayer({
                     <span className="font-mono text-[10px] sm:text-xs px-1.5 py-0.5 border border-[#ff5b00] text-[#ff5b00] font-bold shrink-0 truncate">
                       [{currentCase.subName}]
                     </span>
-                  ) : groupInfo?.nameZh ? (
+                  ) : groupInfo ? (
                     <span className={`hidden xs:inline-block font-mono text-[10px] sm:text-xs px-1.5 py-0.5 border font-bold shrink-0 truncate ${
                       isDark ? 'bg-zinc-900 border-zinc-700 text-zinc-300' : 'bg-zinc-100 border-black text-black'
                     }`}>
-                      [{groupInfo.nameZh}]
+                      [{lang === 'en' ? (groupInfo.fullEn || groupInfo.code) : (groupInfo.nameZh || groupInfo.code)}]
                     </span>
                   ) : null}
                 </div>
@@ -502,6 +504,7 @@ const VideoPlayer = forwardRef(function VideoPlayer({
               <div className="flex items-center gap-1.5 shrink-0">
                 <button
                   onClick={() => onToggleMastered(currentCase.id)}
+                  title={isMastered ? t('unmarkMastered') : t('markMastered')}
                   className={`px-2.5 py-1 sm:px-3.5 sm:py-1.5 border-2 font-mono text-xs sm:text-sm font-black flex items-center gap-1 transition-colors ${
                     isMastered 
                       ? 'bg-[#ff5b00] text-black border-black shadow-xs' 
@@ -511,13 +514,13 @@ const VideoPlayer = forwardRef(function VideoPlayer({
                   }`}
                 >
                   <Check className={`w-3.5 h-3.5 ${isMastered ? 'text-black stroke-[3]' : 'opacity-40'}`} />
-                  <span>{isMastered ? '已掌握' : '未掌握'}</span>
+                  <span>{isMastered ? t('masteredBtn') : t('unmasteredBtn')}</span>
                 </button>
 
                 {/* Mobile collapse trigger */}
                 <button
                   onClick={() => setIsMobileDetailsExpanded(false)}
-                  title="收起公式详情以节省空间"
+                  title={t('collapseDetails')}
                   className={`lg:hidden p-1 sm:p-1.5 border font-mono text-xs ${
                     isDark ? 'bg-zinc-900 border-zinc-700 text-zinc-300' : 'bg-zinc-100 border-black text-black'
                   }`}
@@ -527,8 +530,81 @@ const VideoPlayer = forwardRef(function VideoPlayer({
               </div>
             </div>
 
-            {/* Requirement 4: Unified Formula Component with Tab Switching & No Ellipsis */}
-            <div className={`border-2 p-1.5 sm:p-2 flex flex-col gap-1 transition-colors ${
+            {/* Desktop View: Separate Solution & Scramble Rows (PC Layout - fills height, eliminates blank space) */}
+            <div className="hidden lg:flex flex-col gap-2">
+              {/* Row 1: Solution */}
+              <div className={`border-2 p-2 flex flex-col gap-1 transition-colors ${
+                isDark ? 'bg-zinc-900/90 border-zinc-800' : 'bg-zinc-50 border-black'
+              }`}>
+                <div className={`flex items-center justify-between gap-1.5 border-b pb-1 ${
+                  isDark ? 'border-zinc-800' : 'border-zinc-200'
+                }`}>
+                  <div className="flex items-center gap-1.5 font-mono text-xs font-black">
+                    <span className="w-1.5 h-1.5 bg-[#ff5b00] inline-block" />
+                    <span className="text-[#ff5b00] tracking-wide">{t('solutionLabel')}</span>
+                  </div>
+                  <button
+                    onClick={handleCopySolution}
+                    title={copiedSolution ? t('copiedSolution') : t('copySolution')}
+                    className={`w-6 h-6 sm:w-7 sm:h-7 flex items-center justify-center border font-mono shrink-0 transition-colors ${
+                      copiedSolution
+                        ? 'bg-[#ff5b00] text-black border-black'
+                        : isDark 
+                          ? 'bg-zinc-950 border-zinc-700 text-zinc-300 hover:bg-white hover:text-black' 
+                          : 'bg-white border-black text-black hover:bg-black hover:text-white'
+                    }`}
+                  >
+                    {copiedSolution ? (
+                      <Check className="w-3.5 h-3.5 text-black stroke-[3]" />
+                    ) : (
+                      <Copy className="w-3 sm:w-3.5 h-3 sm:h-3.5" />
+                    )}
+                  </button>
+                </div>
+                <div className="font-mono text-sm md:text-base font-black tracking-wider leading-relaxed select-all break-words py-0.5 text-[#ff5b00]">
+                  {currentCase.algorithm}
+                </div>
+              </div>
+
+              {/* Row 2: Scramble */}
+              <div className={`border-2 p-2 flex flex-col gap-1 transition-colors ${
+                isDark ? 'bg-zinc-900/90 border-zinc-800' : 'bg-zinc-50 border-black'
+              }`}>
+                <div className={`flex items-center justify-between gap-1.5 border-b pb-1 ${
+                  isDark ? 'border-zinc-800' : 'border-zinc-200'
+                }`}>
+                  <div className="flex items-center gap-1.5 font-mono text-xs font-black">
+                    <span className={`w-1.5 h-1.5 inline-block ${isDark ? 'bg-zinc-400' : 'bg-black'}`} />
+                    <span className={`tracking-wide ${isDark ? 'text-zinc-200' : 'text-black'}`}>{t('scrambleLabel')}</span>
+                  </div>
+                  <button
+                    onClick={handleCopyScramble}
+                    title={copiedScramble ? t('copiedScramble') : t('copyScramble')}
+                    className={`w-6 h-6 sm:w-7 sm:h-7 flex items-center justify-center border font-mono shrink-0 transition-colors ${
+                      copiedScramble
+                        ? 'bg-[#ff5b00] text-black border-black'
+                        : isDark 
+                          ? 'bg-zinc-950 border-zinc-700 text-zinc-300 hover:bg-white hover:text-black' 
+                          : 'bg-white border-black text-black hover:bg-black hover:text-white'
+                    }`}
+                  >
+                    {copiedScramble ? (
+                      <Check className="w-3.5 h-3.5 text-black stroke-[3]" />
+                    ) : (
+                      <Copy className="w-3 sm:w-3.5 h-3 sm:h-3.5" />
+                    )}
+                  </button>
+                </div>
+                <div className={`font-mono text-xs sm:text-sm md:text-sm font-black tracking-wider leading-relaxed select-all break-words py-0.5 ${
+                  isDark ? 'text-zinc-100' : 'text-zinc-900'
+                }`}>
+                  {scramble}
+                </div>
+              </div>
+            </div>
+
+            {/* Mobile View: Compact Unified Tab Component (Mobile Layout - saves vertical space) */}
+            <div className={`block lg:hidden border-2 p-1.5 sm:p-2 flex flex-col gap-1 transition-colors ${
               isDark ? 'bg-zinc-900/90 border-zinc-800' : 'bg-zinc-50 border-black'
             }`}>
               {/* Formula Tab Switcher Bar & Copy Button */}
@@ -547,7 +623,7 @@ const VideoPlayer = forwardRef(function VideoPlayer({
                           : 'bg-white border-zinc-300 text-zinc-600 hover:text-black'
                     }`}
                   >
-                    <span>SOLUTION</span>
+                    <span>{t('tabSolution')}</span>
                   </button>
 
                   <button
@@ -562,14 +638,14 @@ const VideoPlayer = forwardRef(function VideoPlayer({
                           : 'bg-white border-zinc-300 text-zinc-600 hover:text-black'
                     }`}
                   >
-                    <span>SCRAMBLE</span>
+                    <span>{t('tabScramble')}</span>
                   </button>
                 </div>
 
                 {/* Copy Button for currently active tab */}
                 <button
                   onClick={activeFormulaTab === 'solution' ? handleCopySolution : handleCopyScramble}
-                  title={activeFormulaTab === 'solution' ? (copiedSolution ? "已复制求解公式" : "复制求解公式") : (copiedScramble ? "已复制打乱公式" : "复制打乱公式")}
+                  title={activeFormulaTab === 'solution' ? (copiedSolution ? t('copiedSolution') : t('copySolution')) : (copiedScramble ? t('copiedScramble') : t('copyScramble'))}
                   className={`w-6 h-6 sm:w-7 sm:h-7 flex items-center justify-center border font-mono shrink-0 transition-colors ${
                     (activeFormulaTab === 'solution' ? copiedSolution : copiedScramble)
                       ? 'bg-[#ff5b00] text-black border-black'

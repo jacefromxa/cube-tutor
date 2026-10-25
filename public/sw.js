@@ -1,5 +1,5 @@
-// Cube-Tutor Lightweight PWA Service Worker
-const CACHE_NAME = 'cube-tutor-v2';
+// CubeDex Lightweight PWA Service Worker
+const CACHE_NAME = 'cubedex-v1';
 const PRECACHE_ASSETS = [
   '/cfop/',
   '/cfop/index.html',

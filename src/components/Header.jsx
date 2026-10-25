@@ -1,5 +1,6 @@
 import React, { useRef, useEffect } from 'react';
-import { HelpCircle, Sun, Moon, RotateCcw } from 'lucide-react';
+import { Sun, Moon, RotateCcw } from 'lucide-react';
+import { useLanguage } from '../context/LanguageContext';
 
 export default function Header({ 
   activeModule = 'f2l',
@@ -11,9 +12,9 @@ export default function Header({
   onMasteredFilterChange,
   theme = 'dark',
   onToggleTheme,
-  onResetProgress,
-  onOpenShortcuts
+  onResetProgress
 }) {
+  const { lang, toggleLang, t } = useLanguage();
   const headerRef = useRef(null);
   const percent = totalCases > 0 ? Math.round((masteredCount / totalCases) * 100) : 0;
   const unmasteredCount = Math.max(0, totalCases - masteredCount);
@@ -66,8 +67,8 @@ export default function Header({
 
             <div className="flex items-center gap-1.5 sm:gap-2">
               <span className="font-mono font-black text-sm sm:text-lg tracking-tight uppercase flex items-center gap-1.5">
-                <span>CUBE:TUTOR</span>
-                <span className="w-2 h-2 bg-[#ff5b00] inline-block shrink-0" title="LineLore System" />
+                <span>CUBEDEX</span>
+                <span className="w-2 h-2 bg-[#ff5b00] inline-block shrink-0" title="CubeDex LineLore" />
               </span>
               <span className={`hidden md:inline-block font-mono text-[10px] tracking-widest uppercase px-1.5 py-0.5 border ${
                 activeModule === 'cmll'
@@ -76,7 +77,7 @@ export default function Header({
                   ? isDark ? 'bg-cyan-950/60 text-cyan-400 border-cyan-800/80' : 'bg-cyan-50 text-cyan-800 border-cyan-300'
                   : isDark ? 'bg-zinc-900 text-zinc-400 border-zinc-800' : 'bg-zinc-100 text-zinc-700 border-zinc-300'
               }`}>
-                {activeModule === 'cmll' ? '[ROUX // SPEC]' : activeModule === 'zbll' ? '[1LL // SPEC]' : '[CFOP // SPEC]'}
+                {activeModule === 'cmll' ? t('rouxSpec') : activeModule === 'zbll' ? t('zbllSpec') : t('cfopSpec')}
               </span>
             </div>
           </div>
@@ -89,7 +90,7 @@ export default function Header({
                 const nextFilter = masteredFilter === 'all' ? 'unmastered' : masteredFilter === 'unmastered' ? 'mastered' : 'all';
                 onMasteredFilterChange(nextFilter);
               }}
-              title={`当前筛选: ${masteredFilter === 'all' ? '全部' : masteredFilter === 'unmastered' ? '待练' : '已过'} (点击切换)`}
+              title={t('progressFilterTip', { status: masteredFilter === 'all' ? t('progressAll') : masteredFilter === 'unmastered' ? t('progressUnmastered') : t('progressMastered') })}
               className={`flex items-center gap-1 px-1.5 py-0.5 border font-mono text-[11px] font-bold transition-all active:scale-95 ${
                 masteredFilter !== 'all'
                   ? isDark ? 'bg-[#ff5b00] text-black border-[#ff5b00]' : 'bg-black text-white border-black'
@@ -99,14 +100,14 @@ export default function Header({
               <span className={`w-1.5 h-1.5 inline-block ${masteredFilter !== 'all' ? (isDark ? 'bg-black' : 'bg-[#ff5b00]') : 'bg-[#ff5b00]'}`} />
               <span>{masteredCount}/{totalCases}</span>
               <span className={masteredFilter !== 'all' ? (isDark ? 'text-black font-black' : 'text-[#ff5b00]') : 'text-[#ff5b00]'}>({percent}%)</span>
-              {masteredFilter === 'unmastered' && <span className="text-[10px] ml-0.5 font-bold">[待]</span>}
-              {masteredFilter === 'mastered' && <span className="text-[10px] ml-0.5 font-bold">[过]</span>}
+              {masteredFilter === 'unmastered' && <span className="text-[10px] ml-0.5 font-bold">[{t('shortUnmastered')}]</span>}
+              {masteredFilter === 'mastered' && <span className="text-[10px] ml-0.5 font-bold">[{t('shortMastered')}]</span>}
             </button>
 
             {/* Dark mode switch */}
             <button
               onClick={onToggleTheme}
-              title={isDark ? "切换为明亮模式" : "切换为暗黑模式"}
+              title={isDark ? t('themeLight') : t('themeDark')}
               className={`w-6 h-6 flex items-center justify-center border transition-colors ${
                 isDark 
                   ? 'bg-zinc-900 border-zinc-700 text-zinc-200 hover:bg-[#ff5b00] hover:text-black hover:border-[#ff5b00]' 
@@ -116,17 +117,17 @@ export default function Header({
               {isDark ? <Sun className="w-3 h-3" /> : <Moon className="w-3 h-3" />}
             </button>
 
-            {/* Shortcuts Help */}
+            {/* Language Switch */}
             <button
-              onClick={onOpenShortcuts}
-              title="键盘快捷键指南"
-              className={`w-6 h-6 flex items-center justify-center border transition-colors ${
+              onClick={toggleLang}
+              title={t('langSwitch')}
+              className={`w-6 h-6 flex items-center justify-center border font-mono text-[10px] font-black transition-colors ${
                 isDark 
                   ? 'bg-zinc-900 border-zinc-700 text-zinc-200 hover:bg-[#ff5b00] hover:text-black hover:border-[#ff5b00]' 
                   : 'bg-white border-black text-black hover:bg-black hover:text-white'
               }`}
             >
-              <HelpCircle className="w-3 h-3" />
+              {t('langLabel')}
             </button>
           </div>
         </div>
@@ -256,9 +257,9 @@ export default function Header({
             isDark ? 'bg-zinc-900 border-zinc-800' : 'bg-zinc-100 border-black'
           }`}>
             {[
-              { id: 'all', label: '全部', count: totalCases },
-              { id: 'unmastered', label: '待练习', count: unmasteredCount },
-              { id: 'mastered', label: '已掌握', count: masteredCount }
+              { id: 'all', label: t('progressAll'), count: totalCases },
+              { id: 'unmastered', label: t('progressUnmastered'), count: unmasteredCount },
+              { id: 'mastered', label: t('progressMastered'), count: masteredCount }
             ].map(f => {
               const active = masteredFilter === f.id;
               return (
@@ -310,7 +311,7 @@ export default function Header({
           {/* Theme Switch */}
           <button
             onClick={onToggleTheme}
-            title={isDark ? "切换为明亮模式" : "切换为暗黑模式"}
+            title={isDark ? t('themeLight') : t('themeDark')}
             className={`w-8 h-8 flex items-center justify-center border transition-colors ${
               isDark 
                 ? 'bg-zinc-900 border-zinc-700 text-zinc-300 hover:bg-[#ff5b00] hover:text-black hover:border-[#ff5b00]' 
@@ -324,7 +325,7 @@ export default function Header({
           {masteredCount > 0 && (
             <button
               onClick={onResetProgress}
-              title="重置当前模块学习进度"
+              title={t('resetProgress')}
               className={`w-8 h-8 flex items-center justify-center border transition-colors ${
                 isDark 
                   ? 'bg-zinc-900 border-zinc-700 text-zinc-400 hover:text-red-400 hover:border-red-500' 
@@ -335,17 +336,17 @@ export default function Header({
             </button>
           )}
 
-          {/* Shortcuts Help */}
+          {/* Language Switch */}
           <button
-            onClick={onOpenShortcuts}
-            title="查看键盘快捷键指南"
-            className={`w-8 h-8 flex items-center justify-center border transition-colors ${
+            onClick={toggleLang}
+            title={t('langSwitch')}
+            className={`h-8 px-2 flex items-center justify-center border font-mono text-xs font-black tracking-wider transition-colors ${
               isDark 
-                ? 'bg-zinc-900 border-zinc-700 text-zinc-400 hover:text-white hover:bg-zinc-800' 
-                : 'bg-white border-black text-zinc-700 hover:bg-black hover:text-white'
+                ? 'bg-zinc-900 border-zinc-700 text-zinc-200 hover:bg-[#ff5b00] hover:text-black hover:border-[#ff5b00]' 
+                : 'bg-white border-black text-black hover:bg-black hover:text-white'
             }`}
           >
-            <HelpCircle className="w-4 h-4" />
+            {lang === 'zh' ? 'EN' : '中文'}
           </button>
         </div>
       </div>

@@ -2,8 +2,9 @@ import React, { useState } from 'react';
 import { ChevronDown, ChevronUp } from 'lucide-react';
 import { F2L_GROUPS } from '../data/f2lCases';
 import { resolveAssetUrl } from '../utils/assetUrl';
+import { useLanguage } from '../context/LanguageContext';
 
-const FILTER_COLLAPSED_KEY = 'cube_tutor_filter_collapsed_v1';
+const FILTER_COLLAPSED_KEY = 'cubedex_filter_collapsed_v1';
 
 export default function FilterBar({
   groups = F2L_GROUPS,
@@ -15,12 +16,13 @@ export default function FilterBar({
   subtitle = '(9大类)',
   totalCount = 41
 }) {
+  const { lang, t } = useLanguage();
   const isDark = theme === 'dark';
 
   // Requirement 5: Collapsible filter bar to save vertical space
   const [isCollapsed, setIsCollapsed] = useState(() => {
     try {
-      const saved = localStorage.getItem(FILTER_COLLAPSED_KEY);
+      const saved = localStorage.getItem(FILTER_COLLAPSED_KEY) || localStorage.getItem('cube_tutor_filter_collapsed_v1');
       return saved === 'true';
     } catch {
       return false;
@@ -40,14 +42,17 @@ export default function FilterBar({
   const categoryGroups = Object.entries(groups).map(([key, info]) => ({
     key,
     en: info.code || key,
-    zh: info.abbrZh || info.nameZh,
-    desc: info.desc,
+    zh: lang === 'en' ? (info.fullEn || info.code || key) : (info.abbrZh || info.nameZh),
+    desc: lang === 'en' ? (info.fullEn || info.code) : info.desc,
     count: groupCounts[key] || 0,
     img: info.iconImg,
     color: info.color
   }));
 
   const currentActiveGroup = groups[selectedGroup];
+  const activeGroupLabel = selectedGroup === 'all' 
+    ? t('progressAll') 
+    : (lang === 'en' ? (currentActiveGroup?.fullEn || currentActiveGroup?.code) : (currentActiveGroup?.abbrZh || currentActiveGroup?.nameZh));
 
   return (
     <div className={`border-2 p-2 sm:p-2.5 flex flex-col gap-2 shrink-0 transition-colors ${
@@ -69,7 +74,7 @@ export default function FilterBar({
           {/* If collapsed, show current category tag directly in header */}
           {isCollapsed && (
             <span className="font-mono text-[10px] sm:text-xs px-1.5 py-0.5 border border-[#ff5b00] text-[#ff5b00] font-bold shrink-0 truncate">
-              [当前: {selectedGroup === 'all' ? '全部' : (currentActiveGroup?.abbrZh || currentActiveGroup?.nameZh)}]
+              [{t('filterTagCurrent')}: {activeGroupLabel}]
             </span>
           )}
         </div>
@@ -79,7 +84,7 @@ export default function FilterBar({
           {/* Dedicated "全部" (All) button */}
           <button
             onClick={() => onSelectGroup('all')}
-            title={`显示全部 ${totalCount} 种手法`}
+            title={t('filterAllTooltip', { count: totalCount })}
             className={`flex items-center gap-1 px-2 sm:px-3 py-0.5 sm:py-1 font-mono text-xs font-black transition-colors border ${
               selectedGroup === 'all'
                 ? 'bg-[#ff5b00] text-black border-black'
@@ -88,7 +93,7 @@ export default function FilterBar({
                   : 'bg-zinc-100 border-black text-black hover:bg-black hover:text-white'
             }`}
           >
-            <span>ALL // 全部</span>
+            <span>{t('filterAllBtn')}</span>
             <span className={`text-[10px] px-1 font-bold ${
               selectedGroup === 'all' 
                 ? 'bg-black text-white' 
@@ -101,14 +106,14 @@ export default function FilterBar({
           {/* Requirement 5: Collapse / Expand Toggle Button */}
           <button
             onClick={toggleCollapsed}
-            title={isCollapsed ? "展开分类九宫格" : "收起分类九宫格以节约垂直空间"}
+            title={isCollapsed ? t('expandCategoriesTip') : t('collapseCategoriesTip')}
             className={`flex items-center gap-1 px-2 py-0.5 sm:py-1 font-mono text-xs font-bold border transition-colors ${
               isDark 
                 ? 'bg-zinc-900 border-zinc-700 text-zinc-300 hover:text-white hover:border-zinc-500' 
                 : 'bg-zinc-100 border-black text-black hover:bg-black hover:text-white'
             }`}
           >
-            <span>{isCollapsed ? '展开分类' : '收起分类'}</span>
+            <span>{isCollapsed ? t('expandCategories') : t('collapseCategories')}</span>
             {isCollapsed ? <ChevronDown className="w-3.5 h-3.5" /> : <ChevronUp className="w-3.5 h-3.5" />}
           </button>
         </div>
