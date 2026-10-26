@@ -192,7 +192,7 @@ const VideoPlayer = forwardRef(function VideoPlayer({
         : 'bg-[#ffffff] border-black text-black'
     }`}>
       {/* 1. Video Container with LineLore frame */}
-      <div className="relative aspect-video shrink min-h-0 lg:max-h-[calc(100%-280px)] bg-black w-full overflow-hidden select-none group flex items-center justify-center border-b border-black dark:border-zinc-800">
+      <div className="relative aspect-video shrink min-h-0 lg:max-h-[calc(100%-260px)] bg-black w-full overflow-hidden select-none group flex items-center justify-center border-b border-black dark:border-zinc-800">
         <video
           ref={videoRef}
           src={resolveAssetUrl(videoPath)}
@@ -204,7 +204,7 @@ const VideoPlayer = forwardRef(function VideoPlayer({
           onPause={() => setIsPlaying(false)}
           onError={() => setVideoError(true)}
           onClick={togglePlay}
-          className="w-full h-full object-contain cursor-pointer"
+          className="w-full h-full object-cover cursor-pointer"
         />
 
         {/* Industrial Pause Indicator */}
@@ -454,7 +454,7 @@ const VideoPlayer = forwardRef(function VideoPlayer({
           )}
 
           {/* Expanded State: Spec-sheet Editorial Style */}
-          <div className={`${!isMobileDetailsExpanded ? 'hidden lg:flex' : 'flex'} flex-1 min-h-0 px-2.5 sm:px-4 py-2 sm:py-2 flex-col justify-between gap-1.5 sm:gap-2 transition-colors overflow-hidden ${
+          <div className={`${!isMobileDetailsExpanded ? 'hidden lg:flex' : 'flex'} flex-1 min-h-0 px-2.5 sm:px-4 py-2 sm:py-2.5 flex-col justify-between gap-2 transition-colors overflow-hidden ${
             isDark ? 'bg-[#0a0a0a]' : 'bg-white'
           }`}>
             {/* Requirement 3: Header Row with Grip Tag on the SAME ROW as Title */}
@@ -531,7 +531,7 @@ const VideoPlayer = forwardRef(function VideoPlayer({
             </div>
 
             {/* Desktop View: Separate Solution & Scramble Rows (PC Layout - guaranteed within bounds) */}
-            <div className="hidden lg:flex flex-col gap-1.5 flex-1 min-h-0 justify-end">
+            <div className="hidden lg:flex flex-col gap-1.5 sm:gap-2 shrink-0 justify-end mt-2">
               {/* Row 1: Solution */}
               <div className={`border p-2 flex flex-col gap-0.5 transition-colors ${
                 isDark ? 'bg-zinc-900/90 border-zinc-800' : 'bg-zinc-50 border-black'

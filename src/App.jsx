@@ -385,7 +385,7 @@ export default function App() {
         {/* LEFT COLUMN: Video Player & Control Spec Area (Position-locked directly below header on mobile) */}
         <div 
           style={{ top: 'var(--header-height, 74px)' }}
-          className={`w-full lg:w-[57%] xl:w-[61%] 2xl:w-[64%] shrink-0 h-auto lg:h-full flex flex-col justify-start sticky lg:static z-30 transition-colors px-2.5 sm:px-0 pt-1 lg:pt-0 pb-1.5 lg:pb-0 border-b-2 lg:border-b-0 border-black dark:border-zinc-800 shadow-sm lg:shadow-none ${
+          className={`w-full lg:w-[48%] xl:w-[49%] 2xl:w-[52%] 2xl:max-w-[1020px] shrink-0 h-auto lg:h-full flex flex-col justify-start sticky lg:static z-30 transition-colors px-2.5 sm:px-0 pt-1 lg:pt-0 pb-1.5 lg:pb-0 border-b-2 lg:border-b-0 border-black dark:border-zinc-800 shadow-sm lg:shadow-none ${
             isDark ? 'bg-[#0a0a0a]' : 'bg-[#f4f4f5]'
           }`}
         >
