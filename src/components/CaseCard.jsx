@@ -42,10 +42,10 @@ export default function CaseCard({
           </span>
 
           {caseItem.grip && (
-            <span className={`font-mono text-[9px] px-1 py-0.2 border font-bold flex items-center gap-0.5 shrink-0 ${
+            <span className={`font-mono text-[10px] sm:text-xs px-1.5 py-0.5 border font-bold flex items-center gap-0.5 shrink-0 ${
               isDark ? 'bg-zinc-900 border-zinc-700 text-zinc-300' : 'bg-zinc-100 border-zinc-300 text-zinc-700'
             }`}>
-              <Hand className="w-2 h-2" />
+              <Hand className="w-2.5 h-2.5" />
               <span>{caseItem.grip}</span>
             </span>
           )}
@@ -83,7 +83,7 @@ export default function CaseCard({
       {/* Dedicated Active Playing Indicator Slot (Off-image to avoid obscuring cube) */}
       <div className="h-4 flex items-center justify-center my-0.5 shrink-0">
         {isActive && (
-          <span className="px-1.5 py-0.2 bg-[#ff5b00] text-black border border-black font-mono font-black text-[9px] flex items-center gap-1 shadow-xs animate-pulse">
+          <span className="px-1.5 py-0.5 bg-[#ff5b00] text-black border border-black font-mono font-black text-[10px] flex items-center gap-1 shadow-xs animate-pulse">
             <span className="w-1 h-1 bg-black inline-block" />
             <span>PLAYING</span>
           </span>
@@ -93,7 +93,7 @@ export default function CaseCard({
       {/* Bottom: Technical Monospace Formula Box */}
       <div className="mt-1 pt-1.5 border-t border-black/10 dark:border-zinc-800 flex flex-col">
         <div 
-          className={`px-1.5 py-1 font-mono text-[11px] sm:text-xs font-bold text-center truncate border ${
+          className={`px-1.5 py-1 font-mono text-xs sm:text-xs font-bold text-center truncate border ${
             isActive
               ? 'bg-[#ff5b00] text-black border-black'
               : isDark

@@ -20,6 +20,7 @@
 
 @layer base {
   :root {
+    font-size: 110%; /* Default scale matching 110% zoom for comfortable reading */
     --ll-orange: #ff5b00;
     --ll-black: #0a0a0a;
     --ll-white: #ffffff;

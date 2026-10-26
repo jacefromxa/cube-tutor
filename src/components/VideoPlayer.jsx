@@ -192,7 +192,7 @@ const VideoPlayer = forwardRef(function VideoPlayer({
         : 'bg-[#ffffff] border-black text-black'
     }`}>
       {/* 1. Video Container with LineLore frame */}
-      <div className="relative aspect-video shrink min-h-0 lg:max-h-[calc(100%-250px)] bg-black w-full overflow-hidden select-none group flex items-center justify-center border-b border-black dark:border-zinc-800">
+      <div className="relative aspect-video shrink min-h-0 lg:max-h-[calc(100%-280px)] bg-black w-full overflow-hidden select-none group flex items-center justify-center border-b border-black dark:border-zinc-800">
         <video
           ref={videoRef}
           src={resolveAssetUrl(videoPath)}
@@ -454,7 +454,7 @@ const VideoPlayer = forwardRef(function VideoPlayer({
           )}
 
           {/* Expanded State: Spec-sheet Editorial Style */}
-          <div className={`${!isMobileDetailsExpanded ? 'hidden lg:flex' : 'flex'} flex-1 min-h-0 px-2.5 sm:px-3.5 py-1.5 sm:py-2 flex-col justify-between gap-1 sm:gap-1.5 transition-colors overflow-hidden ${
+          <div className={`${!isMobileDetailsExpanded ? 'hidden lg:flex' : 'flex'} flex-1 min-h-0 px-2.5 sm:px-4 py-2 sm:py-2 flex-col justify-between gap-1.5 sm:gap-2 transition-colors overflow-hidden ${
             isDark ? 'bg-[#0a0a0a]' : 'bg-white'
           }`}>
             {/* Requirement 3: Header Row with Grip Tag on the SAME ROW as Title */}
@@ -465,33 +465,33 @@ const VideoPlayer = forwardRef(function VideoPlayer({
                   <img 
                     src={resolveAssetUrl(currentCase.cubeImg)} 
                     alt={currentCase.code} 
-                    className="w-8 h-8 sm:w-8.5 sm:h-8.5 bg-white p-0.5 object-contain border border-black dark:border-zinc-700 shrink-0"
+                    className="w-9 h-9 sm:w-10 sm:h-10 bg-white p-0.5 object-contain border border-black dark:border-zinc-700 shrink-0"
                   />
                 </div>
 
                 {/* Case Code & Metadata - STRICTLY SAME LINE flex-nowrap */}
                 <div className="flex items-center gap-1.5 sm:gap-2 min-w-0 flex-nowrap">
-                  <span className="font-mono text-sm sm:text-base md:text-lg font-black tracking-tight flex items-center gap-1 shrink-0">
+                  <span className="font-mono text-base sm:text-lg md:text-xl font-black tracking-tight flex items-center gap-1.5 shrink-0">
                     <span className="w-2 h-2 bg-[#ff5b00] inline-block" />
                     <span>{currentCase.code}</span>
                   </span>
 
                   {/* Requirement 3: Grip Tag placed on the SAME ROW with Title */}
                   {currentCase.grip && (
-                    <span className={`font-mono text-[10px] px-1.5 py-0.2 border font-bold flex items-center gap-0.5 shrink-0 ${
+                    <span className={`font-mono text-xs px-2 py-0.5 border font-bold flex items-center gap-1 shrink-0 ${
                       isDark ? 'bg-zinc-900 border-zinc-700 text-zinc-300' : 'bg-zinc-100 border-black text-black'
                     }`}>
-                      <Hand className="w-2.5 h-2.5" />
+                      <Hand className="w-3 h-3" />
                       <span>{currentCase.grip}</span>
                     </span>
                   )}
 
                   {currentCase.subName ? (
-                    <span className="font-mono text-[10px] px-1.5 py-0.2 border border-[#ff5b00] text-[#ff5b00] font-bold shrink-0 truncate">
+                    <span className="font-mono text-xs px-2 py-0.5 border border-[#ff5b00] text-[#ff5b00] font-bold shrink-0 truncate">
                       [{currentCase.subName}]
                     </span>
                   ) : groupInfo ? (
-                    <span className={`hidden xs:inline-block font-mono text-[10px] px-1.5 py-0.2 border font-bold shrink-0 truncate ${
+                    <span className={`hidden xs:inline-block font-mono text-xs px-2 py-0.5 border font-bold shrink-0 truncate ${
                       isDark ? 'bg-zinc-900 border-zinc-700 text-zinc-300' : 'bg-zinc-100 border-black text-black'
                     }`}>
                       [{lang === 'en' ? (groupInfo.fullEn || groupInfo.code) : (groupInfo.nameZh || groupInfo.code)}]
@@ -505,7 +505,7 @@ const VideoPlayer = forwardRef(function VideoPlayer({
                 <button
                   onClick={() => onToggleMastered(currentCase.id)}
                   title={isMastered ? t('unmarkMastered') : t('markMastered')}
-                  className={`px-2 py-0.5 sm:px-3 sm:py-1 border font-mono text-xs font-black flex items-center gap-1 transition-colors ${
+                  className={`px-2.5 py-1 sm:px-3.5 sm:py-1 border font-mono text-xs font-black flex items-center gap-1.5 transition-colors ${
                     isMastered 
                       ? 'bg-[#ff5b00] text-black border-black shadow-xs' 
                       : isDark 
@@ -513,7 +513,7 @@ const VideoPlayer = forwardRef(function VideoPlayer({
                         : 'bg-white text-black border-black hover:bg-black hover:text-white'
                   }`}
                 >
-                  <Check className={`w-3 h-3 ${isMastered ? 'text-black stroke-[3]' : 'opacity-40'}`} />
+                  <Check className={`w-3.5 h-3.5 ${isMastered ? 'text-black stroke-[3]' : 'opacity-40'}`} />
                   <span>{isMastered ? t('masteredBtn') : t('unmasteredBtn')}</span>
                 </button>
 
@@ -533,20 +533,20 @@ const VideoPlayer = forwardRef(function VideoPlayer({
             {/* Desktop View: Separate Solution & Scramble Rows (PC Layout - guaranteed within bounds) */}
             <div className="hidden lg:flex flex-col gap-1.5 flex-1 min-h-0 justify-end">
               {/* Row 1: Solution */}
-              <div className={`border p-1.5 sm:p-2 flex flex-col gap-0.5 transition-colors ${
+              <div className={`border p-2 flex flex-col gap-0.5 transition-colors ${
                 isDark ? 'bg-zinc-900/90 border-zinc-800' : 'bg-zinc-50 border-black'
               }`}>
                 <div className={`flex items-center justify-between gap-1 border-b pb-0.5 ${
                   isDark ? 'border-zinc-800' : 'border-zinc-200'
                 }`}>
-                  <div className="flex items-center gap-1 font-mono text-[11px] font-black">
+                  <div className="flex items-center gap-1.5 font-mono text-xs font-black">
                     <span className="w-1.5 h-1.5 bg-[#ff5b00] inline-block" />
                     <span className="text-[#ff5b00] tracking-wide">{t('solutionLabel')}</span>
                   </div>
                   <button
                     onClick={handleCopySolution}
                     title={copiedSolution ? t('copiedSolution') : t('copySolution')}
-                    className={`w-5 h-5 flex items-center justify-center border font-mono shrink-0 transition-colors ${
+                    className={`w-6 h-6 flex items-center justify-center border font-mono shrink-0 transition-colors ${
                       copiedSolution
                         ? 'bg-[#ff5b00] text-black border-black'
                         : isDark 
@@ -555,32 +555,32 @@ const VideoPlayer = forwardRef(function VideoPlayer({
                     }`}
                   >
                     {copiedSolution ? (
-                      <Check className="w-3 h-3 text-black stroke-[3]" />
+                      <Check className="w-3.5 h-3.5 text-black stroke-[3]" />
                     ) : (
-                      <Copy className="w-3 h-3" />
+                      <Copy className="w-3.5 h-3.5" />
                     )}
                   </button>
                 </div>
-                <div className="font-mono text-xs xl:text-sm font-black tracking-wider leading-snug select-all break-words py-0.5 text-[#ff5b00]">
+                <div className="font-mono text-sm sm:text-base font-black tracking-wider leading-snug select-all break-words py-0.5 text-[#ff5b00]">
                   {currentCase.algorithm}
                 </div>
               </div>
 
               {/* Row 2: Scramble */}
-              <div className={`border p-1.5 sm:p-2 flex flex-col gap-0.5 transition-colors ${
+              <div className={`border p-2 flex flex-col gap-0.5 transition-colors ${
                 isDark ? 'bg-zinc-900/90 border-zinc-800' : 'bg-zinc-50 border-black'
               }`}>
                 <div className={`flex items-center justify-between gap-1 border-b pb-0.5 ${
                   isDark ? 'border-zinc-800' : 'border-zinc-200'
                 }`}>
-                  <div className="flex items-center gap-1 font-mono text-[11px] font-black">
+                  <div className="flex items-center gap-1.5 font-mono text-xs font-black">
                     <span className={`w-1.5 h-1.5 inline-block ${isDark ? 'bg-zinc-400' : 'bg-black'}`} />
                     <span className={`tracking-wide ${isDark ? 'text-zinc-300' : 'text-black'}`}>{t('scrambleLabel')}</span>
                   </div>
                   <button
                     onClick={handleCopyScramble}
                     title={copiedScramble ? t('copiedScramble') : t('copyScramble')}
-                    className={`w-5 h-5 flex items-center justify-center border font-mono shrink-0 transition-colors ${
+                    className={`w-6 h-6 flex items-center justify-center border font-mono shrink-0 transition-colors ${
                       copiedScramble
                         ? 'bg-[#ff5b00] text-black border-black'
                         : isDark 
@@ -589,13 +589,13 @@ const VideoPlayer = forwardRef(function VideoPlayer({
                     }`}
                   >
                     {copiedScramble ? (
-                      <Check className="w-3 h-3 text-black stroke-[3]" />
+                      <Check className="w-3.5 h-3.5 text-black stroke-[3]" />
                     ) : (
-                      <Copy className="w-3 h-3" />
+                      <Copy className="w-3.5 h-3.5" />
                     )}
                   </button>
                 </div>
-                <div className={`font-mono text-[11px] xl:text-xs font-bold tracking-wider leading-snug select-all break-words py-0.5 ${
+                <div className={`font-mono text-xs sm:text-sm font-bold tracking-wider leading-snug select-all break-words py-0.5 ${
                   isDark ? 'text-zinc-200' : 'text-zinc-800'
                 }`}>
                   {scramble}
