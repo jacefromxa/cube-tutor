@@ -60,9 +60,15 @@ npm install
 # 启动本地开发服务 (http://localhost:5173)
 npm run dev
 
-# 编译生产包 (输出至 dist/)
+# 校验 633 条案例数据（数量、id、分组、时间轴、图片、公式语法）
+npm run verify
+
+# 编译生产包 (输出至 dist/，默认不打包 videos/)
 npm run build
 ```
+
+> **关于视频**：生产构建默认跳过 `public/videos/`（线上走 COS CDN），`dist/` 约 30 MB。
+> 若需要在本地 `npm run preview` 中播放视频，请改用 `KEEP_LOCAL_VIDEOS=1 npm run build`。
 
 ---
 

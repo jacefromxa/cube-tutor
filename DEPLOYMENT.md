@@ -15,7 +15,7 @@
 | **媒体云存储** | 腾讯云 COS + CDN (`https://media.deck.ltd`) | 托管全站 11 个核心 MP4 视频，支持 HTTP 206 分段按需加载 |
 
 > [!TIP]
-> **关于视频存储**：由于全站视频全部通过 `.env` 中的 `VITE_COS_URL=https://media.deck.ltd` 走 CDN 分段加载，**服务器本地（`/var/www/cfop/`）无需存放任何视频文件**，既极大节省服务器磁盘空间，又大幅度缩减了每次构建上传的体积（仅约 28MB，数秒即可传完）。
+> **关于视频存储**：由于全站视频全部通过 `.env` 中的 `VITE_COS_URL=https://media.deck.ltd` 走 CDN 分段加载，**服务器本地（`/var/www/cfop/`）无需存放任何视频文件**。`npm run build` 现在默认不再把 `public/videos/` 复制进 `dist/`（见 [vite.config.js](vite.config.js)），产物约 30MB，数秒即可传完。
 
 ---
 
@@ -24,12 +24,13 @@
 项目中已配置了一键自动化部署脚本 [`deploy.sh`](file:///Users/Zhuanz/Documents/cube-tutor/deploy.sh)。在本地项目根目录下直接执行：
 
 ```bash
+npm run verify   # 可选：先校验 633 条案例数据
 ./deploy.sh
 ```
 
 ### 脚本会自动完成以下动作：
 1. 本地执行 `npm run build` 打包。
-2. 将 `dist/` 目录打包为 `tar.gz`（自动排除本地大体积 `videos/` 文件夹）。
+2. 将 `dist/` 目录打包为 `tar.gz`（`videos/` 已在构建阶段排除，脚本中的排除规则作为双保险保留）。
 3. 通过 SCP 将压缩包推送到服务器 `/home/ubuntu/`。
 4. 在服务器解压覆盖至 `/var/www/cfop/`，重设 `www-data` 权限。
 5. 自动运行 `nginx -t` 测试并平滑重载 Nginx，最后清理临时压缩包。
