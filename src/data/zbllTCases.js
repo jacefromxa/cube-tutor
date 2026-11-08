@@ -516,7 +516,7 @@ export const ZBLL_T_CASES = [
     "endSec": 409,
     "duration": 14,
     "name": "ZBLL T-30",
-    "algorithm": "r' U2 R U R2 F2 R F R' F2 A U r",
+    "algorithm": "r' U2 R U R2 F2 R F R' F2 R U r",
     "moves": 13,
     "cubeImg": "/images/cases/zbll/t/zbll_t_30.png"
   },
