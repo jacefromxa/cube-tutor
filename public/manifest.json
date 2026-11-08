@@ -10,15 +10,22 @@
   "orientation": "portrait-primary",
   "icons": [
     {
-      "src": "/cfop/assets/cubes/Easy-01.webp",
+      "src": "icons/icon-192.png",
       "sizes": "192x192",
-      "type": "image/webp"
+      "type": "image/png",
+      "purpose": "any"
     },
     {
-      "src": "/cfop/assets/cubes/Easy-01.webp",
+      "src": "icons/icon-512.png",
       "sizes": "512x512",
-      "type": "image/webp"
+      "type": "image/png",
+      "purpose": "any"
+    },
+    {
+      "src": "icons/icon-maskable-512.png",
+      "sizes": "512x512",
+      "type": "image/png",
+      "purpose": "maskable"
     }
   ]
 }
-

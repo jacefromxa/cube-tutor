@@ -1,9 +1,12 @@
 // CubeDex Lightweight PWA Service Worker
-const CACHE_NAME = 'cubedex-v1';
+// Bump this version whenever the shell or icons change so installed clients pick up the update.
+const CACHE_NAME = 'cubedex-v2';
 const PRECACHE_ASSETS = [
   '/cfop/',
   '/cfop/index.html',
-  '/cfop/manifest.json'
+  '/cfop/manifest.json',
+  '/cfop/icons/icon-192.png',
+  '/cfop/icons/icon-512.png'
 ];
 
 self.addEventListener('install', (event) => {

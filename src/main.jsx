@@ -18,7 +18,8 @@ if (rootElement) {
 // Register PWA service worker in production
 if ('serviceWorker' in navigator && import.meta.env.PROD) {
   window.addEventListener('load', () => {
-    navigator.serviceWorker.register('/cfop/sw.js').catch(() => {
+    // BASE_URL is '/cfop/' in the production build, so the worker scope stays inside the app path.
+    navigator.serviceWorker.register(`${import.meta.env.BASE_URL}sw.js`).catch(() => {
       // Ignore registration errors
     });
   });
