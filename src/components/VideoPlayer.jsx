@@ -10,8 +10,6 @@ import { useLanguage } from '../context/LanguageContext';
 
 const VideoPlayer = forwardRef(function VideoPlayer({
   currentCase,
-  casesList,
-  onSelectCase,
   isMastered,
   onToggleMastered,
   theme = 'dark',
