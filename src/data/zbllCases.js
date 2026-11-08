@@ -3,13 +3,15 @@
  * Encompasses all 7 Sets: T (72), U (72), L (72), H (40), Pi (72), S (72), AS (72)
  */
 
-import { ZBLL_T_CASES, ZBLL_T_GROUPS, ZBLL_T_VIDEO_PATH } from './zbllTCases';
-import { ZBLL_U_CASES, ZBLL_U_GROUPS, ZBLL_U_VIDEO_PATH } from './zbll/zbll_u';
-import { ZBLL_L_CASES, ZBLL_L_GROUPS, ZBLL_L_VIDEO_PATH } from './zbll/zbll_l';
-import { ZBLL_H_CASES, ZBLL_H_GROUPS, ZBLL_H_VIDEO_PATH } from './zbll/zbll_h';
-import { ZBLL_PI_CASES, ZBLL_PI_GROUPS, ZBLL_PI_VIDEO_PATH } from './zbll/zbll_pi';
-import { ZBLL_S_CASES, ZBLL_S_GROUPS, ZBLL_S_VIDEO_PATH } from './zbll/zbll_s';
-import { ZBLL_AS_CASES, ZBLL_AS_GROUPS, ZBLL_AS_VIDEO_PATH } from './zbll/zbll_as';
+// Explicit .js extensions keep this module importable from plain Node (scripts/verify-data.mjs)
+// as well as from Vite.
+import { ZBLL_T_CASES, ZBLL_T_GROUPS, ZBLL_T_VIDEO_PATH } from './zbllTCases.js';
+import { ZBLL_U_CASES, ZBLL_U_GROUPS, ZBLL_U_VIDEO_PATH } from './zbll/zbll_u.js';
+import { ZBLL_L_CASES, ZBLL_L_GROUPS, ZBLL_L_VIDEO_PATH } from './zbll/zbll_l.js';
+import { ZBLL_H_CASES, ZBLL_H_GROUPS, ZBLL_H_VIDEO_PATH } from './zbll/zbll_h.js';
+import { ZBLL_PI_CASES, ZBLL_PI_GROUPS, ZBLL_PI_VIDEO_PATH } from './zbll/zbll_pi.js';
+import { ZBLL_S_CASES, ZBLL_S_GROUPS, ZBLL_S_VIDEO_PATH } from './zbll/zbll_s.js';
+import { ZBLL_AS_CASES, ZBLL_AS_GROUPS, ZBLL_AS_VIDEO_PATH } from './zbll/zbll_as.js';
 
 export {
   ZBLL_T_CASES, ZBLL_T_GROUPS, ZBLL_T_VIDEO_PATH,

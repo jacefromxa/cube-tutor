@@ -17,6 +17,57 @@ const THEME_STORAGE_KEY = 'cubedex_theme_mode_v1';
 const MODULE_STORAGE_KEY = 'cubedex_active_module_v1';
 const ZBLL_SET_STORAGE_KEY = 'cubedex_active_zbll_set_v1';
 
+// All ZBLL sets share one mastery list: case ids are globally unique (ZBLL-T-01, ZBLL-PI-72, ...),
+// so a single key keeps the 472-case progress intact across set switches and reloads.
+const ZBLL_MASTERED_STORAGE_KEY = 'cubedex_mastered_zbll_v1';
+// Earlier builds wrote one key per ZBLL set; read them once so existing progress is not lost.
+const ZBLL_MASTERED_LEGACY_KEYS = [
+  'cube_tutor_mastered_zbll_v1',
+  ...Object.keys(ZBLL_SETS).flatMap(setId => [
+    `cubedex_mastered_zbll_${setId}_v1`,
+    `cube_tutor_mastered_zbll_${setId}_v1`
+  ])
+];
+
+const ALL_ZBLL_CASES = Object.values(ZBLL_SETS).flatMap(set => set.cases);
+
+const MODULE_CASE_IDS = {
+  f2l: new Set(F2L_CASES.map(c => c.id)),
+  oll: new Set(OLL_CASES.map(c => c.id)),
+  pll: new Set(PLL_CASES.map(c => c.id)),
+  zbll: new Set(ALL_ZBLL_CASES.map(c => c.id)),
+  cmll: new Set(CMLL_CASES.map(c => c.id))
+};
+
+/** Read a persisted array of case ids, tolerating missing / corrupt entries. */
+function readStoredIds(key) {
+  try {
+    const raw = localStorage.getItem(key);
+    if (!raw) return [];
+    const parsed = JSON.parse(raw);
+    return Array.isArray(parsed) ? parsed.filter(id => typeof id === 'string') : [];
+  } catch {
+    return [];
+  }
+}
+
+/** Merge several storage keys and drop ids that no longer exist in the dataset. */
+function loadMasteredIds(keys, moduleId) {
+  const known = MODULE_CASE_IDS[moduleId];
+  const merged = new Set();
+  keys.forEach(key => readStoredIds(key).forEach(id => merged.add(id)));
+  const valid = Array.from(merged).filter(id => known.has(id));
+  if (import.meta.env?.DEV && valid.length !== merged.size) {
+    console.warn(`[CubeDex] dropped ${merged.size - valid.length} stale mastered id(s) for "${moduleId}"`);
+  }
+  return valid;
+}
+
+/** Storage key that holds the mastery list of the currently active module. */
+function masteredStorageKey(moduleId, config) {
+  return moduleId === 'zbll' ? ZBLL_MASTERED_STORAGE_KEY : config.storageKey;
+}
+
 const MODULE_CONFIGS = {
   f2l: {
     name: 'F2L',
@@ -161,23 +212,25 @@ export default function App() {
   const playerRef = useRef(null);
   const caseListScrollRef = useRef(null);
 
-  const [masteredMap, setMasteredMap] = useState(() => {
-    const loadSaved = (key, oldKey) => {
-      try {
-        const s = localStorage.getItem(key) || (oldKey ? localStorage.getItem(oldKey) : null);
-        return s ? JSON.parse(s) : [];
-      } catch {
-        return [];
-      }
-    };
-    return {
-      f2l: loadSaved(MODULE_CONFIGS.f2l.storageKey, MODULE_CONFIGS.f2l.storageKeyOld),
-      oll: loadSaved(MODULE_CONFIGS.oll.storageKey, MODULE_CONFIGS.oll.storageKeyOld),
-      pll: loadSaved(MODULE_CONFIGS.pll.storageKey, MODULE_CONFIGS.pll.storageKeyOld),
-      zbll: loadSaved('cubedex_mastered_zbll_v1', 'cube_tutor_mastered_zbll_v1'),
-      cmll: loadSaved(MODULE_CONFIGS.cmll.storageKey, MODULE_CONFIGS.cmll.storageKeyOld)
-    };
-  });
+  const [masteredMap, setMasteredMap] = useState(() => ({
+    f2l: loadMasteredIds(
+      [MODULE_CONFIGS.f2l.storageKey, MODULE_CONFIGS.f2l.storageKeyOld],
+      'f2l'
+    ),
+    oll: loadMasteredIds(
+      [MODULE_CONFIGS.oll.storageKey, MODULE_CONFIGS.oll.storageKeyOld],
+      'oll'
+    ),
+    pll: loadMasteredIds(
+      [MODULE_CONFIGS.pll.storageKey, MODULE_CONFIGS.pll.storageKeyOld],
+      'pll'
+    ),
+    zbll: loadMasteredIds([ZBLL_MASTERED_STORAGE_KEY, ...ZBLL_MASTERED_LEGACY_KEYS], 'zbll'),
+    cmll: loadMasteredIds(
+      [MODULE_CONFIGS.cmll.storageKey, MODULE_CONFIGS.cmll.storageKeyOld],
+      'cmll'
+    )
+  }));
 
   const currentMasteredIds = masteredMap[activeModule] || [];
   const masteredSet = useMemo(() => new Set(currentMasteredIds), [currentMasteredIds]);
@@ -219,6 +272,8 @@ export default function App() {
     }
   }, [activeZbllSet]);
 
+  const activeMasteredKey = masteredStorageKey(activeModule, activeConfig);
+
   const toggleMastered = useCallback((caseId) => {
     setMasteredMap(prev => {
       const curList = prev[activeModule] || [];
@@ -239,31 +294,46 @@ export default function App() {
       }
       const updated = Array.from(set);
       try {
-        localStorage.setItem(activeConfig.storageKey, JSON.stringify(updated));
+        localStorage.setItem(activeMasteredKey, JSON.stringify(updated));
       } catch {}
       return {
         ...prev,
         [activeModule]: updated
       };
     });
-  }, [activeModule, activeConfig.storageKey]);
+  }, [activeModule, activeMasteredKey]);
 
   const resetProgress = useCallback(() => {
-    if (window.confirm(t('resetConfirm', { name: activeConfig.name }))) {
+    if (!window.confirm(t('resetConfirm', { name: activeConfig.name }))) return;
+
+    // ZBLL keeps all 472 cases in one list: reset only the set currently on screen.
+    if (activeModule === 'zbll') {
+      const prefix = `ZBLL-${activeZbllSet.toUpperCase()}-`;
       setMasteredMap(prev => {
+        const remaining = (prev.zbll || []).filter(id => !id.startsWith(prefix));
         try {
-          localStorage.removeItem(activeConfig.storageKey);
-          if (activeConfig.storageKeyOld) {
-            localStorage.removeItem(activeConfig.storageKeyOld);
-          }
+          localStorage.setItem(ZBLL_MASTERED_STORAGE_KEY, JSON.stringify(remaining));
+          // Legacy per-set keys would otherwise be merged back in on the next load.
+          ZBLL_MASTERED_LEGACY_KEYS.forEach(key => localStorage.removeItem(key));
         } catch {}
-        return {
-          ...prev,
-          [activeModule]: []
-        };
+        return { ...prev, zbll: remaining };
       });
+      return;
     }
-  }, [activeConfig.name, activeConfig.storageKey, activeConfig.storageKeyOld, activeModule, t]);
+
+    setMasteredMap(prev => {
+      try {
+        localStorage.removeItem(activeMasteredKey);
+        if (activeConfig.storageKeyOld) {
+          localStorage.removeItem(activeConfig.storageKeyOld);
+        }
+      } catch {}
+      return {
+        ...prev,
+        [activeModule]: []
+      };
+    });
+  }, [activeConfig.name, activeConfig.storageKeyOld, activeMasteredKey, activeModule, activeZbllSet, t]);
 
   const groupCounts = useMemo(() => {
     const counts = { all: activeCasesList.length };
@@ -364,10 +434,10 @@ export default function App() {
           f2l: MODULE_CONFIGS.f2l.cases.length,
           oll: MODULE_CONFIGS.oll.cases.length,
           pll: MODULE_CONFIGS.pll.cases.length,
-          zbll: 472,
+          zbll: ALL_ZBLL_CASES.length,
           cmll: MODULE_CONFIGS.cmll.cases.length
         }}
-        totalCases={activeCasesList.length}
+        totalCases={activeModule === 'zbll' ? ALL_ZBLL_CASES.length : activeCasesList.length}
         masteredCount={currentMasteredIds.length}
         masteredFilter={masteredFilter}
         onMasteredFilterChange={setMasteredFilter}
@@ -392,14 +462,11 @@ export default function App() {
           <VideoPlayer
             ref={playerRef}
             currentCase={currentCase}
-            casesList={filteredCases.length > 0 ? filteredCases : activeCasesList}
-            onSelectCase={handleSelectCase}
             isMastered={masteredSet.has(currentCase?.id)}
             onToggleMastered={toggleMastered}
             theme={theme}
             videoPath={activeConfig.videoPath}
             groups={activeConfig.groups}
-            moduleType={activeModule}
           />
         </div>
 
